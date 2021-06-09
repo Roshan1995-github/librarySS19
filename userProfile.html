@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>PROFILE</title>
+	<script src="functions.js"></script>
+	<style type="text/css">
+		ul{
+			display: flex;
+			list-style-type: none;
+			padding: 0px
+		}
+		li{
+			margin: 10px;
+			width: 100px
+		}
+		#mainContentDiv{
+			border:  solid black 1px;
+			background-color: green;
+		}
+		#mainContentDiv>div{
+			border:  solid black 1px;
+			width: 40%;
+			margin: 0px auto;
+			background-color: chartreuse;
+		}
+		#mainContentDiv>div>p{
+			margin:  10px 0px 0px 10px;
+			font-size: 20px;
+		}
+		#mainContentDiv>div>input{
+			display: block;
+			margin: 0px auto;
+			font-size: 20px;
+			width: 90%;
+		}
+		#mainContentDiv>div>div>button{
+			width: 100px;
+			height: 30px
+		}
+		#mainContentDiv>div>input::-webkit-outer-spin-button,
+		#mainContentDiv>div>input::-webkit-inner-spin-button {
+		    -webkit-appearance: none;
+		    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+		}
+		#mainContentDiv>div>input[type=number] {
+		    -moz-appearance:textfield; /* Firefox */
+		}
+		@media (max-width: 700px){
+			#navigationBarDiv{
+				flex-direction: column;
+			}
+			#navigationBarDiv>button{
+				display: block;
+				width: 300px;
+				margin: 0px auto !important;
+			}
+			#navigationBarDiv>ul{
+				width: 90%;
+				margin: 20px auto;
+				justify-content: space-around;
+			}
+			#navigationBarDiv>ul>li{
+				text-align: center;
+			}
+			#mainContentDiv>div{
+				width: 80%;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div style="display: flex; justify-content: space-between; margin: 0px 10px">
+		<p>Hello Name</p>
+		<img style="height: 20px" src="cart.png" onclick="checkOutCartFunc()">
+	</div>
+	<h1 style="width: 100%; text-align: center">SS 19 MINI LIBRARY</h1>
+	<div id="navigationBarDiv">
+		<ul>
+			<li onclick="window.location.href = 'userHomepage.html'">Homepage</li>
+			<li onclick="window.location.href = 'userBooks.html'">Books</li>
+			<li onclick="window.location.href = 'userProfile.html'">Profile</li>
+			<li onclick="window.location.href = 'userHowToUse.html'">How To Use</li>
+		</ul>
+	</div>
+	<div id="mainContentDiv">
+		<div>
+			<img src="https://images.ctfassets.net/g8qtv9gzg47d/6SiUg4TCwLA9OfEy3KlQy7/41c90a47f0250d130323056f69f6cdca/5de2bba479d7577cd722e553.jpeg?fl=progressive&fm=jpg&q=80" style="width: 80%; margin: 20px auto; display: block">
+			<p>Name</p>
+			<input type="text" name="name" disabled="true">
+			<p>Phone Number</p>
+			<input type="number" name="phoneNum" disabled="true">
+			<p>Address</p>
+			<input type="text" name="address" disabled="true">
+			<p>Postcode</p>
+			<input type="number" name="postcode" disabled="true">
+			<p>City</p>
+			<input type="text" name="city" disabled="true">
+			<p>State</p>
+			<input type="text" name="state" disabled="true">
+			<p>Country</p>
+			<input type="text" name="country" disabled="true">
+			<br>
+			<div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
+				<button onclick="editBtnFunc()" id="editBtn">Edit</button>
+				<button onclick="logoutBtnFunc()">Log Out</button>
+			</div>
+		</div>
+	</div>
+
+<script type="text/javascript">	
+	var databaseLink = "https://libraryss19.herokuapp.com"
+	var memberId = 6
+	
+
+	function loadMemberData(){
+		fetch(databaseLink+'/api/member/'+memberId, {
+			method: 'GET', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+			var data = data[1][0]
+
+			document.getElementsByName('name')[0].value	= data.name
+			document.getElementsByName('phoneNum')[0].value	= data.phoneNum
+			document.getElementsByName('address')[0].value	= data.address
+			document.getElementsByName('postcode')[0].value	= data.postcode
+			document.getElementsByName('city')[0].value	= data.city
+			document.getElementsByName('state')[0].value	= data.state
+			document.getElementsByName('country')[0].value	= data.country
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
+	}loadMemberData()
+
+
+	function checkOutCartFunc(){
+		console.log("check out button clicked")
+	}
+
+
+	function editBtnFunc(){
+		document.getElementsByName('name')[0].disabled = false
+		document.getElementsByName('phoneNum')[0].disabled = false
+		document.getElementsByName('address')[0].disabled = false
+		document.getElementsByName('postcode')[0].disabled = false
+		document.getElementsByName('city')[0].disabled = false
+		document.getElementsByName('state')[0].disabled = false
+		document.getElementsByName('country')[0].disabled = false
+
+		document.getElementById('editBtn').textContent = "Save"
+		document.getElementById('editBtn').setAttribute('onclick', 'saveBtnFunc()')
+	}
+
+
+	function saveBtnFunc(){
+		console.log("save button clicked")
+		const data = {
+			id: memberId,
+			name: capitalize(document.getElementsByName('name')[0].value),
+			phoneNum: document.getElementsByName('phoneNum')[0].value,
+			address: document.getElementsByName('address')[0].value,
+			postcode: document.getElementsByName('postcode')[0].value,
+			city: capitalize(document.getElementsByName('city')[0].value),
+			state: capitalize(document.getElementsByName('state')[0].value),
+			country: capitalize(document.getElementsByName('country')[0].value)
+		};
+		fetch(databaseLink+'/api/edit-member', {
+			method: 'PUT', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+
+			document.getElementsByName('name')[0].disabled = true
+			document.getElementsByName('phoneNum')[0].disabled = true
+			document.getElementsByName('address')[0].disabled = true
+			document.getElementsByName('postcode')[0].disabled = true
+			document.getElementsByName('city')[0].disabled = true
+			document.getElementsByName('state')[0].disabled = true
+			document.getElementsByName('country')[0].disabled = true
+
+			document.getElementById('editBtn').textContent = "Edit"
+			document.getElementById('editBtn').setAttribute('onclick', 'editBtnFunc()')
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
+	}
+
+
+	function logoutBtnFunc(){
+		console.log("Log out Btn clicked")
+	}
+	// const data = { username: 'example' };
+	// fetch('https://example.com/profile', {
+	// 	method: 'POST', // or 'PUT'
+	// 	headers: {
+	// 		'Content-Type': 'application/json',
+	// 	},
+	// 	body: JSON.stringify(data),
+	// })
+	// .then(response => response.json())
+	// .then(data => {
+	// 	console.log('Success:', data);
+	// })
+	// .catch((error) => {
+	// 	console.error('Error:', error);
+	// });
+
+</script>
+
+</body>
+</html>

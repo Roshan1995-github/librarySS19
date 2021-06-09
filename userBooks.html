@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>BOOKS</title>
+	<script src="functions.js"></script>
+	<style type="text/css">
+		ul{
+			display: flex;
+			list-style-type: none;
+			padding: 0px
+		}
+		li{
+			margin: 10px;
+			width: 100px
+		}
+		image{
+			width: 10px
+		}
+		@media (max-width: 700px){
+			#navigationBarDiv>ul{
+				width: 90%;
+				margin: 20px auto;
+				justify-content: space-around;
+			}
+			#navigationBarDiv>ul>li{
+				text-align: center;
+			}
+			#mainContentDiv>div{				
+				flex-direction: column;
+			}
+			#searchDiv>div{
+				width: 55%;
+				margin: 5px auto;
+				justify-content: space-around;
+			}
+			#mainContentDiv>div>button{
+				width: 100px;
+				height: 30px;
+				margin: 0px auto;
+			}
+			#displayBooksDiv>div{
+				flex-direction: column;
+				width: 95%;
+				margin: 10px auto;
+				background-color: black;
+				padding: 0px
+			}
+			#bookContentDiv{
+				width: 70% !important;
+				margin: 10px auto;
+				border: solid yellow 5px;
+			}
+			#prevNextBtnDiv{
+				flex-direction: row !important
+			}
+		}
+		
+	</style>
+</head>
+<body>
+	<div style="display: flex; justify-content: space-between; margin: 0px 10px">
+		<p>Hello Name</p>
+		<img style="height: 20px" src="cart.png" onclick="checkOutCartFunc()">
+	</div>
+	<h1 style="width: 100%; text-align: center">SS 19 MINI LIBRARY</h1>
+	<div id="navigationBarDiv">
+		<ul>
+			<li onclick="window.location.href = 'userHomepage.html'">Homepage</li>
+			<li onclick="window.location.href = 'userBooks.html'">Books</li>
+			<li onclick="window.location.href = 'userProfile.html'">Profile</li>
+			<li onclick="window.location.href = 'userHowToUse.html'">How To Use</li>
+		</ul>
+	</div>
+	<div id="mainContentDiv">
+		<div id="searchDiv" style="display: flex; width: 90%; justify-content: space-around; margin: 0px auto">
+			<div style="display: flex">
+				<p style="margin: 0px 10px">Name:</p>			
+				<input list="searchBooks" type="text" name="search" style="height: 20px">
+				<datalist id="searchBooks">
+					<option value="Book Name 1">
+					<option value="Book Name 2">
+					<option value="Book Name 3">
+					<option value="Book Name 4">
+					<option value="Book Name 5">
+					<option value="Book Name 6">
+					<option value="Book Name 7">
+					<option value="Book Name 8">
+				</datalist>
+			</div>
+			<div style="display: flex">
+				<p style="margin: 0px 10px">Genre:</p>
+				<input list="searchGenre" type="text" name="search" style="height: 20px">
+				<datalist id="searchGenre">
+					<option value="Book Genre 1">
+					<option value="Book Genre 2">
+					<option value="Book Genre 3">
+					<option value="Book Genre 4">
+					<option value="Book Genre 5">
+					<option value="Book Genre 6">
+					<option value="Book Genre 7">
+					<option value="Book Genre 8">
+				</datalist>
+			</div>
+			<div style="display: flex">
+				<p style="margin: 0px 10px">Author:</p>
+				<input list="searchAuthors" type="text" name="search" style="height: 20px">
+				<datalist id="searchAuthors">
+					<option value="Book Author 1">
+					<option value="Book Author 2">
+					<option value="Book Author 3">
+					<option value="Book Author 4">
+					<option value="Book Author 5">
+					<option value="Book Author 6">
+					<option value="Book Author 7">
+					<option value="Book Author 8">
+				</datalist>
+			</div>
+			<button onclick="searchBtnFunc()">SEARCH</button>
+		</div>
+		<div id="displayBooksDiv" style="width: 90%; margin: 10px auto">
+			
+		</div>
+		<div id="prevNextBtnDiv" style="display: flex; width: 100%; justify-content: center; margin-top: 20px">
+			<button onclick="prevBtnFunc()" id="prevBtn">Prev</button>
+			<span style="width: 20px"></span>
+			<button onclick="nextBtnFunc()" id="nextBtn">Next</button>
+		</div>
+	</div>
+
+<script type="text/javascript">	
+	var databaseLink = "https://libraryss19.herokuapp.com"
+	var currentPage = 1
+	var lastPage = 0
+
+	function checkOutCartFunc(){
+		console.log("check out button clicked")
+	}
+
+
+	function loadBooksFunc(){
+		var searchName = document.getElementsByName('search')[0].value
+		var searchGenre = document.getElementsByName('search')[1].value
+		var searchAuthor = document.getElementsByName('search')[2].value
+
+		while(searchName.charAt(0) == " "){
+			searchName = searchName.substring(1)
+		}
+		while(searchGenre.charAt(0) == " "){
+			searchGenre = searchGenre.substring(1)
+		}
+		while(searchAuthor.charAt(0) == " "){
+			searchAuthor = searchAuthor.substring(1)
+		}
+
+		if(searchName != "" && searchGenre != "" && searchAuthor != ""){
+			console.log("name + category + author")
+			var link = databaseLink+'/api/books/nageau/'+searchName+'/'+searchGenre+'/'+searchAuthor+'?page='+currentPage
+		}else if(searchName != "" && searchGenre != ""){
+			console.log("name + category")
+			var link = databaseLink+'/api/books/nage/'+searchName+'/'+searchGenre+'?page='+currentPage
+		}else if(searchName != "" && searchAuthor != ""){
+			console.log("name + author")
+			var link = databaseLink+'/api/books/naau/'+searchName+'/'+searchAuthor+'?page='+currentPage
+		}else if(searchGenre != "" && searchAuthor != ""){
+			console.log("category + author")
+			var link = databaseLink+'/api/books/geau/'+searchGenre+'/'+searchAuthor+'?page='+currentPage
+		}else if(searchName != ""){
+			console.log("name")
+			var link = databaseLink+'/api/books/na/'+searchName+'?page='+currentPage
+		}else if(searchGenre != ""){
+			console.log("category")
+			var link = databaseLink+'/api/books/ge/'+searchGenre+'?page='+currentPage
+		}else if(searchAuthor != ""){
+			console.log("author")
+			var link = databaseLink+'/api/books/au/'+searchAuthor+'?page='+currentPage
+		}else{
+			var link = databaseLink+'/api/books?page='+currentPage
+		}
+
+
+		var displayBooksDiv = document.getElementById('displayBooksDiv')
+		displayBooksDiv.innerHTML = ""
+		console.log(displayBooksDiv)
+		
+		fetch(link, {
+			method: 'GET', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+			lastPage = data[1].last_page
+
+			if(currentPage == lastPage){
+				document.getElementById('nextBtn').disabled = true
+				document.getElementById('prevBtn').disabled = true
+				if(lastPage > 1){
+					document.getElementById('prevBtn').disabled = false
+				}
+			}else{
+				document.getElementById('nextBtn').disabled = false
+				document.getElementById('prevBtn').disabled = false
+				if(currentPage == 1){
+					document.getElementById('prevBtn').disabled = true
+				}
+			}
+
+			var data = data[1].data
+			var dataLength = data.length
+			var dataNumber = 0
+			for(var i=0; i<dataLength/3; i++){
+				var div = document.createElement('DIV')
+				div.setAttribute("style", "display: flex; justify-content: space-around")
+				displayBooksDiv.appendChild(div)
+				for (var j=0; j<3; j++){
+					var bookContentDiv = document.createElement('DIV')
+					bookContentDiv.setAttribute('id', 'bookContentDiv')
+					console.log(data[dataNumber].availability)
+					if(data[dataNumber].availability == "unavailable"){
+						bookContentDiv.setAttribute('style', 'width: 30%; padding: 10px; text-align: center; background-color: red; margin-top: 10px')
+					}else{
+						bookContentDiv.setAttribute('style', 'width: 30%; padding: 10px; text-align: center; background-color: azure; margin-top: 10px')
+					}					
+
+					var image = document.createElement('IMG')
+					image.setAttribute('src', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTY_6xlv6z30igW5fW7--EW0owZJWX0aedcQ&usqp=CAU')
+					image.setAttribute('style', 'height: 200px')
+					var paraDiv = document.createElement('DIV')
+					paraDiv.setAttribute('style', 'text-align:left; width: 60%; margin: 0px auto')
+					paraDiv.innerHTML = "Title : "+data[dataNumber].name+"<br>"+"Author : "+data[dataNumber].author+"<br>"+"Category : "+data[dataNumber].category+"<br>"+"Genre : "+data[dataNumber].genre
+
+					bookContentDiv.appendChild(image)
+					bookContentDiv.appendChild(paraDiv)
+					
+					div.appendChild(bookContentDiv)
+					dataNumber = dataNumber + 1
+					if(dataNumber == dataLength){
+						return;
+					}
+				}
+			}
+			
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
+	}loadBooksFunc()
+
+
+	function searchBtnFunc(){
+		currentPage = 1
+		loadBooksFunc()
+	}
+
+
+	function nextBtnFunc(){
+		currentPage = currentPage + 1		
+		loadBooksFunc()
+	}
+
+
+	function prevBtnFunc(){
+		currentPage = currentPage - 1
+		loadBooksFunc()
+	}
+	// const data = { username: 'example' };
+	// fetch('https://example.com/profile', {
+	// 	method: 'POST', // or 'PUT'
+	// 	headers: {
+	// 		'Content-Type': 'application/json',
+	// 	},
+	// 	body: JSON.stringify(data),
+	// })
+	// .then(response => response.json())
+	// .then(data => {
+	// 	console.log('Success:', data);
+	// })
+	// .catch((error) => {
+	// 	console.error('Error:', error);
+	// });
+
+</script>
+
+</body>
+</html>

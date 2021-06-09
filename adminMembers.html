@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>MEMBERS</title>
+	<script src="functions.js"></script>
+	<style type="text/css">
+		body{
+			padding: 0px
+		}
+		h1{
+			width: 100%;
+			height: 60px;
+			text-align: center;
+			padding-top: 20px;
+			margin-top: 0px;
+			background-image: url('https://image.freepik.com/free-photo/hand-painted-watercolor-background-with-sky-clouds-shape_24972-1095.jpg');
+			background-size: cover
+		}
+		ul{
+			display: flex;
+			list-style-type: none;
+			padding: 0px
+		}
+		li{
+			margin: 0px 30px;
+			font-size: 20px
+		}
+		th,td{
+			border: solid black 1px;
+		}
+		td:nth-child(1){
+			width: 25%
+		}
+		td:nth-child(2){
+			width: 15%
+		}
+		td:nth-child(3){
+			width: 60%
+		}
+		#modal{			
+		  display: none; /* Hidden by default */
+		  position: fixed; /* Stay in place */
+		  z-index: 1; /* Sit on top */
+		  left: 0;
+		  top: 0;
+		  width: 100%; /* Full width */
+		  height: 100%; /* Full height */
+		  overflow: none; /* Enable scroll if needed */
+		  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+		}
+		#modalContent{
+			background-color: white;
+			margin: 5% auto;
+			width: 50%;
+			height: 70%;
+			overflow: auto;
+			overflow-x: hidden;
+			padding: 10px
+		}
+		#modalContent>p{
+			margin: 0px;
+		}
+		#modalContent>input{
+			margin: 0px 0px 20px 0px;
+			width: 70%;
+			height: 20px
+		}
+
+
+
+	</style>
+</head>
+<body>
+	<div id="modal">
+		<div id="modalContent">
+			<p>Name</p>
+			<input type="text" name="name">
+			<p>Phone Number</p>
+			<input type="number" name="phoneNum">
+			<p>Address</p>
+			<input type="text" name="address">
+			<p>Postcode</p>
+			<input type="number" name="postcode">
+			<p>City</p>
+			<input type="text" name="city">
+			<p>State</p>
+			<input type="text" name="state">
+			<p>Country</p>
+			<input type="text" name="country">
+			<br>
+			<div style="display: flex">				
+				<button onclick="modalVisibility()" style="background-color: red">CANCEL</button>
+				<button onclick="addMemberFunc()" style="background-color: green">ADD</button>
+			</div>
+			
+		</div>
+	</div>
+	<h1 style="">SS 19 MINI LIBRARY</h1>
+	<div id="navigationBarDiv">
+		<ul>
+			<li onclick="window.location.href = 'adminHomepage.html'">Homepage</li>
+			<li onclick="window.location.href = 'adminBooks.html'">Books</li>
+			<li onclick="window.location.href = 'adminMembers.html'">Members</li>
+		</ul>
+	</div>
+	<div id="mainContentDiv">
+		<div style="display: flex; flex-direction: row; justify-content: space-between; width: 95%; margin: 0px auto">
+			<h4>MEMBERS DATA BASE</h4>
+			<button style="height: 30px; margin-right: 5px" onclick="modalVisibility()">ADD NEW MEMBER</button>
+		</div>
+		<table style="width: 95%; margin: 0px auto; border: solid 1px black">
+			<thead>
+				<tr>
+					<th>NAME</th>
+					<th>HANDPHONE #</th>
+					<th>ADDRESS</th>
+				</tr>
+			</thead>
+			<tbody id="memTableBod">
+				
+			</tbody>
+		</table>
+		<div style="display: flex; width: 100%; justify-content: center; margin-top: 20px">
+			<button onclick="prevBtnFunc()" id="prevBtn">Prev</button>
+			<span style="width: 20px"></span>
+			<button onclick="nextBtnFunc()" id="nextBtn">Next</button>
+		</div>
+	</div>
+
+<script type="text/javascript">	
+	var databaseLink = "https://libraryss19.herokuapp.com"
+	var currentPage = 1
+	var lastPage = 0
+
+	function loadMembers(){
+		fetch(databaseLink+'/api/members?page='+currentPage, {
+			method: 'GET', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+			lastPage = data[1].last_page
+
+			if(currentPage == lastPage){
+				document.getElementById('nextBtn').disabled = true
+				document.getElementById('prevBtn').disabled = true
+				if(lastPage > 1){
+					document.getElementById('prevBtn').disabled = false
+				}
+			}else{
+				document.getElementById('nextBtn').disabled = false
+				document.getElementById('prevBtn').disabled = false
+				if(currentPage == 1){
+					document.getElementById('prevBtn').disabled = true
+				}
+			}
+
+			var memTableBod = document.getElementById('memTableBod')
+			memTableBod.innerHTML = ""
+			for(var i=0; i<data[1].data.length; i++){
+				var tr = document.createElement('TR')
+				var td1 = document.createElement('TD')
+				var td2 = document.createElement('TD')
+				var td3 = document.createElement('TD')
+				td1.textContent = data[1].data[i].name
+				td2.textContent = data[1].data[i].phoneNum
+				td3.textContent = data[1].data[i].address + " " + data[1].data[i].postcode + " " + data[1].data[i].city + " " + data[1].data[i].state
+
+				memTableBod.appendChild(tr)
+				tr.appendChild(td1)
+				tr.appendChild(td2)
+				tr.appendChild(td3)
+
+			}
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
+	}loadMembers()
+
+
+	function nextBtnFunc(){
+		currentPage = currentPage + 1		
+		loadMembers()
+	}
+
+
+	function prevBtnFunc(){
+		currentPage = currentPage - 1
+		loadMembers()
+	}
+
+
+	function addMemberFunc(){
+		var name = document.getElementsByName('name')[0].value
+		var phoneNum = document.getElementsByName('phoneNum')[0].value
+		var address = document.getElementsByName('address')[0].value
+		var postcode = document.getElementsByName('postcode')[0].value
+		var city = document.getElementsByName('city')[0].value
+		var state = document.getElementsByName('state')[0].value
+		var country = document.getElementsByName('country')[0].value
+
+		const data = {
+			name: capitalize(name),
+			phoneNum: phoneNum,
+			address: address,
+			postcode: postcode,
+			city: capitalize(city),
+			state: capitalize(state),
+			country: capitalize(country),
+			status: "good"
+		};
+
+		fetch(databaseLink+'/api/new-member', {
+			method: 'POST', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+
+			modalVisibility()
+			loadMembers()
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});	
+	}
+
+	
+	function modalVisibility(){
+		var modalDisplay = document.getElementById('modal').style.display
+		console.log(modalDisplay)
+		if(modalDisplay == "block"){
+			document.getElementById('modal').style.display = "none"
+
+			document.getElementsByName('name')[0].value = ""
+			document.getElementsByName('phoneNum')[0].value = ""
+			document.getElementsByName('address')[0].value = ""
+			document.getElementsByName('postcode')[0].value = ""
+			document.getElementsByName('city')[0].value = ""
+			document.getElementsByName('state')[0].value = ""
+			document.getElementsByName('country')[0].value = ""
+		}else{
+			document.getElementById('modal').style.display = "block"
+		}
+	}
+</script>
+
+
+	
+</body>
+</html>

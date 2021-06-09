@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HOMEPAGE</title>
+	<script src="functions.js"></script>
+	<style type="text/css">
+		body{
+			padding: 0px
+		}
+		h1{
+			width: 100%;
+			height: 60px;
+			text-align: center;
+			padding-top: 20px;
+			margin-top: 0px;
+			background-image: url('https://image.freepik.com/free-photo/hand-painted-watercolor-background-with-sky-clouds-shape_24972-1095.jpg');
+			background-size: cover
+		}
+		ul{
+			display: flex;
+			list-style-type: none;
+			padding: 0px
+		}
+		li{
+			margin: 0px 30px;
+			font-size: 20px
+		}
+		h3{
+			font-size: 40px
+		}
+		div>p{
+			font-size: 30px
+		}
+
+
+
+
+		.divBox{
+			border: black solid 1px;
+			width: 300px;
+			height: 200px;
+			text-align: center;
+			padding-top: 10px
+		}
+	</style>
+</head>
+<body>
+	<h1 style="">SS 19 MINI LIBRARY</h1>
+	<div id="navigationBarDiv">
+		<ul>
+			<li onclick="window.location.href = 'adminHomepage.html'">Homepage</li>
+			<li onclick="window.location.href = 'adminBooks.html'">Books</li>
+			<li onclick="window.location.href = 'adminMembers.html'">Members</li>
+		</ul>
+	</div>
+	<div id="mainContentDiv">
+		<div style="display: flex; justify-content: space-around; margin-top: 40px">
+			<div class="divBox">
+				<h3>Books</h3>
+				<p id="booksNumber">0</p>
+			</div>
+			<div class="divBox">
+				<h3>Members</h3>
+				<p id="membersNumber">0</p>
+			</div>
+			<div class="divBox">
+				<h3>Outstanding</h3>
+				<p>0</p>
+			</div>
+			<div class="divBox">
+				<h3>Borrowed</h3>
+				<p>0</p>
+			</div>
+		</div>		
+	</div>
+
+<script type="text/javascript">	
+	var databaseLink = "https://libraryss19.herokuapp.com"
+
+	function loadData(){
+		fetch(databaseLink+'/api/books/count', {
+			method: 'GET', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+			document.getElementById('booksNumber').innerHTML = data[1]
+			document.getElementById('membersNumber').innerHTML = data[2]
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
+	}loadData()
+</script>
+
+</body>
+</html>
