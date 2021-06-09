@@ -176,7 +176,7 @@
 				video: {
 					facingMode: 'environment'
 			}
-		}).then((stream)=> {
+		}).then(stream=> {
 				qrReader.srcObject = stream
 				qrReader.play()
 			})
