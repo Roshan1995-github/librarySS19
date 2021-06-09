@@ -96,6 +96,9 @@
 				overflow-x: hidden;
 				padding: 10px;
 			}
+			#qrReader{
+				max-height: 200px;
+			}
 		}
 	</style>
 </head>
@@ -177,8 +180,8 @@
 					facingMode: 'environment'
 			}
 		}).then(stream=> {
-				// qrReader.srcObject = stream
-				// qrReader.play()
+				qrReader.srcObject = stream
+				qrReader.play()
 			})
 		}
 		
