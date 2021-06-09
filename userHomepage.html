@@ -102,6 +102,7 @@
 <body>	
 	<video id="qrReader" style="border: red solid 1px; display: none;"></video>
 	<canvas id="qrReaderCanvas" style="border: solid red 1px; display: none;"></canvas>
+	<!-- <canvas id="secondCanvas" style="border: solid red 1px;"></canvas> -->
 	<div style="display: flex; justify-content: space-between; margin: 0px 10px">
 		<p>Hello Name</p>
 		<img style="height: 20px" src="cart.png" onclick="checkOutCartFunc()">
@@ -164,25 +165,28 @@
 			console.log("paused")
 		}
 	}
-	var qrReader = document.getElementById('qrReader')
-	if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
-		navigator.mediaDevices.getUserMedia({ video: true }).then((stream)=> {
-			qrReader.srcObject = stream
-			qrReader.play()
-			
-			// console.log(imgData)
-			// const code = jsQR(stream, 400, 400);
+	
 
-			// if (code) {
-			//   console.log("Found QR code", code);
-			// }
-		})
-	}
 	function scanQRBtnFunc(){
 		document.getElementById('qrReaderCanvas').style.display = "block"
 
-
+		var qrReader = document.getElementById('qrReader')
+		if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
+			navigator.mediaDevices.getUserMedia({
+				video: {
+					facingMode: {
+						exact: 'environment'
+					}
+			}
+		}).then((stream)=> {
+				qrReader.srcObject = stream
+				qrReader.play()
+			})
+		}
 		
+		qrReaderCanvasFunc()
+	}
+	function qrReaderCanvasFunc(){
 		var qrReaderCanvas = document.getElementById('qrReaderCanvas')
 		var ctx = qrReaderCanvas.getContext('2d')
 		var qrReader = document.getElementById('qrReader')
@@ -196,25 +200,26 @@
 
 			ctx.beginPath();
 			ctx.lineWidth = "4";
-			ctx.strokeStyle = "green";
+			ctx.strokeStyle = "blue";
 			ctx.rect(120, 40, 400, 400);
 			ctx.stroke();
 
-			var imageData = ctx.getImageData(0, 0, 100, 100)
+			var imageData = ctx.getImageData(120, 42, 400, 400)
 			console.log(imageData.data)
-			const code = jsQR(imageData.data, 100, 100);
+			const code = jsQR(imageData.data, 400, 400);
 
 			if (code) {
 			  alert("Found QR code", code);
 			}
 		}
+
+		// var canvastwo = document.getElementById('secondCanvas')
+		// canvastwo.width = qrReader.videoWidth
+		// 	canvastwo.height = qrReader.videoHeight
+		// var ctx2 = canvastwo.getContext('2d')
+		// ctx2.putImageData(imageData, 0, 0)
 		
-		setTimeout(scanQRBtnFunc, 100);
-
-
-
-
-		
+		// setTimeout(qrReaderCanvasFunc, 10);
 	}
 
 	
