@@ -100,7 +100,7 @@
 	</style>
 </head>
 <body>	
-	<video id="qrReader" style="border: red solid 1px; display: none;"></video>
+	<video id="qrReader" style="border: red solid 1px; display: block;"></video>
 	<canvas id="qrReaderCanvas" style="border: solid red 1px; display: none;"></canvas>
 	<!-- <canvas id="secondCanvas" style="border: solid red 1px;"></canvas> -->
 	<div style="display: flex; justify-content: space-between; margin: 0px 10px">
@@ -174,9 +174,7 @@
 		if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
 			navigator.mediaDevices.getUserMedia({
 				video: {
-					facingMode: {
-						exact: 'environment'
-					}
+					facingMode: 'environment'
 			}
 		}).then((stream)=> {
 				qrReader.srcObject = stream
