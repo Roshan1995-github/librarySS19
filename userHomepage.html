@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head permissions-policy: interest-cohort=()>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>HOME</title>
 	<script src="functions.js"></script>
@@ -99,6 +99,9 @@
 			#qrReader{
 				max-height: 200px;
 			}
+			#qrReaderCanvas{
+				max-height: 200px;
+			}
 		}
 	</style>
 </head>
@@ -107,7 +110,7 @@
 	<canvas id="qrReaderCanvas" style="border: solid red 1px; display: block; max-width: 100%;"></canvas>
 	<!-- <canvas id="secondCanvas" style="border: solid red 1px;"></canvas> -->
 	<div style="display: flex; justify-content: space-between; margin: 0px 10px">
-		<p>Hello Name</p>
+		<p>Hello Name A</p>
 		<img style="height: 20px" src="cart.png" onclick="checkOutCartFunc()">
 	</div>
 	<h1 style="width: 100%; text-align: center">SS 19 MINI LIBRARY</h1>
@@ -171,7 +174,7 @@
 	
 
 	function scanQRBtnFunc(){
-		document.getElementById('qrReaderCanvas').style.display = "block"
+		// document.getElementById('qrReaderCanvas').style.display = "block"
 
 		var qrReader = document.getElementById('qrReader')
 		if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
