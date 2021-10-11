@@ -105,52 +105,53 @@
 		}
 	</style>
 </head>
-<body>	
-	<div id="reader" width="600px"></div>
-	<!-- <video id="qrReader" style="border: red solid 1px; display: block; max-width: 100%;"></video> -->
-	<!-- <canvas id="qrReaderCanvas" style="border: solid red 1px; display: block; max-width: 100%;"></canvas> -->
-	<!-- <canvas id="secondCanvas" style="border: solid red 1px;"></canvas> -->
+<body>
+	<div style="width: 100%; height: 100%; display: none;" id="qrReader">
+		<div id="reader" width="100%"></div>
+		<button>Cancel</button>
+	</div>
 
-
-	<div style="display: flex; justify-content: space-between; margin: 0px 10px">
-		<p id="greetings"></p>
-		<img style="height: 20px" src="cart.png" onclick="checkOutCartFunc()">
-	</div>
-	<h1 style="width: 100%; text-align: center">SS 19 MINI LIBRARY</h1>
-	<div id="navigationBarDiv" style="display: flex; justify-content: space-between">
-		<ul>
-			<li onclick="window.location.href = 'userHomepage.html'">Homepage</li>
-			<li onclick="window.location.href = 'userBooks.html'">Books</li>
-			<li onclick="window.location.href = 'userProfile.html'">Profile</li>
-			<li onclick="window.location.href = 'userHowToUse.html'">How To Use</li>
-		</ul>
-		<button style="height: 30px; margin-top: 20px; margin-right: 20px" onclick="scanQRBtnFunc()">Scan QR Code</button>
-	</div>
-	<div id="mainContentDiv" style="border: solid black 1px">
-		<div id="displayBooksDiv" style="width: 90%; margin: 10px auto">
-			
+	<div id="body">
+		<div style="display: flex; justify-content: space-between; margin: 0px 10px">
+			<p id="greetings"></p>
+			<img style="height: 20px" src="cart.png" onclick="checkOutCartFunc()">
 		</div>
-		<div id="prevNextBtnDiv" style="display: flex; width: 100%; justify-content: center; margin-top: 20px">
-			<button onclick="prevBtnFunc()" id="prevBtn" style="display: none">Prev</button>
-			<span style="width: 20px"></span>
-			<button onclick="nextBtnFunc()" id="nextBtn" style="display: none">Next</button>
+		<h1 style="width: 100%; text-align: center">SS 19 MINI LIBRARY</h1>
+		<div id="navigationBarDiv" style="display: flex; justify-content: space-between">
+			<ul>
+				<li onclick="window.location.href = 'userHomepage.html'">Homepage</li>
+				<li onclick="window.location.href = 'userBooks.html'">Books</li>
+				<li onclick="window.location.href = 'userProfile.html'">Profile</li>
+				<li onclick="window.location.href = 'userHowToUse.html'">How To Use</li>
+			</ul>
+			<button style="height: 30px; margin-top: 20px; margin-right: 20px" onclick="scanQRBtnFunc()">Scan QR Code</button>
 		</div>
-	</div>
-	<div id="modal">
-		<div id="modalContent">
-			<img src="" id="modalImage" style="width: 200px; margin: 20px auto; display: block;">
-			<p id="modalTitle"></p>
-			<p id="modalAuthor"></p>
-			<p id="modalCategory"></p>
-			<p id="modalGenre"></p>
-			<p id="modalDateBorrowed"></p>
-			<p id="modalDateExpectedReturn"></p>
-			<p id="modalRemainingOverdue"></p>
-			<div style="display: flex; width: 90%; margin: 10px auto; justify-content: space-around;">
-				<button onclick="modalVisibility()">Cancel</button>
-				<button>Returned</button>
+		<div id="mainContentDiv" style="border: solid black 1px">
+			<div id="displayBooksDiv" style="width: 90%; margin: 10px auto">
+				
 			</div>
-		</div>		
+			<div id="prevNextBtnDiv" style="display: flex; width: 100%; justify-content: center; margin-top: 20px">
+				<button onclick="prevBtnFunc()" id="prevBtn" style="display: none">Prev</button>
+				<span style="width: 20px"></span>
+				<button onclick="nextBtnFunc()" id="nextBtn" style="display: none">Next</button>
+			</div>
+		</div>
+		<div id="modal">
+			<div id="modalContent">
+				<img src="" id="modalImage" style="width: 200px; margin: 20px auto; display: block;">
+				<p id="modalTitle"></p>
+				<p id="modalAuthor"></p>
+				<p id="modalCategory"></p>
+				<p id="modalGenre"></p>
+				<p id="modalDateBorrowed"></p>
+				<p id="modalDateExpectedReturn"></p>
+				<p id="modalRemainingOverdue"></p>
+				<div style="display: flex; width: 90%; margin: 10px auto; justify-content: space-around;">
+					<button onclick="modalVisibility()">Cancel</button>
+					<button>Returned</button>
+				</div>
+			</div>		
+		</div>
 	</div>
 
 <script type="text/javascript">	
@@ -200,56 +201,8 @@
 
 
 	function scanQRBtnFunc(){
-		// document.getElementById('qrReaderCanvas').style.display = "block"
-
-		var qrReader = document.getElementById('qrReader')
-		if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
-			navigator.mediaDevices.getUserMedia({
-				video: {
-					facingMode: 'environment'
-			}
-		}).then(stream=> {
-				qrReader.srcObject = stream
-				qrReader.play()
-			})
-		}
-		
-		qrReaderCanvasFunc()
-	}
-	function qrReaderCanvasFunc(){
-		var qrReaderCanvas = document.getElementById('qrReaderCanvas')
-		var ctx = qrReaderCanvas.getContext('2d')
-		var qrReader = document.getElementById('qrReader')
-		console.log(qrReader.videoHeight)
-		console.log(qrReader.videoWidth)
-		if(qrReader.play()){
-			qrReaderCanvas.width = qrReader.videoWidth
-			qrReaderCanvas.height = qrReader.videoHeight
-
-			ctx.drawImage(qrReader, 0, 0)
-
-			ctx.beginPath();
-			ctx.lineWidth = "4";
-			ctx.strokeStyle = "blue";
-			ctx.rect(120, 40, 400, 400);
-			ctx.stroke();
-
-			var imageData = ctx.getImageData(120, 42, 400, 400)
-			console.log(imageData.data)
-			const code = jsQR(imageData.data, 400, 400);
-
-			if (code) {
-			  alert("Found QR code", code);
-			}
-		}
-
-		// var canvastwo = document.getElementById('secondCanvas')
-		// canvastwo.width = qrReader.videoWidth
-		// 	canvastwo.height = qrReader.videoHeight
-		// var ctx2 = canvastwo.getContext('2d')
-		// ctx2.putImageData(imageData, 0, 0)
-		
-		setTimeout(qrReaderCanvasFunc, 10);
+document.getElementById('body').style.display = "none"
+		document.getElementById('qrReader').style.display = "block"
 	}
 
 	
