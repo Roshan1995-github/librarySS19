@@ -4,7 +4,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>HOME</title>
 	<script src="functions.js"></script>
-	<script src="node_modules\jsqr\dist\jsQR.js"></script>
+	<script src="./node_modules/html5-qrcode/dist/html5-qrcode.min.js"></script>
 	<style type="text/css">
 		ul{
 			display: flex;
@@ -106,8 +106,9 @@
 	</style>
 </head>
 <body>	
-	<video id="qrReader" style="border: red solid 1px; display: block; max-width: 100%;"></video>
-	<canvas id="qrReaderCanvas" style="border: solid red 1px; display: block; max-width: 100%;"></canvas>
+	<div id="reader" width="600px"></div>
+	<!-- <video id="qrReader" style="border: red solid 1px; display: block; max-width: 100%;"></video> -->
+	<!-- <canvas id="qrReaderCanvas" style="border: solid red 1px; display: block; max-width: 100%;"></canvas> -->
 	<!-- <canvas id="secondCanvas" style="border: solid red 1px;"></canvas> -->
 
 
@@ -156,12 +157,12 @@
 
 	// var databaseLink = "https://libraryss19.herokuapp.com"
 	var databaseLink = "http://libraryss19.test"
-	var userData = JSON.parse(sessionStorage.getItem('userData'))
-	var userId = userData.id
-	console.log(userId);
-	document.getElementById('greetings').innerHTML = "Hello "+userData.name
-	var currentPage = 1
-	var lastPage = 0
+	// var userData = JSON.parse(sessionStorage.getItem('userData'))
+	var userId = 1
+	// console.log(userId);
+	// document.getElementById('greetings').innerHTML = "Hello "+userData.name
+	// var currentPage = 1
+	// var lastPage = 0
 	
 	var cameraId = ""
 
@@ -171,6 +172,31 @@
 	}
 
 	
+
+
+
+	function onScanSuccess(decodedText, decodedResult) {
+	  // handle the scanned code as you like, for example:
+	  console.log(`Code matched = ${decodedText}`, decodedResult);
+	}
+
+	function onScanFailure(error) {
+	  // handle scan failure, usually better to ignore and keep scanning.
+	  // for example:
+	  console.warn(`Code scan error = ${error}`);
+	}
+
+	let html5QrcodeScanner = new Html5QrcodeScanner(
+	  "reader",
+	  { fps: 10, qrbox: {width: 250, height: 250} },
+	  /* verbose= */ false);
+	html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+
+
+
+
+
+
 
 	function scanQRBtnFunc(){
 		// document.getElementById('qrReaderCanvas').style.display = "block"

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>LOG IN PAGE</title>
+	<script src="functions.js"></script>
+	<style type="text/css">
+		ul{
+			display: flex;
+			list-style-type: none;
+			padding: 0px
+		}
+		li{
+			margin: 10px;
+			width: 100px
+		}
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+		    -webkit-appearance: none;
+		    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+		}
+		input[type=number] {
+		    -moz-appearance:textfield; /* Firefox */
+		}
+	</style>
+</head>
+<body>
+	<p>Phone Number</p>
+	<input type="number" name="phoneNum">
+	<p>password</p>
+	<input type="password" name="password">
+	<br><br>
+	<button onclick="loginBtnFunc()">Login</button>
+	</div>
+
+
+	<input type="file" name="image">
+	<button onclick="postImage()">press me</button>
+	<br>
+	<img src="" id="imageDisplay" style="width: 300px">
+
+<script type="text/javascript">	
+	// var databaseLink = "https://libraryss19.herokuapp.com"
+	var databaseLink = "http://libraryss19.test"
+
+	function loginBtnFunc(){
+		var phoneNum = document.getElementsByName('phoneNum')[0].value
+		var password = document.getElementsByName('password')[0].value
+
+		while(phoneNum.charAt(0) == " "){
+			phoneNum = phoneNum.substring(1)
+		}
+		while(password.charAt(0) == " "){
+			password = password.substring(1)
+		}
+
+		if(phoneNum == ""){
+			alert("Please enter phone number.")
+			return;
+		}
+		if(password == ""){
+			alert("Please enter password.")
+			document.getElementsByName('password')[0].setAttribute('style', 'border: 1px red solid')
+			return;
+		}
+
+		fetch(databaseLink+'/api/memberLogIn/'+phoneNum+'/'+password, {
+			method: 'GET', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+
+			if(data == "wrong phone number"){
+				alert("Phone number entered does not exist in system.")
+			}else if(data == "wrong password"){
+				alert("Wrong password entered.")
+			}else{
+				sessionStorage.setItem('userData', JSON.stringify(data[1][0]));
+				window.location.href = "userHomepage.html";	
+			}
+			
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
+	}
+	
+	function postImage(){
+		var imageData = document.getElementsByName('image')[0].files[0]
+		// var reader = new FileReader()
+		// reader.readAsDataURL(imageData)
+		// reader.onload = function(evt){
+			console.log(imageData)
+		// 	console.log(evt)
+		// 	console.log(evt.target.result)
+		// 	document.getElementById('imageDisplay').src = evt.target.result
+
+
+			// const data = {
+			// 	photo: imageData
+			// };
+			const data = new FormData();
+			data.append('photo', imageData)
+			// data.append('name', "roshan")
+			console.log(...data)
+			fetch(databaseLink+'/api/post-image', {
+				method: 'PUT',
+				 headers: {
+			      "Content-Type": "multipart/form-data"
+			    },
+				body:data
+			})
+			.then(response => response.json())
+			.then(data => {
+				console.log('Success:', data);
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			});
+		// }
+
+	}
+
+</script>
+
+</body>
+</html>

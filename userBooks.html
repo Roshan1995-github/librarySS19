@@ -129,7 +129,8 @@
 	</div>
 
 <script type="text/javascript">	
-	var databaseLink = "https://libraryss19.herokuapp.com"
+	// var databaseLink = "https://libraryss19.herokuapp.com"
+	var databaseLink = "http://libraryss19.test"
 	var currentPage = 1
 	var lastPage = 0
 
@@ -218,6 +219,7 @@
 				for (var j=0; j<3; j++){
 					var bookContentDiv = document.createElement('DIV')
 					bookContentDiv.setAttribute('id', 'bookContentDiv')
+					console.log(bookContentDiv)
 					console.log(data[dataNumber].availability)
 					if(data[dataNumber].availability == "unavailable"){
 						bookContentDiv.setAttribute('style', 'width: 30%; padding: 10px; text-align: center; background-color: red; margin-top: 10px')
@@ -230,10 +232,15 @@
 					image.setAttribute('style', 'height: 200px')
 					var paraDiv = document.createElement('DIV')
 					paraDiv.setAttribute('style', 'text-align:left; width: 60%; margin: 0px auto')
+					paraDiv.setAttribute('id', data[dataNumber].id)
 					paraDiv.innerHTML = "Title : "+data[dataNumber].name+"<br>"+"Author : "+data[dataNumber].author+"<br>"+"Category : "+data[dataNumber].category+"<br>"+"Genre : "+data[dataNumber].genre
 
 					bookContentDiv.appendChild(image)
 					bookContentDiv.appendChild(paraDiv)
+
+					bookContentDiv.addEventListener('click', function(e){
+						console.log(this.children[1].id)
+					})
 					
 					div.appendChild(bookContentDiv)
 					dataNumber = dataNumber + 1

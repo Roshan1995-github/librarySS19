@@ -77,6 +77,8 @@
 			<input type="text" name="name">
 			<p>Phone Number</p>
 			<input type="number" name="phoneNum">
+			<p>Password</p>
+			<input type="password" name="password">
 			<p>Address</p>
 			<input type="text" name="address">
 			<p>Postcode</p>
@@ -128,7 +130,8 @@
 	</div>
 
 <script type="text/javascript">	
-	var databaseLink = "https://libraryss19.herokuapp.com"
+	// var databaseLink = "https://libraryss19.herokuapp.com"
+	var databaseLink = "http://libraryss19.test"
 	var currentPage = 1
 	var lastPage = 0
 
@@ -197,15 +200,71 @@
 	function addMemberFunc(){
 		var name = document.getElementsByName('name')[0].value
 		var phoneNum = document.getElementsByName('phoneNum')[0].value
+		var password = document.getElementsByName('password')[0].value
 		var address = document.getElementsByName('address')[0].value
 		var postcode = document.getElementsByName('postcode')[0].value
 		var city = document.getElementsByName('city')[0].value
 		var state = document.getElementsByName('state')[0].value
 		var country = document.getElementsByName('country')[0].value
 
+		while(name.charAt(0) == " "){
+			name = name.substring(1)
+		}
+		while(phoneNum.charAt(0) == " "){
+			phoneNum = phoneNum.substring(1)
+		}
+		while(password.charAt(0) == " "){
+			password = password.substring(1)
+		}
+		while(address.charAt(0) == " "){
+			address = address.substring(1)
+		}
+		while(postcode.charAt(0) == " "){
+			postcode = postcode.substring(1)
+		}
+		while(city.charAt(0) == " "){
+			city = city.substring(1)
+		}
+		while(state.charAt(0) == " "){
+			state = state.substring(1)
+		}
+		while(country.charAt(0) == " "){
+			country = country.substring(1)
+		}
+
+		if(name == ""){
+			alert("Please fill up member name.")
+			return;
+		}
+		if(phoneNum == ""){
+			alert("Please fill up member name.")
+			return;
+		}
+		if(password == ""){
+			alert("Please fill up member name.")
+			return;
+		}
+		// if(name == ""){
+		// 	alert("Please fill up member name.")
+		// 	return;
+		// }
+		// if(name == ""){
+		// 	alert("Please fill up member name.")
+		// 	return;
+		// }
+		// if(name == ""){
+		// 	alert("Please fill up member name.")
+		// 	return;
+		// }
+		// if(name == ""){
+		// 	alert("Please fill up member name.")
+		// 	return;
+		// }
+
 		const data = {
 			name: capitalize(name),
 			phoneNum: phoneNum,
+			password: password,
 			address: address,
 			postcode: postcode,
 			city: capitalize(city),

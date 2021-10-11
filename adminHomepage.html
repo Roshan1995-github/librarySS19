@@ -55,11 +55,11 @@
 	</div>
 	<div id="mainContentDiv">
 		<div style="display: flex; justify-content: space-around; margin-top: 40px">
-			<div class="divBox">
+			<div class="divBox" onclick="window.location.href = 'adminBooks.html'">
 				<h3>Books</h3>
 				<p id="booksNumber">0</p>
 			</div>
-			<div class="divBox">
+			<div class="divBox" onclick="window.location.href = 'adminMembers.html'">
 				<h3>Members</h3>
 				<p id="membersNumber">0</p>
 			</div>
@@ -75,7 +75,8 @@
 	</div>
 
 <script type="text/javascript">	
-	var databaseLink = "https://libraryss19.herokuapp.com"
+	// var databaseLink = "https://libraryss19.herokuapp.com"
+	var databaseLink = "http://libraryss19.test"
 
 	function loadData(){
 		fetch(databaseLink+'/api/books/count', {

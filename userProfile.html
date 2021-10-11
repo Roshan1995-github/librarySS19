@@ -109,33 +109,45 @@
 	</div>
 
 <script type="text/javascript">	
-	var databaseLink = "https://libraryss19.herokuapp.com"
-	var memberId = 6
+	// var databaseLink = "https://libraryss19.herokuapp.com"
+	var databaseLink = "http://libraryss19.test"
+	var userData = JSON.parse(sessionStorage.getItem('userData'))
+	console.log(userData)
+	var memberId = userData.id
 	
 
 	function loadMemberData(){
-		fetch(databaseLink+'/api/member/'+memberId, {
-			method: 'GET', // or 'PUT'
-			headers: {
-				'Content-Type': 'application/json',
-			}
-		})
-		.then(response => response.json())
-		.then(data => {
-			console.log('Success:', data);
-			var data = data[1][0]
+		data = userData
+		// fetch(databaseLink+'/api/member/'+memberId, {
+		// 	method: 'GET', // or 'PUT'
+		// 	headers: {
+		// 		'Content-Type': 'application/json',
+		// 	}
+		// })
+		// .then(response => response.json())
+		// .then(data => {
+		// 	console.log('Success:', data);
+		// 	var data = data[1][0]
 
-			document.getElementsByName('name')[0].value	= data.name
-			document.getElementsByName('phoneNum')[0].value	= data.phoneNum
-			document.getElementsByName('address')[0].value	= data.address
-			document.getElementsByName('postcode')[0].value	= data.postcode
-			document.getElementsByName('city')[0].value	= data.city
-			document.getElementsByName('state')[0].value	= data.state
-			document.getElementsByName('country')[0].value	= data.country
-		})
-		.catch((error) => {
-			console.error('Error:', error);
-		});
+		// 	document.getElementsByName('name')[0].value	= data.name
+		// 	document.getElementsByName('phoneNum')[0].value	= data.phoneNum
+		// 	document.getElementsByName('address')[0].value	= data.address
+		// 	document.getElementsByName('postcode')[0].value	= data.postcode
+		// 	document.getElementsByName('city')[0].value	= data.city
+		// 	document.getElementsByName('state')[0].value	= data.state
+		// 	document.getElementsByName('country')[0].value	= data.country
+		// })
+		// .catch((error) => {
+		// 	console.error('Error:', error);
+		// });
+
+		document.getElementsByName('name')[0].value	= data.name
+		document.getElementsByName('phoneNum')[0].value	= data.phoneNum
+		document.getElementsByName('address')[0].value	= data.address
+		document.getElementsByName('postcode')[0].value	= data.postcode
+		document.getElementsByName('city')[0].value	= data.city
+		document.getElementsByName('state')[0].value	= data.state
+		document.getElementsByName('country')[0].value	= data.country
 	}loadMemberData()
 
 
@@ -200,6 +212,8 @@
 
 	function logoutBtnFunc(){
 		console.log("Log out Btn clicked")
+		sessionStorage.removeItem('userData');
+		window.location.href = "logintest.html";
 	}
 	// const data = { username: 'example' };
 	// fetch('https://example.com/profile', {
