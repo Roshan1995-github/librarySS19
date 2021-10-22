@@ -5,38 +5,52 @@
 	<title>PROFILE</title>
 	<script src="functions.js"></script>
 	<style type="text/css">
+		html, body{
+			margin: 0;
+			height: 100%;
+			background-image: url("Images/background-1.jpg");
+		}
+		body{
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+		}
 		ul{
 			display: flex;
 			list-style-type: none;
 			padding: 0px
 		}
 		li{
-			margin: 10px;
-			width: 100px
-		}
-		#mainContentDiv{
-			border:  solid black 1px;
-			background-color: green;
-		}
-		#mainContentDiv>div{
-			border:  solid black 1px;
-			width: 40%;
-			margin: 0px auto;
-			background-color: chartreuse;
-		}
-		#mainContentDiv>div>p{
-			margin:  10px 0px 0px 10px;
+			border: solid yellow 1px;
+			color: white;
 			font-size: 20px;
+			margin: 10px;
+			width: 150px;
+			text-align: center;
+			background: linear-gradient(to bottom, #00ff00 -43%, #009933 100%);
 		}
-		#mainContentDiv>div>input{
-			display: block;
+		p{
+			margin:  10px 0px 0px 0px;
+			font-size: 20px;
+			color: white;
+		}
+		input{
 			margin: 0px auto;
 			font-size: 20px;
 			width: 90%;
+			border-radius: 10px;
+			padding: 5px;
 		}
-		#mainContentDiv>div>div>button{
-			width: 100px;
-			height: 30px
+		#mainContentDiv{
+			display: flex;
+			border:  solid black 1px;
+			width: 98%;
+			height: 410px;
+			margin: 0px auto;
+			background: linear-gradient(to bottom, #66ff33 -27%, #009933 100%);
+		}
+		#mainContentDiv>div>div{
+			display: inline-block;
+			width: 450px;
 		}
 		#mainContentDiv>div>input::-webkit-outer-spin-button,
 		#mainContentDiv>div>input::-webkit-inner-spin-button {
@@ -46,6 +60,17 @@
 		#mainContentDiv>div>input[type=number] {
 		    -moz-appearance:textfield; /* Firefox */
 		}
+		#editLogBtn>button{
+			width: 200px;
+			height: 40px;
+			border-radius: 12px;
+			color: white;
+			font: italic small-caps bold 16px/2 cursive;
+		}
+
+
+
+
 		@media (max-width: 700px){
 			#navigationBarDiv{
 				flex-direction: column;
@@ -63,18 +88,23 @@
 			#navigationBarDiv>ul>li{
 				text-align: center;
 			}
+			#mainContentDiv{
+				display: block;
+				height: 920px;
+			}
 			#mainContentDiv>div{
 				width: 80%;
+				margin: 0px auto;
+			}
+			#imageDiv{
+				text-align: center;
 			}
 		}
 	</style>
 </head>
 <body>
-	<div style="display: flex; justify-content: space-between; margin: 0px 10px">
-		<p>Hello Name</p>
-		<img style="height: 20px" src="cart.png" onclick="checkOutCartFunc()">
-	</div>
-	<h1 style="width: 100%; text-align: center">SS 19 MINI LIBRARY</h1>
+	<p id="greetings" style="color: white; font-size: 20px">Hello</p>
+	<h1 style="color: white; font: italic small-caps bold 40px cursive; text-align: center;">SS19 LIBRARY</h1>
 	<div id="navigationBarDiv">
 		<ul>
 			<li onclick="window.location.href = 'userHomepage.html'">Homepage</li>
@@ -84,35 +114,54 @@
 		</ul>
 	</div>
 	<div id="mainContentDiv">
+		<div id="imageDiv">
+			<img src="https://images.ctfassets.net/g8qtv9gzg47d/6SiUg4TCwLA9OfEy3KlQy7/41c90a47f0250d130323056f69f6cdca/5de2bba479d7577cd722e553.jpeg?fl=progressive&fm=jpg&q=80" style="width: 300px; height: 300px; margin: 20px; display: inline-block">
+		</div>
 		<div>
-			<img src="https://images.ctfassets.net/g8qtv9gzg47d/6SiUg4TCwLA9OfEy3KlQy7/41c90a47f0250d130323056f69f6cdca/5de2bba479d7577cd722e553.jpeg?fl=progressive&fm=jpg&q=80" style="width: 80%; margin: 20px auto; display: block">
-			<p>Name</p>
-			<input type="text" name="name" disabled="true">
-			<p>Phone Number</p>
-			<input type="number" name="phoneNum" disabled="true">
-			<p>Address</p>
-			<input type="text" name="address" disabled="true">
-			<p>Postcode</p>
-			<input type="number" name="postcode" disabled="true">
-			<p>City</p>
-			<input type="text" name="city" disabled="true">
-			<p>State</p>
-			<input type="text" name="state" disabled="true">
-			<p>Country</p>
-			<input type="text" name="country" disabled="true">
-			<br>
-			<div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
-				<button onclick="editBtnFunc()" id="editBtn">Edit</button>
-				<button onclick="logoutBtnFunc()">Log Out</button>
+			<div>
+				<p>Name</p>
+				<input type="text" name="name" disabled="true">
+			</div>
+			<div>
+				<p>Phone Number</p>
+				<input type="number" name="phoneNum" disabled="true">
+			</div>
+			<div>
+				<p>Address</p>
+				<input type="text" name="address" disabled="true">
+			</div>
+			<div>
+				<p>Postcode</p>
+				<input type="number" name="postcode" disabled="true">
+			</div>
+			<div>
+				<p>City</p>
+				<input type="text" name="city" disabled="true">
+			</div>
+			<div>
+				<p>State</p>
+				<input type="text" name="state" disabled="true">
+			</div>
+			<div>
+				<p>Country</p>
+				<input type="text" name="country" disabled="true">
+			</div>
+			<div id="editLogBtn">
+				<button onclick="editBtnFunc()" id="editBtn" style="background: linear-gradient(to bottom, #ffff00 -50%, #ff9900 100%); margin: 20px auto;">Edit</button>
+				<button onclick="logoutBtnFunc()" style="background-color: red">Log Out</button>
 			</div>
 		</div>
 	</div>
 
 <script type="text/javascript">	
-	// var databaseLink = "https://libraryss19.herokuapp.com"
-	var databaseLink = "http://libraryss19.test"
-	var userData = JSON.parse(sessionStorage.getItem('userData'))
+	var databaseLink = "https://libraryss19.herokuapp.com"
+	// var databaseLink = "http://libraryss19.test"
+	var userData = JSON.parse(sessionStorage.getItem('userData'))	
 	console.log(userData)
+	if(userData == null){
+		window.location.href = "logintest.html";
+	}
+	document.getElementById('greetings').innerHTML = "Hello "+userData.name	
 	var memberId = userData.id
 	
 
@@ -149,11 +198,6 @@
 		document.getElementsByName('state')[0].value	= data.state
 		document.getElementsByName('country')[0].value	= data.country
 	}loadMemberData()
-
-
-	function checkOutCartFunc(){
-		console.log("check out button clicked")
-	}
 
 
 	function editBtnFunc(){

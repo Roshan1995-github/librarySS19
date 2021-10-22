@@ -5,18 +5,43 @@
 	<title>BOOKS</title>
 	<script src="functions.js"></script>
 	<style type="text/css">
+		html, body{
+			margin: 0;
+			height: 100%;			
+			background-image: url("Images/background-1.jpg");
+		}
+		body{
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+		}
 		ul{
 			display: flex;
 			list-style-type: none;
 			padding: 0px
 		}
 		li{
+			border: solid yellow 1px;
+			color: white;
+			font-size: 20px;
 			margin: 10px;
-			width: 100px
+			width: 150px;
+			text-align: center;
+			background: linear-gradient(to bottom, #00ff00 -43%, #009933 100%);
 		}
-		image{
-			width: 10px
+		p{
+			font-size: 20px;
+			color: white;
 		}
+		#prevNextBtnDiv>button{
+			width: 100px;
+			height: 40px;
+		}
+		#displayBooksDiv{
+			color: yellow;
+		}
+
+
+
 		@media (max-width: 700px){
 			#navigationBarDiv>ul{
 				width: 90%;
@@ -34,7 +59,7 @@
 				margin: 5px auto;
 				justify-content: space-around;
 			}
-			#mainContentDiv>div>button{
+			#searchBtn{
 				width: 100px;
 				height: 30px;
 				margin: 0px auto;
@@ -43,7 +68,6 @@
 				flex-direction: column;
 				width: 95%;
 				margin: 10px auto;
-				background-color: black;
 				padding: 0px
 			}
 			#bookContentDiv{
@@ -59,11 +83,8 @@
 	</style>
 </head>
 <body>
-	<div style="display: flex; justify-content: space-between; margin: 0px 10px">
-		<p>Hello Name</p>
-		<img style="height: 20px" src="cart.png" onclick="checkOutCartFunc()">
-	</div>
-	<h1 style="width: 100%; text-align: center">SS 19 MINI LIBRARY</h1>
+	<p id="greetings" style="color: white; font-size: 20px">Hello</p>
+	<h1 style="color: white; font: italic small-caps bold 40px cursive; text-align: center;">SS19 LIBRARY</h1>
 	<div id="navigationBarDiv">
 		<ul>
 			<li onclick="window.location.href = 'userHomepage.html'">Homepage</li>
@@ -116,7 +137,7 @@
 					<option value="Book Author 8">
 				</datalist>
 			</div>
-			<button onclick="searchBtnFunc()">SEARCH</button>
+			<button onclick="searchBtnFunc()" id="searchBtn">SEARCH</button>
 		</div>
 		<div id="displayBooksDiv" style="width: 90%; margin: 10px auto">
 			
@@ -129,8 +150,16 @@
 	</div>
 
 <script type="text/javascript">	
-	// var databaseLink = "https://libraryss19.herokuapp.com"
-	var databaseLink = "http://libraryss19.test"
+	var databaseLink = "https://libraryss19.herokuapp.com"
+	// var databaseLink = "http://libraryss19.test"
+	var userData = JSON.parse(sessionStorage.getItem('userData'))
+	console.log(userData)
+	if(userData == null){
+		window.location.href = "logintest.html";
+	}
+	document.getElementById('greetings').innerHTML = "Hello "+userData.name
+
+
 	var currentPage = 1
 	var lastPage = 0
 
@@ -209,6 +238,11 @@
 				}
 			}
 
+			if(data[1].data.length == 0){
+				console.log("empty")
+				displayBooksDiv.innerHTML = "BOOK NOT IN DATABASE"
+			}
+
 			var data = data[1].data
 			var dataLength = data.length
 			var dataNumber = 0
@@ -222,9 +256,9 @@
 					console.log(bookContentDiv)
 					console.log(data[dataNumber].availability)
 					if(data[dataNumber].availability == "unavailable"){
-						bookContentDiv.setAttribute('style', 'width: 30%; padding: 10px; text-align: center; background-color: red; margin-top: 10px')
+						bookContentDiv.setAttribute('style', 'width: 30%; padding: 10px; text-align: center; margin-top: 10px; background: linear-gradient(to bottom, #ff5050 -27%, #ff0000 100%)')
 					}else{
-						bookContentDiv.setAttribute('style', 'width: 30%; padding: 10px; text-align: center; background-color: azure; margin-top: 10px')
+						bookContentDiv.setAttribute('style', 'width: 30%; padding: 10px; text-align: center; margin-top: 10px; background: linear-gradient(to bottom, #66ff33 -27%, #009933 100%)')
 					}					
 
 					var image = document.createElement('IMG')

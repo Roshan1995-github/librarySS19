@@ -4,18 +4,32 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>HOME</title>
 	<script src="functions.js"></script>
-	<script src="node_modules\jsqr\dist\jsQR.js"></script>
+	<script src="./html5-qrcode/dist/html5-qrcode.min.js"></script>
 	<style type="text/css">
+		html, body{
+			margin: 0;
+			height: 100%;
+			background-image: url("Images/background-1.jpg");
+		}
+		body{
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+		}
 		ul{
 			display: flex;
 			list-style-type: none;
 			padding: 0px
 		}
 		li{
+			border: solid yellow 1px;
+			color: white;
+			font-size: 20px;
 			margin: 10px;
-			width: 100px
+			width: 150px;
+			text-align: center;
+			background: linear-gradient(to bottom, #00ff00 -43%, #009933 100%);
 		}
-		#modal{			
+		#modal1, #modal2{			
 		  display: none; /* Hidden by default */
 		  position: fixed; /* Stay in place */
 		  z-index: 1; /* Sit on top */
@@ -26,18 +40,20 @@
 		  overflow: none; /* Enable scroll if needed */
 		  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 		}
-		#modalContent{
-			background-color: white;
-			margin: 3% auto;
+		#modal1Content, #modal2Content{
+			background: linear-gradient(to bottom, #66ff33 -27%, #009933 100%);
+			margin: 15px auto;
 			width: 30%;
-			height: 90%;
+			height: 95%;
 			overflow: auto;
 			overflow-x: hidden;
 		}
-		#modalContent>p{
+		#modal1Content>p, #modal2Content>p{
+			padding: 2px 20px;
+			color: white;
 			margin: 5px;
 		}
-		#modalContent>div>button{
+		#modal1Content>div>button, #modal2Content>div>button{
 			width: 100px;
 			height: 30px;
 			margin-top: 20px;
@@ -52,6 +68,20 @@
 		  height: 100%; /* Full height */
 		  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 		}
+		#navigationBarDiv{
+			display: flex;
+			justify-content: space-between;
+		}
+		#prevNextBtnDiv>button{
+			width: 100px;
+			height: 40px;
+		}
+		#displayBooksDiv{
+			color: yellow;
+		}
+
+
+
 		@media (max-width: 700px){
 			#navigationBarDiv{
 				flex-direction: column;
@@ -66,9 +96,6 @@
 				margin: 20px auto;
 				justify-content: space-around;
 			}
-			#navigationBarDiv>ul>li{
-				text-align: center;
-			}
 			#mainContentDiv>div{				
 				flex-direction: column;
 			}
@@ -76,7 +103,6 @@
 				flex-direction: column;
 				width: 95%;
 				margin: 10px auto;
-				background-color: black;
 				padding: 0px
 			}
 			#bookContentDiv{
@@ -87,7 +113,7 @@
 			#prevNextBtnDiv{
 				flex-direction: row !important
 			}
-			#modalContent{
+			#modal1Content, #modal2Content{
 				background-color: white;
 				margin: 3% auto;
 				width: 80%;
@@ -105,63 +131,82 @@
 		}
 	</style>
 </head>
-<body>	
-	<video id="qrReader" style="border: red solid 1px; display: block; max-width: 100%;"></video>
-	<canvas id="qrReaderCanvas" style="border: solid red 1px; display: block; max-width: 100%;"></canvas>
-	<!-- <canvas id="secondCanvas" style="border: solid red 1px;"></canvas> -->
+<body>
+	<div style="width: 100%; height: 100%; display: none;" id="qrReader">
+		<div id="reader" width="100%"></div>
+		<button onclick="qrReaderCancelBtnFunc()">Cancel</button>
+	</div>
 
-
-	<div style="display: flex; justify-content: space-between; margin: 0px 10px">
-		<p id="greetings"></p>
-		<img style="height: 20px" src="cart.png" onclick="checkOutCartFunc()">
-	</div>
-	<h1 style="width: 100%; text-align: center">SS 19 MINI LIBRARY</h1>
-	<div id="navigationBarDiv" style="display: flex; justify-content: space-between">
-		<ul>
-			<li onclick="window.location.href = 'userHomepage.html'">Homepage</li>
-			<li onclick="window.location.href = 'userBooks.html'">Books</li>
-			<li onclick="window.location.href = 'userProfile.html'">Profile</li>
-			<li onclick="window.location.href = 'userHowToUse.html'">How To Use</li>
-		</ul>
-		<button style="height: 30px; margin-top: 20px; margin-right: 20px" onclick="scanQRBtnFunc()">Scan QR Code</button>
-	</div>
-	<div id="mainContentDiv" style="border: solid black 1px">
-		<div id="displayBooksDiv" style="width: 90%; margin: 10px auto">
-			
+	<div id="body">
+		<p id="greetings" style="color: white; font-size: 20px">Hello</p>
+		<h1 style="color: white; font: italic small-caps bold 40px cursive; text-align: center;">SS19 LIBRARY</h1>
+		<div id="navigationBarDiv">
+			<ul>
+				<li onclick="window.location.href = 'userHomepage.html'">Homepage</li>
+				<li onclick="window.location.href = 'userBooks.html'">Books</li>
+				<li onclick="window.location.href = 'userProfile.html'">Profile</li>
+				<li onclick="window.location.href = 'userHowToUse.html'">How To Use</li>
+			</ul>
+			<button style="height: 30px; margin-top: 20px; margin-right: 20px" onclick="scanQRBtnFunc()">Scan QR Code</button>
 		</div>
-		<div id="prevNextBtnDiv" style="display: flex; width: 100%; justify-content: center; margin-top: 20px">
-			<button onclick="prevBtnFunc()" id="prevBtn" style="display: none">Prev</button>
-			<span style="width: 20px"></span>
-			<button onclick="nextBtnFunc()" id="nextBtn" style="display: none">Next</button>
-		</div>
-	</div>
-	<div id="modal">
-		<div id="modalContent">
-			<img src="" id="modalImage" style="width: 200px; margin: 20px auto; display: block;">
-			<p id="modalTitle"></p>
-			<p id="modalAuthor"></p>
-			<p id="modalCategory"></p>
-			<p id="modalGenre"></p>
-			<p id="modalDateBorrowed"></p>
-			<p id="modalDateExpectedReturn"></p>
-			<p id="modalRemainingOverdue"></p>
-			<div style="display: flex; width: 90%; margin: 10px auto; justify-content: space-around;">
-				<button onclick="modalVisibility()">Cancel</button>
-				<button>Returned</button>
+		<div id="mainContentDiv">
+			<div id="displayBooksDiv" style="width: 95%; margin: 10px auto">
+				
 			</div>
-		</div>		
+			<div id="prevNextBtnDiv" style="display: flex; width: 100%; justify-content: center; margin-top: 20px">
+				<button onclick="prevBtnFunc()" id="prevBtn">Prev</button>
+				<span style="width: 20px"></span>
+				<button onclick="nextBtnFunc()" id="nextBtn">Next</button>
+			</div>
+		</div>
+
+
+		<div id="modal1">
+			<div id="modal1Content">
+				<img src="" id="modal1Image" style="width: 200px; margin: 20px auto; display: block;">
+				<p id="modal1Title"></p>
+				<p id="modal1Author"></p>
+				<p id="modal1Category"></p>
+				<p id="modal1Genre"></p>
+				<p id="modal1DateBorrowed"></p>
+				<p id="modal1DateExpectedReturn"></p>
+				<p id="modal1RemainingOverdue"></p>
+				<div style="display: flex; width: 90%; margin: 10px auto; justify-content: space-around;">
+					<button onclick="modal1Visibility()">Cancel</button>
+					<button>Returned</button>
+				</div>
+			</div>		
+		</div>
+		<div id="modal2">
+			<div id="modal2Content">
+				<img src="" id="modal2Image" style="width: 200px; margin: 20px auto; display: block;">
+				<p id="modal2Title"></p>
+				<p id="modal2Author"></p>
+				<p id="modal2Category"></p>
+				<p id="modal2Genre"></p>
+				<div style="display: flex; width: 90%; margin: 10px auto; justify-content: space-around;">
+					<button onclick="modal2Visibility()">Cancel</button>
+					<button onclick="bookNowBtnFunc()">Book Now!</button>
+				</div>
+			</div>		
+		</div>
 	</div>
 
 <script type="text/javascript">	
 
-	// var databaseLink = "https://libraryss19.herokuapp.com"
-	var databaseLink = "http://libraryss19.test"
+	var databaseLink = "https://libraryss19.herokuapp.com"
+	// var databaseLink = "http://libraryss19.test"
 	var userData = JSON.parse(sessionStorage.getItem('userData'))
+	console.log(userData)
+	if(userData == null){
+		window.location.href = "logintest.html";
+	}
 	var userId = userData.id
 	console.log(userId);
 	document.getElementById('greetings').innerHTML = "Hello "+userData.name
 	var currentPage = 1
 	var lastPage = 0
+	var bookData = null
 	
 	var cameraId = ""
 
@@ -172,61 +217,95 @@
 
 	
 
+
+
+	function onScanSuccess(decodedText, decodedResult) {
+	  // handle the scanned code as you like, for example:
+	  console.log(`Code matched = ${decodedText}`, decodedResult);
+	  alert(decodedText)
+	  	fetch(decodedText, {
+			method: 'GET', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+			bookData = data[1][0]
+			console.log(bookData)
+			document.getElementById('modal2Image').setAttribute('src', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTY_6xlv6z30igW5fW7--EW0owZJWX0aedcQ&usqp=CAU')
+			document.getElementById('modal2Title').innerHTML = "Title : "+bookData.name
+			document.getElementById('modal2Author').innerHTML = "Author : "+bookData.author
+			document.getElementById('modal2Category').innerHTML = "Category : "+bookData.category
+			document.getElementById('modal2Genre').innerHTML = "Genre : "+bookData.genre
+
+			document.getElementById('body').style.display = "block"
+			document.getElementById('qrReader').style.display = "none"
+	  		modal2Visibility()
+
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+			alert("Invalid QR Code. Try Again.")
+		});
+
+	}
+
+	function onScanFailure(error) {
+	  // handle scan failure, usually better to ignore and keep scanning.
+	  // for example:
+	  console.warn(`Code scan error = ${error}`);
+	}
+
+	let html5QrcodeScanner = new Html5QrcodeScanner(
+	  "reader",
+	  { fps: 10, qrbox: {width: 250, height: 250} },
+	  /* verbose= */ false);
+	html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+
+
+
+
+
+
+
 	function scanQRBtnFunc(){
-		// document.getElementById('qrReaderCanvas').style.display = "block"
-
-		var qrReader = document.getElementById('qrReader')
-		if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia){
-			navigator.mediaDevices.getUserMedia({
-				video: {
-					facingMode: 'environment'
-			}
-		}).then(stream=> {
-				qrReader.srcObject = stream
-				qrReader.play()
-			})
-		}
-		
-		qrReaderCanvasFunc()
+		document.getElementById('body').style.display = "none"
+		document.getElementById('qrReader').style.display = "block"
 	}
-	function qrReaderCanvasFunc(){
-		var qrReaderCanvas = document.getElementById('qrReaderCanvas')
-		var ctx = qrReaderCanvas.getContext('2d')
-		var qrReader = document.getElementById('qrReader')
-		console.log(qrReader.videoHeight)
-		console.log(qrReader.videoWidth)
-		if(qrReader.play()){
-			qrReaderCanvas.width = qrReader.videoWidth
-			qrReaderCanvas.height = qrReader.videoHeight
 
-			ctx.drawImage(qrReader, 0, 0)
-
-			ctx.beginPath();
-			ctx.lineWidth = "4";
-			ctx.strokeStyle = "blue";
-			ctx.rect(120, 40, 400, 400);
-			ctx.stroke();
-
-			var imageData = ctx.getImageData(120, 42, 400, 400)
-			console.log(imageData.data)
-			const code = jsQR(imageData.data, 400, 400);
-
-			if (code) {
-			  alert("Found QR code", code);
-			}
-		}
-
-		// var canvastwo = document.getElementById('secondCanvas')
-		// canvastwo.width = qrReader.videoWidth
-		// 	canvastwo.height = qrReader.videoHeight
-		// var ctx2 = canvastwo.getContext('2d')
-		// ctx2.putImageData(imageData, 0, 0)
-		
-		setTimeout(qrReaderCanvasFunc, 10);
+	function qrReaderCancelBtnFunc(){
+		document.getElementById('body').style.display = "block"
+		document.getElementById('qrReader').style.display = "none"
 	}
 
 	
-	
+	function bookNowBtnFunc(){
+		console.log(bookData)
+		console.log(bookData.id)
+		const data = {
+			member_id: userId,
+			book_id: bookData.id,
+			status: "active"
+		};
+		fetch(databaseLink+'/api/new-book-borrowed', {
+			method: 'POST', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
+		modal2Visibility()
+		loadBooksFunc()
+	}
 	
 
 
@@ -247,16 +326,16 @@
 			lastPage = data[1].last_page
 
 			if(currentPage == lastPage){
-				document.getElementById('nextBtn').style.display = "none"
-				document.getElementById('prevBtn').style.display = "none"
+				document.getElementById('nextBtn').disabled = true
+				document.getElementById('prevBtn').disabled = true
 				if(lastPage > 1){
-					document.getElementById('prevBtn').style.display = "block"
+					document.getElementById('prevBtn').disabled = false
 				}
 			}else{
-				document.getElementById('nextBtn').style.display = "block"
-				document.getElementById('prevBtn').style.display = "block"
+				document.getElementById('nextBtn').disabled = false
+				document.getElementById('prevBtn').disabled = false
 				if(currentPage == 1){
-					document.getElementById('prevBtn').style.display = "none"
+					document.getElementById('prevBtn').disabled = true
 				}
 			}
 
@@ -305,7 +384,7 @@
 						console.log('clciked')
 						console.log(this.children[2].textContent)
 
-						modalVisibility()
+						modal1Visibility()
 						var bookBorrowedId = this.children[2].textContent
 
 						fetch(databaseLink+'/api/book-borrowed/'+bookBorrowedId, {
@@ -318,18 +397,24 @@
 						.then(data => {
 							console.log('Success:', data);
 							data = data[1][0]
-							document.getElementById('modalImage').setAttribute('src', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTY_6xlv6z30igW5fW7--EW0owZJWX0aedcQ&usqp=CAU')
-							document.getElementById('modalTitle').innerHTML = "Title : "+data.book_id.name
-							document.getElementById('modalAuthor').innerHTML = "Author : "+data.book_id.author
-							document.getElementById('modalCategory').innerHTML = "Category : "+data.book_id.category
-							document.getElementById('modalGenre').innerHTML = "Genre : "+data.book_id.genre
+							document.getElementById('modal1Image').setAttribute('src', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTY_6xlv6z30igW5fW7--EW0owZJWX0aedcQ&usqp=CAU')
+							document.getElementById('modal1Title').innerHTML = "Title : "+data.book_id.name
+							document.getElementById('modal1Author').innerHTML = "Author : "+data.book_id.author
+							document.getElementById('modal1Category').innerHTML = "Category : "+data.book_id.category
+							document.getElementById('modal1Genre').innerHTML = "Genre : "+data.book_id.genre
 							var borrowDate = getProperDate(new Date(data.created_at))
-							document.getElementById('modalDateBorrowed').innerHTML = "Date Borrowed : "+borrowDate
+							document.getElementById('modal1DateBorrowed').innerHTML = "Date Borrowed : "+borrowDate
 							var expReturnDate = getProperDate(addDaysToDate(new Date(data.created_at), 7))
-							document.getElementById('modalDateExpectedReturn').innerHTML = "Expected Return Date : "+expReturnDate
+							document.getElementById('modal1DateExpectedReturn').innerHTML = "Expected Return Date : "+expReturnDate
 							var todayDate = new Date()
 							var remainingOverdueDate = Math.ceil(differenceInDates(expReturnDate, todayDate))
-							document.getElementById('modalRemainingOverdue').innerHTML = "Days Remaining : "+remainingOverdueDate
+							document.getElementById('modal1RemainingOverdue').innerHTML = "Days Remaining : "+remainingOverdueDate
+
+							if(data.status == "late"){
+								document.getElementById("modal1Content").setAttribute("style", "background: linear-gradient(to bottom, #ff5050 -27%, #ff0000 100%)")
+							}else{
+								document.getElementById("modal1Content").setAttribute("style", "background: linear-gradient(to bottom, #66ff33 -27%, #009933 100%)")
+							}
 
 						})
 						.catch((error) => {
@@ -363,13 +448,22 @@
 	}
 
 
-	function modalVisibility(){
-		var modalDisplay = document.getElementById('modal').style.display
-		console.log(modalDisplay)
-		if(modalDisplay == "block"){
-			document.getElementById('modal').style.display = "none"
+	function modal1Visibility(){
+		var modal1Display = document.getElementById('modal1').style.display
+		console.log(modal1Display)
+		if(modal1Display == "block"){
+			document.getElementById('modal1').style.display = "none"
 		}else{
-			document.getElementById('modal').style.display = "block"
+			document.getElementById('modal1').style.display = "block"
+		}
+	}
+	function modal2Visibility(){
+		var modal2Display = document.getElementById('modal2').style.display
+		console.log(modal2Display)
+		if(modal2Display == "block"){
+			document.getElementById('modal2').style.display = "none"
+		}else{
+			document.getElementById('modal2').style.display = "block"
 		}
 	}
 	// const data = { username: 'example' };

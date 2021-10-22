@@ -93,8 +93,7 @@
 			<div style="display: flex">				
 				<button onclick="modalVisibility()" style="background-color: red">CANCEL</button>
 				<button onclick="addMemberFunc()" style="background-color: green">ADD</button>
-			</div>
-			
+			</div>			
 		</div>
 	</div>
 	<h1 style="">SS 19 MINI LIBRARY</h1>
@@ -233,33 +232,37 @@
 		}
 
 		if(name == ""){
-			alert("Please fill up member name.")
+			alert("Please fill up name.")
 			return;
 		}
 		if(phoneNum == ""){
-			alert("Please fill up member name.")
+			alert("Please fill up phone number.")
 			return;
 		}
 		if(password == ""){
-			alert("Please fill up member name.")
+			alert("Please fill up password.")
 			return;
 		}
-		// if(name == ""){
-		// 	alert("Please fill up member name.")
-		// 	return;
-		// }
-		// if(name == ""){
-		// 	alert("Please fill up member name.")
-		// 	return;
-		// }
-		// if(name == ""){
-		// 	alert("Please fill up member name.")
-		// 	return;
-		// }
-		// if(name == ""){
-		// 	alert("Please fill up member name.")
-		// 	return;
-		// }
+		if(address == ""){
+			alert("Please fill up address.")
+			return;
+		}
+		if(postcode == ""){
+			alert("Please fill up postcode.")
+			return;
+		}
+		if(city == ""){
+			alert("Please fill up city.")
+			return;
+		}
+		if(state == ""){
+			alert("Please fill up state.")
+			return;
+		}
+		if(country == ""){
+			alert("Please fill up country.")
+			return;
+		}
 
 		const data = {
 			name: capitalize(name),

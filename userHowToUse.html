@@ -5,23 +5,34 @@
 	<title>HOW TO USE</title>
 	<script src="functions.js"></script>
 	<style type="text/css">
+		html, body{
+			margin: 0;
+			height: 100%;
+			background-image: url("Images/background-1.jpg");
+		}
+		body{
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+		}
 		ul{
 			display: flex;
 			list-style-type: none;
 			padding: 0px
 		}
 		li{
+			border: solid yellow 1px;
+			color: white;
+			font-size: 20px;
 			margin: 10px;
-			width: 100px
+			width: 150px;
+			text-align: center;
+			background: linear-gradient(to bottom, #00ff00 -43%, #009933 100%);
 		}
 	</style>
 </head>
 <body>
-	<div style="display: flex; justify-content: space-between; margin: 0px 10px">
-		<p>Hello Name</p>
-		<img style="height: 20px" src="cart.png" onclick="checkOutCartFunc()">
-	</div>
-	<h1 style="width: 100%; text-align: center">SS 19 MINI LIBRARY</h1>
+	<p id="greetings" style="color: white; font-size: 20px">Hello</p>
+	<h1 style="color: white; font: italic small-caps bold 40px cursive; text-align: center;">SS19 LIBRARY</h1>
 	<div id="navigationBarDiv">
 		<ul>
 			<li onclick="window.location.href = 'userHomepage.html'">Homepage</li>
@@ -36,6 +47,13 @@
 
 <script type="text/javascript">	
 	var databaseLink = "https://libraryss19.herokuapp.com"
+	// var databaseLink = "http://libraryss19.test"
+	var userData = JSON.parse(sessionStorage.getItem('userData'))
+	console.log(userData)
+	if(userData == null){
+		window.location.href = "logintest.html";
+	}
+	document.getElementById('greetings').innerHTML = "Hello "+userData.name
 	
 
 	function checkOutCartFunc(){

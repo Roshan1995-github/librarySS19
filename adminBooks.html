@@ -3,6 +3,7 @@
 <head>
 	<title>BOOKS</title>
 	<script src="functions.js"></script>
+	<script src="./html5-qrcode/dist/html5-qrcode.min.js"></script>
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet">
 	<style type="text/css">
@@ -96,6 +97,10 @@
 			<p>Genre</p>
 			<input type="text" name="genre">
 			<br>
+			<p>Book Cover</p>
+			<input type="file" name="image" onchange="displayImage()">
+			<img id="imageDisplay" src="">
+			<br>
 			<div style="display: flex">				
 				<button onclick="modalVisibility()" style="background-color: red">CANCEL</button>
 				<button onclick="addBookFunc()" style="background-color: green">ADD</button>
@@ -163,6 +168,7 @@
 			<span style="width: 20px"></span>
 			<button onclick="nextBtnFunc()" id="nextBtn">Next</button>
 		</div>
+		<div id="qrcode" style="display: none"></div>
 	</div>
 
 
@@ -171,6 +177,10 @@
 	var databaseLink = "http://libraryss19.test"
 	var currentPage = 1
 	var lastPage = 0
+
+
+	
+
 
 	function loadBooks(){
 		var searchName = document.getElementsByName('search')[0].value
@@ -261,11 +271,21 @@
 					}					
 
 					var image = document.createElement('IMG')
-					image.setAttribute('src', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTY_6xlv6z30igW5fW7--EW0owZJWX0aedcQ&usqp=CAU')
-					image.setAttribute('style', 'height: 200px')
+					if(data[dataNumber].image == null){
+						image.setAttribute('src', 'https://thumbs.dreamstime.com/b/no-image-available-icon-vector-illustration-flat-design-140476186.jpg')
+					}else{
+						image.setAttribute('src', databaseLink+'/api/get-image/'+data[dataNumber].image.split('/')[1])
+					}
+					image.setAttribute('style', 'height: 200px; width: 200px')
 					var paraDiv = document.createElement('DIV')
 					paraDiv.setAttribute('style', 'text-align:left; width: 60%; margin: 0px auto')
 					paraDiv.innerHTML = "Title : "+data[dataNumber].name+"<br>"+"Author : "+data[dataNumber].author+"<br>"+"Category : "+data[dataNumber].category+"<br>"+"Genre : "+data[dataNumber].genre
+
+					var editBookBtn = document.createElement('BUTTON')
+					editBookBtn.setAttribute('style', 'width: 200px; height: 30px; margin: 10px auto')
+					editBookBtn.setAttribute('id', bookId)
+					editBookBtn.innerHTML = "Edit Book Details"
+
 					var downloadQRCodeBtn = document.createElement('BUTTON')
 					downloadQRCodeBtn.setAttribute('style', 'width: 200px; height: 30px; margin: 10px auto')
 					downloadQRCodeBtn.setAttribute('id', bookId)
@@ -273,15 +293,40 @@
 
 					bookContentDiv.appendChild(image)
 					bookContentDiv.appendChild(paraDiv)
+					bookContentDiv.appendChild(editBookBtn)
 					bookContentDiv.appendChild(downloadQRCodeBtn)
 					
 					div.appendChild(bookContentDiv)
 
+					editBookBtn.addEventListener('click', function(e){
+						console.log('clicked')
+						console.log(this.id)
+						console.log(this)
+					})
+
 					downloadQRCodeBtn.addEventListener('click', function(e){
 						console.log('clicked')
 						console.log(this.id)
-						console.log(databaseLink+'/api/qrcode/'+(this.id))
-						window.location.href = databaseLink+'/api/qrcode/'+(this.id)
+						console.log(this)
+						var qrURL = 'https://libraryss19.herokuapp.com/api/book/'+this.id
+						console.log(qrURL)
+
+
+						var element = document.getElementById("qrcode");
+						console.log(element.children.length)
+				        if(element.children.length > 0){				        	
+				          element.replaceChild(showQRCode(qrURL), element.lastChild);
+				        }
+				        else{
+				          element.appendChild(showQRCode(qrURL));
+				        }
+
+				        var a = document.createElement('a');
+					    a.href = element.lastChild.src
+					    a.setAttribute('download', "qr-code.png");
+					 
+					    element.prepend(a);
+					    a.click();
 					})
 
 					dataNumber = dataNumber + 1
@@ -331,40 +376,86 @@
 	}
 
 
+	function displayImage(){
+		var imageData = document.getElementsByName('image')[0].files[0]
+		// console.log(typeof imageData)
+		if(typeof imageData == "object"){			
+			var reader = new FileReader()
+			reader.readAsDataURL(imageData)
+			reader.onload = function(evt){
+				// console.log(evt)
+				// console.log(evt.target.result.substring(5,10))
+				if(evt.target.result.substring(5,10) == "image"){
+					document.getElementById('imageDisplay').src = evt.target.result
+				}else{
+					document.getElementsByName('image')[0].value = ""
+					document.getElementById('imageDisplay').src = ""
+					alert("Please choose file type image")
+				}
+			}
+		}
+	}
+
+
 	function addBookFunc(){
 		var bookName = document.getElementsByName('name')[0].value
 		var author = document.getElementsByName('author')[0].value
 		var category = document.getElementById('category').value
 		var genre = document.getElementsByName('genre')[0].value
+		var imageData = document.getElementsByName('image')[0].files[0]
+
 		console.log(bookName)
 		console.log(author)
 		console.log(category)
 		console.log(genre)
+		console.log(imageData)
 
-		const data = {
-			name: capitalize(bookName),
-			author: capitalize(author),
-			category: category,
-			genre: capitalize(genre),
-			availability: "available"
-		};
-		fetch(databaseLink+'/api/new-book', {
-			method: 'POST', // or 'PUT'
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify(data),
+		if(typeof imageData != "object"){
+			console.log("yeap undefined")
+			imageData = ""
+		}
+
+		const data = new FormData();
+		data.append('photo', imageData)
+		console.log(...data)
+
+		fetch(databaseLink+'/api/post-image', {
+			method: 'POST',
+			body:data
 		})
 		.then(response => response.json())
-		.then(data => {
-			console.log('Success:', data);
+		.then(imageLink => {
+			console.log('Success:', imageLink);
 
-			modalVisibility()
-			loadBooks()
+			const data = {
+				name: capitalize(bookName),
+				author: capitalize(author),
+				category: category,
+				genre: capitalize(genre),
+				image: imageLink,
+				availability: "available"
+			};
+			fetch(databaseLink+'/api/new-book', {
+				method: 'POST', // or 'PUT'
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(data),
+			})
+			.then(response => response.json())
+			.then(data => {
+				console.log('Success:', data);
+
+				modalVisibility()
+				loadBooks()
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+			});			
 		})
 		.catch((error) => {
 			console.error('Error:', error);
-		});
+		});		
 	}
 
 </script>

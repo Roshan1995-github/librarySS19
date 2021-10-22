@@ -5,6 +5,28 @@
 	<title>LOG IN PAGE</title>
 	<script src="functions.js"></script>
 	<style type="text/css">
+		html, body{
+			margin: 0;
+			height: 100%;
+		}
+		body{
+			background-image: url("Images/background-1.jpg");
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+		}
+		p{
+			font-size: 20px;
+			margin-bottom: 2px
+		}
+		button{
+			display: block;
+			width: 200px;
+			height: 40px;
+			border-radius: 12px;
+			color: white;
+			margin: 1px auto;
+			font: italic small-caps bold 16px/2 cursive;
+		}
 		ul{
 			display: flex;
 			list-style-type: none;
@@ -14,6 +36,11 @@
 			margin: 10px;
 			width: 100px
 		}
+		input{
+			font-size: 20px;
+			border-radius: 10px;
+			padding: 5px;
+		}
 		input::-webkit-outer-spin-button,
 		input::-webkit-inner-spin-button {
 		    -webkit-appearance: none;
@@ -22,30 +49,154 @@
 		input[type=number] {
 		    -moz-appearance:textfield; /* Firefox */
 		}
+		#modal1, #modal2{			
+		  display: none; /* Hidden by default */
+		  position: fixed; /* Stay in place */
+		  z-index: 1; /* Sit on top */
+		  left: 0;
+		  top: 0;
+		  width: 100%; /* Full width */
+		  height: 100%; /* Full height */
+		  overflow: none; /* Enable scroll if needed */
+			background-image: url("Images/background-1.jpg");
+			background-repeat: no-repeat;
+			background-size: 100% 630px;
+		}
+		#modal1Content, #modal2Content{
+			background-color: rgba(0,0,0, 0.8);
+			margin: 5% auto;
+			width: 37%;
+			height: 80%;
+			overflow: auto;
+			overflow-x: hidden;
+			padding: 10px;
+			border-radius: 10px;
+			color: white;
+		}
+		#modal1Content{
+			margin-top: 10px;
+			height: 99%;
+			padding: 0px 25px;
+			width: 60%;
+		}
+		#modal1Content>p{
+			margin: 0px;
+			color: white;
+		}
+		#modal1Content>p{
+			margin: 0px;
+			color: white;
+		}
+		#modal1Content>div{
+			display: inline-block;
+			width: 45%;
+			margin: 5px 15px;
+		}
+		#modal1Content>div>input{
+			width: 95%;
+		}
+		#mainContentDiv{
+			text-align: center;
+			padding-top: 100px
+		}
+
+
+
+		@media (max-width: 700px){
+			#mainContentDiv{
+				text-align: center;
+				padding-top: 100px
+			}
+			#mainContentDiv>button{
+				width: 200px;
+				height: 40px;
+				border-radius: 12px;
+				color: red;
+			}
+			#modal1Content, #modal2Content{
+				width: 80%;
+			}
+			#modal1Content>div{
+				width: 90%;
+			}
+		}
 	</style>
 </head>
 <body>
-	<p>Phone Number</p>
-	<input type="number" name="phoneNum">
-	<p>password</p>
-	<input type="password" name="password">
-	<br><br>
-	<button onclick="loginBtnFunc()">Login</button>
+	<div id="modal1">
+		<div id="modal1Content">
+			<h1 style="color: white; font: italic small-caps bold 40px cursive; text-align: center;">SS19 LIBRARY</h1>
+			<div>
+				<p>Name</p>
+				<input type="text" name="name">
+			</div>
+			<div>
+				<p>Phone Number</p>
+				<input type="number" name="phoneNum">
+			</div>
+			<div>
+				<p>Password</p>
+				<input type="password" name="password">
+			</div>
+			<div>
+				<p>Address</p>
+				<input type="text" name="address">
+			</div>
+			<div>
+				<p>Postcode</p>
+				<input type="number" name="postcode">
+			</div>
+			<div>
+				<p>City</p>
+				<input type="text" name="city">
+			</div>
+			<div>
+				<p>State</p>
+				<input type="text" name="state">
+			</div>
+			<div>
+				<p>Country</p>
+				<input type="text" name="country">
+			</div>
+			<br>
+			<button onclick="addMemberFunc()" style="background: linear-gradient(to bottom, #ffff00 -50%, #ff9900 100%); margin: 20px auto;">Register</button>
+			<button onclick="closeModals()" style="background-color: red">Cancel</button>
+		</div>
 	</div>
 
+	<div id="modal2">
+		<div id="modal2Content">
+			<h1 style="color: white; font: italic small-caps bold 40px cursive; text-align: center;">SS19 LIBRARY</h1>
+			<div style="width: 50%; margin: 0px auto;">
+				<p>Phone Number</p>
+				<input type="number" name="phoneNum">
+				<p>Password</p>
+				<input type="password" name="password">
+			</div>
+			<br><br>
+			<button onclick="loginBtnFunc()" style="background: linear-gradient(to bottom, #ff0066 0%, #000099 100%);">Login</button>
+			<p style="text-align: center; font-size: 16px; margin-top: 50px;">Forgot password? <u>CLICK HERE</u></p>
+			<p style="text-align: center; font-size: 16px;" onclick="modal1Visibility()">Dont have account?  <u>REGISTER HERE</u></p>
+		</div>
+	</div>
 
-	<input type="file" name="image">
-	<button onclick="postImage()">press me</button>
-	<br>
-	<img src="" id="imageDisplay" style="width: 300px">
-
+	<div id="mainContentDiv">
+		<h1 style="color: white; font: italic small-caps bold 40px cursive;">SS19 LIBRARY</h1>
+		<div style="height: 250px"></div>
+		<button style="background: linear-gradient(to bottom, #ff0066 0%, #000099 100%);" onclick="modal2Visibility()">Login</button>
+		<div style="height: 20px"></div>
+		<button style="background: linear-gradient(to bottom, #ffff00 -50%, #ff9900 100%);" onclick="modal1Visibility()">Register</button>
+	</div>
 <script type="text/javascript">	
-	// var databaseLink = "https://libraryss19.herokuapp.com"
-	var databaseLink = "http://libraryss19.test"
+	var databaseLink = "https://libraryss19.herokuapp.com"
+	// var databaseLink = "http://libraryss19.test"
+
+	var modal1 = document.getElementById('modal1')
+	var modal2 = document.getElementById('modal2')
 
 	function loginBtnFunc(){
-		var phoneNum = document.getElementsByName('phoneNum')[0].value
-		var password = document.getElementsByName('password')[0].value
+		var phoneNum = document.getElementsByName('phoneNum')[1].value
+		var password = document.getElementsByName('password')[1].value
 
 		while(phoneNum.charAt(0) == " "){
 			phoneNum = phoneNum.substring(1)
@@ -88,41 +239,122 @@
 			console.error('Error:', error);
 		});
 	}
-	
-	function postImage(){
-		var imageData = document.getElementsByName('image')[0].files[0]
-		// var reader = new FileReader()
-		// reader.readAsDataURL(imageData)
-		// reader.onload = function(evt){
-			console.log(imageData)
-		// 	console.log(evt)
-		// 	console.log(evt.target.result)
-		// 	document.getElementById('imageDisplay').src = evt.target.result
 
+	function addMemberFunc(){
+		var name = document.getElementsByName('name')[0].value
+		var phoneNum = document.getElementsByName('phoneNum')[0].value
+		var password = document.getElementsByName('password')[0].value
+		var address = document.getElementsByName('address')[0].value
+		var postcode = document.getElementsByName('postcode')[0].value
+		var city = document.getElementsByName('city')[0].value
+		var state = document.getElementsByName('state')[0].value
+		var country = document.getElementsByName('country')[0].value
 
-			// const data = {
-			// 	photo: imageData
-			// };
-			const data = new FormData();
-			data.append('photo', imageData)
-			// data.append('name', "roshan")
-			console.log(...data)
-			fetch(databaseLink+'/api/post-image', {
-				method: 'PUT',
-				 headers: {
-			      "Content-Type": "multipart/form-data"
-			    },
-				body:data
-			})
-			.then(response => response.json())
-			.then(data => {
-				console.log('Success:', data);
-			})
-			.catch((error) => {
-				console.error('Error:', error);
-			});
-		// }
+		while(name.charAt(0) == " "){
+			name = name.substring(1)
+		}
+		while(phoneNum.charAt(0) == " "){
+			phoneNum = phoneNum.substring(1)
+		}
+		while(password.charAt(0) == " "){
+			password = password.substring(1)
+		}
+		while(address.charAt(0) == " "){
+			address = address.substring(1)
+		}
+		while(postcode.charAt(0) == " "){
+			postcode = postcode.substring(1)
+		}
+		while(city.charAt(0) == " "){
+			city = city.substring(1)
+		}
+		while(state.charAt(0) == " "){
+			state = state.substring(1)
+		}
+		while(country.charAt(0) == " "){
+			country = country.substring(1)
+		}
 
+		if(name == ""){
+			alert("Please fill up name.")
+			return;
+		}
+		if(phoneNum == ""){
+			alert("Please fill up phone number.")
+			return;
+		}
+		if(password == ""){
+			alert("Please fill up password.")
+			return;
+		}
+		if(address == ""){
+			alert("Please fill up address.")
+			return;
+		}
+		if(postcode == ""){
+			alert("Please fill up postcode.")
+			return;
+		}
+		if(city == ""){
+			alert("Please fill up city.")
+			return;
+		}
+		if(state == ""){
+			alert("Please fill up state.")
+			return;
+		}
+		if(country == ""){
+			alert("Please fill up country.")
+			return;
+		}
+
+		const data = {
+			name: capitalize(name),
+			phoneNum: phoneNum,
+			password: password,
+			address: address,
+			postcode: postcode,
+			city: capitalize(city),
+			state: capitalize(state),
+			country: capitalize(country),
+			status: "good"
+		};
+
+		fetch(databaseLink+'/api/new-member', {
+			method: 'POST', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+
+			modal1Visibility()
+			loadMembers()
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});	
+	}
+
+	function modal1Visibility(){
+		console.log("modal 1 clicked")
+		modal1.style.display = "block"
+		modal2.style.display = "none"
+	}
+
+	function modal2Visibility(){
+		console.log("modal 2 clicked")
+		modal1.style.display = "none"
+		modal2.style.display = "block"
+	}
+
+	function closeModals(){
+		console.log("close modals clicked")
+		modal1.style.display = "none"
+		modal2.style.display = "none"
 	}
 
 </script>
