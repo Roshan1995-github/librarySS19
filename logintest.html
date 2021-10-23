@@ -8,9 +8,9 @@
 		html, body{
 			margin: 0;
 			height: 100%;
+			background-image: url("Images/background-1.jpg");
 		}
 		body{
-			background-image: url("Images/background-1.jpg");
 			background-repeat: no-repeat;
 			background-size: 100% 100%;
 		}
@@ -101,6 +101,18 @@
 		}
 
 
+		@media (max-width: 1070px){
+			#modal1Content{
+				width: 80%;
+			}
+			#modal2Content{
+				width: 60%;
+			}
+			#modal1Content>div{
+				width: 90%;
+			}
+		}
+
 
 		@media (max-width: 700px){
 			#mainContentDiv{
@@ -125,7 +137,7 @@
 <body>
 	<div id="modal1">
 		<div id="modal1Content">
-			<h1 style="color: white; font: italic small-caps bold 40px cursive; text-align: center;">SS19 LIBRARY</h1>
+			<h1 style="color: white; font: italic small-caps bold 40px; text-align: center;">SS19 LIBRARY</h1>
 			<div>
 				<p>Name</p>
 				<input type="text" name="name">
@@ -188,8 +200,8 @@
 		<button style="background: linear-gradient(to bottom, #ffff00 -50%, #ff9900 100%);" onclick="modal1Visibility()">Register</button>
 	</div>
 <script type="text/javascript">	
-	var databaseLink = "https://libraryss19.herokuapp.com"
-	// var databaseLink = "http://libraryss19.test"
+	// var databaseLink = "https://libraryss19.herokuapp.com"
+	var databaseLink = "http://libraryss19.test"
 
 	var modal1 = document.getElementById('modal1')
 	var modal2 = document.getElementById('modal2')
@@ -331,7 +343,24 @@
 		.then(data => {
 			console.log('Success:', data);
 
-			modal1Visibility()
+			if(data == "exist"){
+				alert("Phone number already used.")
+			}else{
+				alert("User created. Please login.")
+				modal2Visibility()
+			}
+
+
+			document.getElementsByName('name')[0].value = ""
+			document.getElementsByName('phoneNum')[0].value = ""
+			document.getElementsByName('password')[0].value = ""
+			document.getElementsByName('address')[0].value = ""
+			document.getElementsByName('postcode')[0].value = ""
+			document.getElementsByName('city')[0].value = ""
+			document.getElementsByName('state')[0].value = ""
+			document.getElementsByName('country')[0].value = ""
+
+			
 		})
 		.catch((error) => {
 			console.error('Error:', error);
