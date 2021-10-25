@@ -92,12 +92,19 @@
 			width: 45%;
 			margin: 5px 15px;
 		}
-		#modal1Content>div>input{
+		#modal2Content>div{
+			width: 50%;
+			margin: 0px auto;
+		}
+		#modal1Content>div>input, #modal2Content>div>input{
 			width: 95%;
 		}
 		#mainContentDiv{
 			text-align: center;
 			padding-top: 100px
+		}
+		#mainContentDivSep1{
+			height: 250px;
 		}
 
 
@@ -111,9 +118,12 @@
 			#modal1Content>div{
 				width: 90%;
 			}
+			#mainContentDivSep1{
+				height: 220px;
+			}
 		}
 
-
+		
 		@media (max-width: 700px){
 			#mainContentDiv{
 				text-align: center;
@@ -131,7 +141,22 @@
 			#modal1Content>div{
 				width: 90%;
 			}
+			#mainContentDivSep1{
+				height: 200px;
+			}
 		}
+
+
+		@media (max-width: 500px){
+			#modal2Content{
+				height: 90%;
+			}
+			#modal2Content>div{
+				width: 70%;
+			}
+		}
+
+
 	</style>
 </head>
 <body>
@@ -179,7 +204,7 @@
 	<div id="modal2">
 		<div id="modal2Content">
 			<h1 style="color: white; font: italic small-caps bold 40px cursive; text-align: center;">SS19 LIBRARY</h1>
-			<div style="width: 50%; margin: 0px auto;">
+			<div>
 				<p>Phone Number</p>
 				<input type="number" name="phoneNum">
 				<p>Password</p>
@@ -194,14 +219,14 @@
 
 	<div id="mainContentDiv">
 		<h1 style="color: white; font: italic small-caps bold 40px cursive;">SS19 LIBRARY</h1>
-		<div style="height: 250px"></div>
+		<div id="mainContentDivSep1"></div>
 		<button style="background: linear-gradient(to bottom, #ff0066 0%, #000099 100%);" onclick="modal2Visibility()">Login</button>
 		<div style="height: 20px"></div>
 		<button style="background: linear-gradient(to bottom, #ffff00 -50%, #ff9900 100%);" onclick="modal1Visibility()">Register</button>
 	</div>
 <script type="text/javascript">	
-	// var databaseLink = "https://libraryss19.herokuapp.com"
-	var databaseLink = "http://libraryss19.test"
+	var databaseLink = "https://libraryss19.herokuapp.com"
+	// var databaseLink = "http://libraryss19.test"
 
 	var modal1 = document.getElementById('modal1')
 	var modal2 = document.getElementById('modal2')
