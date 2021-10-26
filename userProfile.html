@@ -20,13 +20,12 @@
 			padding: 0px
 		}
 		li{
-			border: solid yellow 1px;
 			color: white;
 			font-size: 20px;
 			margin: 10px;
 			width: 150px;
 			text-align: center;
-			background: linear-gradient(to bottom, #00ff00 -43%, #009933 100%);
+			background: linear-gradient(to bottom, #ccff99 -37%, #333300 100%);
 		}
 		p{
 			margin:  10px 0px 0px 0px;
@@ -39,18 +38,24 @@
 			width: 90%;
 			border-radius: 10px;
 			padding: 5px;
+			color: black;
+			background-color: white;
+		}
+		img{
+			width: 300px;
+			height: 300px;
 		}
 		#mainContentDiv{
 			display: flex;
-			border:  solid black 1px;
-			width: 98%;
-			height: 410px;
+			width: 97%;
 			margin: 0px auto;
-			background: linear-gradient(to bottom, #66ff33 -27%, #009933 100%);
+			padding: 10px;
+			background: rgb(61, 57, 11, 0.5)
 		}
 		#mainContentDiv>div>div{
 			display: inline-block;
 			width: 450px;
+			margin-left: 10px;
 		}
 		#mainContentDiv>div>input::-webkit-outer-spin-button,
 		#mainContentDiv>div>input::-webkit-inner-spin-button {
@@ -69,6 +74,38 @@
 		}
 
 
+		@media (max-width: 1280px){
+			img{
+				display: block;
+				margin: 0px auto;
+			}
+			#mainContentDiv{
+				display: block;
+			}		
+			#mainContentDiv>div>div{
+				width: 48%;
+			}
+		}
+
+
+		@media (max-width: 900px){
+			input{
+				width: 96%;
+			}
+			#mainContentDiv>div{
+				width: 80%;
+				margin: 0px auto;
+				padding: 2%;
+			}
+			#mainContentDiv>div>div{
+				display: block;
+				width: 80%;
+				margin: 0px auto;
+			}
+			#editLogBtn{
+				text-align: center;
+			}
+		}
 
 
 		@media (max-width: 700px){
@@ -88,16 +125,21 @@
 			#navigationBarDiv>ul>li{
 				text-align: center;
 			}
-			#mainContentDiv{
-				display: block;
-				height: 920px;
-			}
-			#mainContentDiv>div{
-				width: 80%;
-				margin: 0px auto;
-			}
 			#imageDiv{
 				text-align: center;
+				width: 100%;
+				border: black red 1px;
+			}
+			#imageDiv>img{
+				width: 90%;
+				height: 90%;
+			}
+			input{
+				width: 90%;
+			}
+			li{
+				font-size: 16px;
+				margin: 6px;
 			}
 		}
 	</style>
@@ -115,7 +157,7 @@
 	</div>
 	<div id="mainContentDiv">
 		<div id="imageDiv">
-			<img src="https://images.ctfassets.net/g8qtv9gzg47d/6SiUg4TCwLA9OfEy3KlQy7/41c90a47f0250d130323056f69f6cdca/5de2bba479d7577cd722e553.jpeg?fl=progressive&fm=jpg&q=80" style="width: 300px; height: 300px; margin: 20px; display: inline-block">
+			<img src="https://images.ctfassets.net/g8qtv9gzg47d/6SiUg4TCwLA9OfEy3KlQy7/41c90a47f0250d130323056f69f6cdca/5de2bba479d7577cd722e553.jpeg?fl=progressive&fm=jpg&q=80">
 		</div>
 		<div>
 			<div>

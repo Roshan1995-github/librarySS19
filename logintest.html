@@ -49,7 +49,7 @@
 		input[type=number] {
 		    -moz-appearance:textfield; /* Firefox */
 		}
-		#modal1, #modal2{			
+		#modal1, #modal2, #searchLoading{			
 		  display: none; /* Hidden by default */
 		  position: fixed; /* Stay in place */
 		  z-index: 1; /* Sit on top */
@@ -61,6 +61,17 @@
 			background-image: url("Images/background-1.jpg");
 			background-repeat: no-repeat;
 			background-size: 100% 630px;
+		}
+		#searchLoading{
+			background-image: url("Images/background-1.jpg");
+			background-repeat: no-repeat;
+			background-size: 100% 630px;
+			z-index: 2;
+		}
+		#searchLoading>div{
+			width: 50%;
+			margin: 240px auto;
+			text-align: center;
 		}
 		#modal1Content, #modal2Content{
 			background-color: rgba(0,0,0, 0.8);
@@ -168,6 +179,12 @@
 	</style>
 </head>
 <body>
+	<div id="searchLoading">
+		<div>
+			<img src="https://i.gifer.com/7Fmb.gif" style="opacity: 1; width: 100px; height: 100px; border-radius: 50%;">
+			<!-- <img src="https://thumbs.gfycat.com/IndolentDistantBuffalo-max-1mb.gif" style="opacity: 1; width: 100px; height: 100px; border-radius: 50%;"> -->
+		</div>
+	</div>
 	<div id="modal1">
 		<div id="modal1Content">
 			<h1 class="headerFont">SS19 LIBRARY</h1>
@@ -238,8 +255,11 @@
 
 	var modal1 = document.getElementById('modal1')
 	var modal2 = document.getElementById('modal2')
+	var searchLoading = document.getElementById('searchLoading')
 
 	function loginBtnFunc(){
+		searchLoading.style.display = "block"
+
 		var phoneNum = document.getElementsByName('phoneNum')[1].value
 		var password = document.getElementsByName('password')[1].value
 
@@ -275,6 +295,7 @@
 			}else if(data == "wrong password"){
 				alert("Wrong password entered.")
 			}else{
+				searchLoading.style.display = "none"
 				sessionStorage.setItem('userData', JSON.stringify(data[1][0]));
 				window.location.href = "userHomepage.html";	
 			}
@@ -286,6 +307,8 @@
 	}
 
 	function addMemberFunc(){
+		searchLoading.style.display = "block"
+
 		var name = document.getElementsByName('name')[0].value
 		var phoneNum = document.getElementsByName('phoneNum')[0].value
 		var password = document.getElementsByName('password')[0].value
@@ -377,8 +400,10 @@
 			console.log('Success:', data);
 
 			if(data == "exist"){
+				searchLoading.style.display = "none"
 				alert("Phone number already used.")
 			}else{
+				searchLoading.style.display = "none"
 				alert("User created. Please login.")
 				modal2Visibility()
 			}
