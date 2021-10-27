@@ -20,13 +20,12 @@
 			padding: 0px
 		}
 		li{
-			border: solid yellow 1px;
 			color: white;
 			font-size: 20px;
 			margin: 10px;
 			width: 150px;
 			text-align: center;
-			background: linear-gradient(to bottom, #00ff00 -43%, #009933 100%);
+			background: linear-gradient(to bottom, #ccff99 -37%, #333300 100%);
 		}
 		p{
 			font-size: 20px;
@@ -40,14 +39,14 @@
 			color: yellow;
 		}
 
+		.headerFont{
+			color: white;
+			font: small-caps bold 40px;
+			text-align: center;
+		}
 
 
-		@media (max-width: 700px){
-			#navigationBarDiv>ul{
-				width: 90%;
-				margin: 20px auto;
-				justify-content: space-around;
-			}
+		@media (max-width:  930px){
 			#navigationBarDiv>ul>li{
 				text-align: center;
 			}
@@ -64,6 +63,13 @@
 				height: 30px;
 				margin: 0px auto;
 			}
+			#prevNextBtnDiv{
+				flex-direction: row !important
+			}
+		}
+
+
+		@media (max-width: 700px){
 			#displayBooksDiv>div{
 				flex-direction: column;
 				width: 95%;
@@ -75,24 +81,19 @@
 				margin: 10px auto;
 				border: solid yellow 5px;
 			}
-			#prevNextBtnDiv{
-				flex-direction: row !important
-			}
-		}
-
-
-
-		@media (max-width: 600px){
 			li{
 				font-size: 14px;
+				margin: 6px;
 			}
 		}
+
+
 		
 	</style>
 </head>
 <body>
 	<p id="greetings" style="color: white; font-size: 20px">Hello</p>
-	<h1 style="color: white; font: italic small-caps bold 40px cursive; text-align: center;">SS19 LIBRARY</h1>
+	<h1 class="headerFont">SS19 LIBRARY</h1>
 	<div id="navigationBarDiv">
 		<ul>
 			<li onclick="window.location.href = 'userHomepage.html'">Homepage</li>

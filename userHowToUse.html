@@ -20,19 +20,24 @@
 			padding: 0px
 		}
 		li{
-			border: solid yellow 1px;
 			color: white;
 			font-size: 20px;
 			margin: 10px;
 			width: 150px;
 			text-align: center;
-			background: linear-gradient(to bottom, #00ff00 -43%, #009933 100%);
+			background: linear-gradient(to bottom, #ccff99 -37%, #333300 100%);
+		}
+
+		.headerFont{
+			color: white;
+			font: small-caps bold 40px;
+			text-align: center;
 		}
 
 
-		@media (max-width: 600px){
+		@media (max-width: 700px){			
 			li{
-				font-size: 16px;
+				font-size: 14px;
 				margin: 6px;
 			}
 		}
@@ -40,7 +45,7 @@
 </head>
 <body>
 	<p id="greetings" style="color: white; font-size: 20px">Hello</p>
-	<h1 style="color: white; font: italic small-caps bold 40px cursive; text-align: center;">SS19 LIBRARY</h1>
+	<h1 class="headerFont">SS19 LIBRARY</h1>
 	<div id="navigationBarDiv">
 		<ul>
 			<li onclick="window.location.href = 'userHomepage.html'">Homepage</li>

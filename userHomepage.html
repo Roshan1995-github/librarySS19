@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head permissions-policy: interest-cohort=()>
+<head>
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>HOME</title>
 	<script src="functions.js"></script>
@@ -21,13 +21,12 @@
 			padding: 0px
 		}
 		li{
-			border: solid yellow 1px;
 			color: white;
 			font-size: 20px;
 			margin: 10px;
 			width: 150px;
 			text-align: center;
-			background: linear-gradient(to bottom, #00ff00 -43%, #009933 100%);
+			background: linear-gradient(to bottom, #ccff99 -37%, #333300 100%);
 		}
 		#modal1, #modal2, #searchLoading{			
 		  display: none; /* Hidden by default */
@@ -81,6 +80,16 @@
 		#navigationBarDiv{
 			display: flex;
 			justify-content: space-between;
+			padding-top: 0px;
+		}
+		#navigationBarDiv>ul{
+			margin: 0px;
+			padding: 0px;
+		}
+		#navigationBarDiv>button{
+			height: 30px;
+			width: 120px;
+			margin-right: 20px
 		}
 		#prevNextBtnDiv>button{
 			width: 100px;
@@ -89,23 +98,33 @@
 		#displayBooksDiv{
 			color: yellow;
 		}
+		#body{
+			border: solid red 1px;
+			width: 100%;
+			height: 100%;
+		}
+
+		.headerFont{
+			color: white;
+			font: small-caps bold 40px;
+			text-align: center;
+		}
 
 
-
-		@media (max-width: 700px){
+		@media (max-width:  840px){
 			#navigationBarDiv{
 				flex-direction: column;
 			}
 			#navigationBarDiv>button{
 				display: block;
-				width: 300px;
-				margin: 0px auto !important;
+				width: 40%;
+				font-size: 12px;
+				margin: 20px auto !important;
 			}
-			#navigationBarDiv>ul{
-				width: 90%;
-				margin: 20px auto;
-				justify-content: space-around;
-			}
+		}
+
+
+		@media (max-width: 700px){
 			#mainContentDiv>div{				
 				flex-direction: column;
 			}
@@ -138,14 +157,12 @@
 			#qrReaderCanvas{
 				max-height: 200px;
 			}
-		}
-
-
-		@media (max-width: 600px){
 			li{
-				font-size: 16px;
+				font-size: 14px;
+				margin: 6px;
 			}
 		}
+
 
 
 	</style>
@@ -164,8 +181,7 @@
 
 	<div id="body">
 		<p id="greetings" style="color: white; font-size: 20px">Hello</p>
-		<button onclick="showLoading()">cick</button>
-		<h1 style="color: white; font: italic small-caps bold 40px cursive; text-align: center;">SS19 LIBRARY</h1>
+		<h1 class="headerFont">SS19 LIBRARY</h1>
 		<div id="navigationBarDiv">
 			<ul>
 				<li onclick="window.location.href = 'userHomepage.html'">Homepage</li>
@@ -173,7 +189,7 @@
 				<li onclick="window.location.href = 'userProfile.html'">Profile</li>
 				<li onclick="window.location.href = 'userHowToUse.html'">How To Use</li>
 			</ul>
-			<button style="height: 30px; margin-top: 20px; margin-right: 20px" onclick="scanQRBtnFunc()">Scan QR Code</button>
+			<button onclick="scanQRBtnFunc()">Scan QR Code</button>
 		</div>
 		<div id="mainContentDiv">
 			<div id="displayBooksDiv" style="width: 95%; margin: 10px auto">
@@ -198,7 +214,7 @@
 				<p id="modal1DateExpectedReturn"></p>
 				<p id="modal1RemainingOverdue"></p>
 				<div style="display: flex; width: 90%; margin: 10px auto; justify-content: space-around;">
-					<button onclick="modal1Visibility()">Cancel</button>
+					<button onclick="closeModals()">Cancel</button>
 					<button>Returned</button>
 				</div>
 			</div>		
@@ -211,7 +227,7 @@
 				<p id="modal2Category"></p>
 				<p id="modal2Genre"></p>
 				<div style="display: flex; width: 90%; margin: 10px auto; justify-content: space-around;">
-					<button onclick="modal2Visibility()">Cancel</button>
+					<button onclick="closeModals()">Cancel</button>
 					<button onclick="bookNowBtnFunc()">Book Now!</button>
 				</div>
 			</div>		
@@ -261,7 +277,11 @@
 			console.log('Success:', data);
 			bookData = data[1][0]
 			console.log(bookData)
-			document.getElementById('modal2Image').setAttribute('src', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTY_6xlv6z30igW5fW7--EW0owZJWX0aedcQ&usqp=CAU')
+			if(bookData.image == null){
+				document.getElementById('modal2Image').setAttribute('src', 'https://thumbs.dreamstime.com/b/no-image-available-icon-vector-illustration-flat-design-140476186.jpg')
+			}else{
+				document.getElementById('modal2Image').setAttribute('src', databaseLink+'/api/get-image/'+bookData.image.split('/')[1])
+			}
 			document.getElementById('modal2Title').innerHTML = "Title : "+bookData.name
 			document.getElementById('modal2Author').innerHTML = "Author : "+bookData.author
 			document.getElementById('modal2Category').innerHTML = "Category : "+bookData.category
@@ -330,7 +350,6 @@
 		.catch((error) => {
 			console.error('Error:', error);
 		});
-		modal2Visibility()
 		loadBooksFunc()
 	}
 	
@@ -350,6 +369,7 @@
 		.then(response => response.json())
 		.then(data => {
 			console.log('Success:', data);
+			closeModals()
 			lastPage = data[1].last_page
 
 			if(currentPage == lastPage){
@@ -370,7 +390,10 @@
 			if(data == ""){
 				console.log("empty")
 				displayBooksDiv.innerHTML = "NO BOOKS BORROWED"
+				displayBooksDiv.setAttribute("style", "text-align: center; padding-top: 20px")
 				return;
+			}else{
+				displayBooksDiv.setAttribute("style", "text-align: left; padding-top: 0px")
 			}
 			var dataLength = data.length
 			var dataNumber = 0
@@ -390,7 +413,11 @@
 					}					
 
 					var image = document.createElement('IMG')
-					image.setAttribute('src', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTY_6xlv6z30igW5fW7--EW0owZJWX0aedcQ&usqp=CAU')
+					if(data[dataNumber].image == null){
+						image.setAttribute('src', 'https://thumbs.dreamstime.com/b/no-image-available-icon-vector-illustration-flat-design-140476186.jpg')
+					}else{
+						image.setAttribute('src', databaseLink+'/api/get-image/'+data[dataNumber].image.split('/')[1])
+					}
 					image.setAttribute('style', 'height: 200px')
 					var paraDiv = document.createElement('DIV')
 					paraDiv.setAttribute('style', 'text-align:left; width: 60%; margin: 0px auto')
@@ -476,22 +503,21 @@
 
 
 	function modal1Visibility(){
-		var modal1Display = document.getElementById('modal1').style.display
-		console.log(modal1Display)
-		if(modal1Display == "block"){
-			document.getElementById('modal1').style.display = "none"
-		}else{
-			document.getElementById('modal1').style.display = "block"
-		}
+		console.log("modal 1 clicked")
+		modal1.style.display = "block"
+		modal2.style.display = "none"
 	}
+
 	function modal2Visibility(){
-		var modal2Display = document.getElementById('modal2').style.display
-		console.log(modal2Display)
-		if(modal2Display == "block"){
-			document.getElementById('modal2').style.display = "none"
-		}else{
-			document.getElementById('modal2').style.display = "block"
-		}
+		console.log("modal 2 clicked")
+		modal1.style.display = "none"
+		modal2.style.display = "block"
+	}
+
+	function closeModals(){
+		console.log("close modals clicked")
+		modal1.style.display = "none"
+		modal2.style.display = "none"
 	}
 	// const data = { username: 'example' };
 	// fetch('https://example.com/profile', {

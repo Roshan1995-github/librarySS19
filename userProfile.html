@@ -27,7 +27,7 @@
 			text-align: center;
 			background: linear-gradient(to bottom, #ccff99 -37%, #333300 100%);
 		}
-		p{
+		div>p{
 			margin:  10px 0px 0px 0px;
 			font-size: 20px;
 			color: white;
@@ -70,7 +70,13 @@
 			height: 40px;
 			border-radius: 12px;
 			color: white;
-			font: italic small-caps bold 16px/2 cursive;
+			font: small-caps bold 16px;
+		}
+
+		.headerFont{
+			color: white;
+			font: small-caps bold 40px;
+			text-align: center;
 		}
 
 
@@ -116,12 +122,7 @@
 				display: block;
 				width: 300px;
 				margin: 0px auto !important;
-			}
-			#navigationBarDiv>ul{
-				width: 90%;
-				margin: 20px auto;
-				justify-content: space-around;
-			}
+			}			
 			#navigationBarDiv>ul>li{
 				text-align: center;
 			}
@@ -138,7 +139,7 @@
 				width: 90%;
 			}
 			input{
-				width: 90%;
+				width: 100%;
 				font-size: 16px;
 			}
 			li{
@@ -150,7 +151,7 @@
 </head>
 <body>
 	<p id="greetings" style="color: white; font-size: 20px">Hello</p>
-	<h1 style="color: white; font: italic small-caps bold 40px cursive; text-align: center;">SS19 LIBRARY</h1>
+	<h1 class="headerFont">SS19 LIBRARY</h1>
 	<div id="navigationBarDiv">
 		<ul>
 			<li onclick="window.location.href = 'userHomepage.html'">Homepage</li>
