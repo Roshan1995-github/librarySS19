@@ -37,12 +37,72 @@
 		}
 		#displayBooksDiv{
 			color: yellow;
+			text-align: center;
+			/*border:  solid red 1px;*/
+		}
+		#bookContentDiv{
+			display: inline-block;
+			width: 250px;
+			height: 100%;
+			padding: 20px 0px;
+			text-align: center;
+			margin: 10px 30px;
+			/*border:  solid red 1px;*/
+		}
+		#bookContentDiv>img{
+			height: 200px;
+			width: 200px;
+		}
+		#bookContentDiv>table{
+			width: 95%;
+			margin:  0px auto;
+			table-layout: fixed
+		}
+		#bookContentDiv>table>tbody>tr>td{
+			text-align: left;
+			height: 35px;
+			/*border:  solid red 1px;*/
+		}
+		#bookContentDiv>table>tbody>tr>td:nth-child(1){
+			width: 55px;
+			/*border:  solid blue 1px;*/
+		}		
+		#bookContentDiv>table>tbody>tr>td:nth-child(2){
+			width: 5px;
+		}		
+		#bookContentDiv>table>tbody>tr>td:nth-child(3){
+			word-wrap: break-word
+		}
+		#loadingPage{			
+		  display: none; /* Hidden by default */
+		  position: fixed; /* Stay in place */
+		  z-index: 1; /* Sit on top */
+		  left: 0;
+		  top: 0;
+		  width: 100%; /* Full width */
+		  height: 100%; /* Full height */
+		  overflow: none; /* Enable scroll if needed */
+		  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 		}
 
 		.headerFont{
 			color: white;
 			font: small-caps bold 40px;
 			text-align: center;
+		}
+
+
+		@media (max-width:  1008px){
+			#bookContentDiv{
+				margin: 10px 25px;
+			}
+		}
+
+
+		@media (max-width:  965px){
+			#bookContentDiv{
+				margin: 10px 15px;
+			}
 		}
 
 
@@ -69,17 +129,23 @@
 		}
 
 
-		@media (max-width: 700px){
-			#displayBooksDiv>div{
-				flex-direction: column;
-				width: 95%;
-				margin: 10px auto;
-				padding: 0px
-			}
+		@media (max-width:  901px){
 			#bookContentDiv{
-				width: 70% !important;
-				margin: 10px auto;
-				border: solid yellow 5px;
+				margin: 10px 60px;
+			}
+		}
+
+
+		@media (max-width:  830px){
+			#bookContentDiv{
+				margin: 10px 35px;
+			}
+		}
+
+
+		@media (max-width: 700px){
+			#bookContentDiv{
+				margin: 10px 30px;
 			}
 			li{
 				font-size: 14px;
@@ -88,10 +154,29 @@
 		}
 
 
+		@media (max-width:  680px){
+			#bookContentDiv{
+				margin: 10px 20px;
+			}
+		}
+
+
+		@media (max-width:  627px){
+			#bookContentDiv{
+				margin: 10px 15px;
+			}
+		}
+
+
 		
 	</style>
 </head>
-<body>
+<body onload="bodyLoad()">
+	<div id="loadingPage" style="display: block; z-index: 3">
+		<!-- <img src="https://i.gifer.com/7Fmb.gif" style="opacity: 1; width: 100px; height: 100px; border-radius: 50%;"> -->
+		<img src="Images/loadingPage.gif" style="width: 100%; height: 100%; border-radius: 0px;">
+	</div>
+
 	<p id="greetings" style="color: white; font-size: 20px">Hello</p>
 	<h1 class="headerFont">SS19 LIBRARY</h1>
 	<div id="navigationBarDiv">
@@ -103,7 +188,7 @@
 		</ul>
 	</div>
 	<div id="mainContentDiv">
-		<div id="searchDiv" style="display: flex; width: 90%; justify-content: space-around; margin: 0px auto">
+		<div id="searchDiv" style="display: flex; width: 99%; justify-content: space-between; margin: 0px auto;">
 			<div style="display: flex">
 				<p style="margin: 0px 10px">Name:</p>			
 				<input list="searchBooks" type="text" name="search" style="height: 20px">
@@ -148,7 +233,7 @@
 			</div>
 			<button onclick="searchBtnFunc()" id="searchBtn">SEARCH</button>
 		</div>
-		<div id="displayBooksDiv" style="width: 90%; margin: 10px auto">
+		<div id="displayBooksDiv" style="width: 95%; margin: 10px auto">
 			
 		</div>
 		<div id="prevNextBtnDiv" style="display: flex; width: 100%; justify-content: center; margin-top: 20px">
@@ -159,8 +244,8 @@
 	</div>
 
 <script type="text/javascript">	
-	var databaseLink = "https://libraryss19.herokuapp.com"
-	// var databaseLink = "http://libraryss19.test"
+	// var databaseLink = "https://libraryss19.herokuapp.com"
+	var databaseLink = "http://libraryss19.test"
 	var userData = JSON.parse(sessionStorage.getItem('userData'))
 	console.log(userData)
 	if(userData == null){
@@ -172,8 +257,11 @@
 	var currentPage = 1
 	var lastPage = 0
 
-	function checkOutCartFunc(){
-		console.log("check out button clicked")
+	function bodyLoad(){
+		console.log("body loaded")
+		setTimeout(function(){
+			document.getElementById("loadingPage").style.display = "none"
+		}, 1000)		
 	}
 
 
@@ -254,47 +342,62 @@
 
 			var data = data[1].data
 			var dataLength = data.length
-			var dataNumber = 0
-			for(var i=0; i<dataLength/3; i++){
-				var div = document.createElement('DIV')
-				div.setAttribute("style", "display: flex; justify-content: space-around")
-				displayBooksDiv.appendChild(div)
-				for (var j=0; j<3; j++){
-					var bookContentDiv = document.createElement('DIV')
-					bookContentDiv.setAttribute('id', 'bookContentDiv')
-					console.log(bookContentDiv)
-					console.log(data[dataNumber].availability)
-					if(data[dataNumber].availability == "unavailable"){
-						bookContentDiv.setAttribute('style', 'width: 30%; padding: 10px; text-align: center; margin-top: 10px; background: linear-gradient(to bottom, #ff5050 -27%, #ff0000 100%)')
-					}else{
-						bookContentDiv.setAttribute('style', 'width: 30%; padding: 10px; text-align: center; margin-top: 10px; background: linear-gradient(to bottom, #66ff33 -27%, #009933 100%)')
-					}					
+			for(var i=0; i<dataLength; i++){
+				var bookContentDiv = document.createElement('DIV')
+				console.log(bookContentDiv)
+				bookContentDiv.setAttribute('id', 'bookContentDiv')
+				console.log(data[i].availability)
+				if(data[i].availability == "unavailable"){
+					bookContentDiv.setAttribute('style', 'background-color: red')
+				}else{
+					bookContentDiv.setAttribute('style', 'background-color: green')
+				}					
 
-					var image = document.createElement('IMG')
-					if(data[dataNumber].image == null){
-						image.setAttribute('src', 'https://thumbs.dreamstime.com/b/no-image-available-icon-vector-illustration-flat-design-140476186.jpg')
-					}else{
-						image.setAttribute('src', databaseLink+'/api/get-image/'+data[dataNumber].image.split('/')[1])
-					}
-					image.setAttribute('style', 'height: 200px')
-					var paraDiv = document.createElement('DIV')
-					paraDiv.setAttribute('style', 'text-align:left; width: 60%; margin: 0px auto')
-					paraDiv.setAttribute('id', data[dataNumber].id)
-					paraDiv.innerHTML = "Title : "+data[dataNumber].name+"<br>"+"Author : "+data[dataNumber].author+"<br>"+"Category : "+data[dataNumber].category+"<br>"+"Genre : "+data[dataNumber].genre
-
-					bookContentDiv.appendChild(image)
-					bookContentDiv.appendChild(paraDiv)
-
-					bookContentDiv.addEventListener('click', function(e){
-						console.log(this.children[1].id)
-					})
-					
-					div.appendChild(bookContentDiv)
-					dataNumber = dataNumber + 1
-					if(dataNumber == dataLength){
-						return;
-					}
+				var image = document.createElement('IMG')
+				console.log(data[i].image)
+				if(data[i].image == null){
+					image.setAttribute('src', 'https://thumbs.dreamstime.com/b/no-image-available-icon-vector-illustration-flat-design-140476186.jpg')
+				}else{
+					console.log(databaseLink+'/api/get-cover-page/'+data[i].image.split('/')[1])
+					image.setAttribute('src', databaseLink+'/api/get-cover-page/'+data[i].image.split('/')[1])
 				}
+				var table = document.createElement('table')
+				var tr1 = table.insertRow()
+				var td1a = tr1.insertCell()
+				var td1b = tr1.insertCell()
+				var td1c = tr1.insertCell()
+				td1a.appendChild(document.createTextNode('Title'))
+				td1b.appendChild(document.createTextNode(':'))
+				td1c.appendChild(document.createTextNode(data[i].name))
+
+				var tr2 = table.insertRow()
+				var td2a = tr2.insertCell()
+				var td2b = tr2.insertCell()
+				var td2c = tr2.insertCell()
+				td2a.appendChild(document.createTextNode('Genre'))
+				td2b.appendChild(document.createTextNode(':'))
+				td2c.appendChild(document.createTextNode(data[i].genre))
+
+				var tr3 = table.insertRow()
+				var td3a = tr3.insertCell()
+				var td3b = tr3.insertCell()
+				var td3c = tr3.insertCell()
+				td3a.appendChild(document.createTextNode('Author'))
+				td3b.appendChild(document.createTextNode(':'))
+				td3c.appendChild(document.createTextNode(data[i].author))
+
+				var tr4 = table.insertRow()
+				var td4a = tr4.insertCell()
+				var td4b = tr4.insertCell()
+				var td4c = tr4.insertCell()
+				td4a.appendChild(document.createTextNode('Category'))
+				td4b.appendChild(document.createTextNode(':'))
+				td4c.appendChild(document.createTextNode(data[i].category))
+
+				bookContentDiv.appendChild(image)
+				bookContentDiv.appendChild(table)
+
+				displayBooksDiv.appendChild(bookContentDiv)
 			}
 			
 		})

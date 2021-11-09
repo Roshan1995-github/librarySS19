@@ -49,7 +49,16 @@
 		input[type=number] {
 		    -moz-appearance:textfield; /* Firefox */
 		}
-		#modal1, #modal2, #searchLoading{			
+		table{
+			width: 70%;
+			margin: 20px auto;
+		}
+		td{
+			border: solid red 1px;
+			text-align: center;
+			font-size: 20px;
+		}
+		#modal1, #modal2, #modal3, #modal4, #searchLoading{			
 		  display: none; /* Hidden by default */
 		  position: fixed; /* Stay in place */
 		  z-index: 1; /* Sit on top */
@@ -60,12 +69,12 @@
 		  overflow: none; /* Enable scroll if needed */
 			background-image: url("Images/background-1.jpg");
 			background-repeat: no-repeat;
-			background-size: 100% 630px;
+			background-size: 100% 100%;
 		}
 		#searchLoading{
 			background-image: url("Images/background-1.jpg");
 			background-repeat: no-repeat;
-			background-size: 100% 630px;
+			background-size: 100% 100%;
 			z-index: 2;
 		}
 		#searchLoading>div{
@@ -73,11 +82,11 @@
 			margin: 240px auto;
 			text-align: center;
 		}
-		#modal1Content, #modal2Content{
+		#modal1Content, #modal2Content, #modal3Content, #modal4Content{
 			background-color: rgba(0,0,0, 0.8);
-			margin: 5% auto;
+			margin: 1% auto;
 			width: 37%;
-			height: 80%;
+			height: 93%;
 			overflow: auto;
 			overflow-x: hidden;
 			padding: 10px;
@@ -85,9 +94,6 @@
 			color: white;
 		}
 		#modal1Content{
-			margin-top: 10px;
-			height: 99%;
-			padding: 0px 25px;
 			width: 60%;
 		}
 		#modal1Content>p{
@@ -103,11 +109,36 @@
 			width: 45%;
 			margin: 5px 15px;
 		}
-		#modal2Content>div{
+		#modal2Content>div>img{
+			width: 260px;
+			height: 300px;
+		}
+		#modal2Content>div>input{
+			width: 200px;
+			text-align: center;
+			font-size: 14px;
+		}
+		#modal3Content{
+			width: 60%;
+		}
+		#modal3Content>div{
+			width: 95%;
+			margin: 0px auto;
+			text-align: center;
+		}
+		#modal3Content>div>button{
+			display: inline-block;
+			width: 200px;
+			height: 50px;
+			margin: 15px;
+			color: black;
+			font-size: 20px;
+		}
+		#modal4Content>div{
 			width: 50%;
 			margin: 0px auto;
 		}
-		#modal1Content>div>input, #modal2Content>div>input{
+		#modal1Content>div>input, #modal4Content>div>input{
 			width: 95%;
 		}
 		#mainContentDiv{
@@ -132,7 +163,7 @@
 			#modal1Content{
 				width: 80%;
 			}
-			#modal2Content{
+			#modal4Content{
 				width: 60%;
 			}
 			#modal1Content>div{
@@ -154,7 +185,7 @@
 				height: 40px;
 				border-radius: 12px;
 			}
-			#modal1Content, #modal2Content{
+			#modal1Content, #modal4Content{
 				width: 80%;
 			}
 			#modal1Content>div{
@@ -167,10 +198,10 @@
 
 
 		@media (max-width: 550px){
-			#modal2Content{
+			#modal4Content{
 				height: 90%;
 			}
-			#modal2Content>div{
+			#modal4Content>div{
 				width: 70%;
 			}
 		}
@@ -185,20 +216,24 @@
 			<!-- <img src="https://thumbs.gfycat.com/IndolentDistantBuffalo-max-1mb.gif" style="opacity: 1; width: 100px; height: 100px; border-radius: 50%;"> -->
 		</div>
 	</div>
-	<div id="modal1">
+	<div id="modal1" style="display: none">
 		<div id="modal1Content">
 			<h1 class="headerFont">SS19 LIBRARY</h1>
 			<div>
-				<p>Name</p>
+				<p>Name<span style="color:red">*</span></p>
 				<input type="text" name="name">
 			</div>
 			<div>
-				<p>Phone Number</p>
+				<p>Phone Number<span style="color:red">*</span></p>
 				<input type="number" name="phoneNum">
 			</div>
 			<div>
-				<p>Password</p>
+				<p>Password<span style="color:red">*</span></p>
 				<input type="password" name="password">
+			</div>
+			<div>
+				<p>Confirm Password<span style="color:red">*</span></p>
+				<input type="password" name="confirmPassword">
 			</div>
 			<div>
 				<p>Address</p>
@@ -220,14 +255,85 @@
 				<p>Country</p>
 				<input type="text" name="country">
 			</div>
+			<table>
+				<thead>
+					<tr>
+						<td>Category</td>
+						<td colspan="3">Quantity</td>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Ages 1 to 3</td>
+						<td onclick="plusMinusTableFunc(this)">-</td>
+						<td>0</td>
+						<td onclick="plusMinusTableFunc(this)">+</td>
+					</tr>
+					<tr>
+						<td>Ages 4 to 6</td>
+						<td onclick="plusMinusTableFunc(this)">-</td>
+						<td>0</td>
+						<td onclick="plusMinusTableFunc(this)">+</td>
+					</tr>
+					<tr>
+						<td>Ages 7 to 11</td>
+						<td onclick="plusMinusTableFunc(this)">-</td>
+						<td>0</td>
+						<td onclick="plusMinusTableFunc(this)">+</td>
+					</tr>
+					<tr>
+						<td>Ages 12 to 15</td>
+						<td onclick="plusMinusTableFunc(this)">-</td>
+						<td>0</td>
+						<td onclick="plusMinusTableFunc(this)">+</td>
+					</tr>
+					<tr>
+						<td>Ages 16 to 18</td>
+						<td onclick="plusMinusTableFunc(this)">-</td>
+						<td>0</td>
+						<td onclick="plusMinusTableFunc(this)">+</td>
+					</tr>
+				</tbody>
+			</table>
 			<br>
-			<button onclick="addMemberFunc()" style="background: linear-gradient(to bottom, #ffff00 -50%, #ff9900 100%); margin: 20px auto;">Register</button>
+			<button onclick="checkPhoneNum()" style="background: linear-gradient(to bottom, #ffff00 -50%, #ff9900 100%); margin: 20px auto;">Next</button>
 			<button onclick="closeModals()" style="background-color: red">Cancel</button>
 		</div>
 	</div>
-
 	<div id="modal2">
 		<div id="modal2Content">
+			<h1 class="headerFont">SS19 LIBRARY</h1>
+			<div style="text-align: center;">
+				<p style="text-align:center;">Choose a profile picture</p>
+				<img src="" id="profilePicture">
+				<br>
+				<input type="file" name="image" onchange="displayImageFunc(this)">
+			</div>
+			<button onclick="modal3Visibility()" style="background: linear-gradient(to bottom, #ffff00 -50%, #ff9900 100%); margin: 20px auto;" id="modal2Btn">Skip</button>
+			<button onclick="modal1Visibility()" style="background-color: red">Back</button>
+		</div>
+	</div>
+	<div id="modal3">
+		<div id="modal3Content">
+			<h1 class="headerFont">SS19 LIBRARY</h1>
+			<p style="text-align:center; margin: 15px;">Select preferred genres and complete registration</p>
+			<div>
+				<button value="fantasy" onclick="bookGenres(this)">Fantasy</button>
+				<button value="sfiction" onclick="bookGenres(this)">Science Fiction</button>
+				<button value="romance" onclick="bookGenres(this)">Romance</button>
+				<button value="adventure" onclick="bookGenres(this)">Adventure</button>
+				<button value="mystery" onclick="bookGenres(this)">Mystery</button>
+				<button value="drama" onclick="bookGenres(this)">Drama</button>
+				<button value="thriller" onclick="bookGenres(this)">Thriller</button>
+				<button value="poetry" onclick="bookGenres(this)">Poetry</button>
+				<button value="children" onclick="bookGenres(this)">Children</button>
+			</div>
+			<button onclick="addMemberFunc()" style="background: linear-gradient(to bottom, #ffff00 -50%, #ff9900 100%); margin: 20px auto;" id="modal3Btn">Register</button>
+			<button onclick="modal2Visibility()" style="background-color: red">Back</button>
+		</div>
+	</div>
+	<div id="modal4">
+		<div id="modal4Content">
 			<h1 class="headerFont">SS19 LIBRARY</h1>
 			<div>
 				<p>Phone Number</p>
@@ -245,21 +351,39 @@
 	<div id="mainContentDiv">
 		<h1 class="headerFont">SS19 LIBRARY</h1>
 		<div id="mainContentDivSep1"></div>
-		<button style="background: linear-gradient(to bottom, #ff0066 0%, #000099 100%);" onclick="modal2Visibility()">Login</button>
+		<button style="background: linear-gradient(to bottom, #ff0066 0%, #000099 100%);" onclick="modal4Visibility()">Login</button>
 		<div style="height: 20px"></div>
 		<button style="background: linear-gradient(to bottom, #ffff00 -50%, #ff9900 100%);" onclick="modal1Visibility()">Register</button>
 	</div>
 <script type="text/javascript">	
-	var databaseLink = "https://libraryss19.herokuapp.com"
-	// var databaseLink = "http://libraryss19.test"
+	// var databaseLink = "https://libraryss19.herokuapp.com"
+	var databaseLink = "http://libraryss19.test"
 
 	var modal1 = document.getElementById('modal1')
 	var modal2 = document.getElementById('modal2')
+	var modal3 = document.getElementById('modal3')
+	var modal4 = document.getElementById('modal4')
 	var searchLoading = document.getElementById('searchLoading')
 
-	function loginBtnFunc(){
-		searchLoading.style.display = "block"
+	var genreChoices = []
 
+
+	function plusMinusTableFunc(cell){
+		// console.log(cell.textContent)
+		// console.log(cell.parentElement.children[2].textContent)
+		console.log(document.getElementsByTagName('tbody')[0].children[0].children[2].textContent)
+		var counter = parseInt(cell.parentElement.children[2].textContent)
+		if(cell.textContent == "-"){
+			if(counter > 0){
+				cell.parentElement.children[2].textContent = counter - 1
+			}
+		}else{
+			cell.parentElement.children[2].textContent = counter + 1
+		}
+	}
+
+
+	function loginBtnFunc(){
 		var phoneNum = document.getElementsByName('phoneNum')[1].value
 		var password = document.getElementsByName('password')[1].value
 
@@ -270,48 +394,126 @@
 			password = password.substring(1)
 		}
 
+
 		if(phoneNum == ""){
 			alert("Please enter phone number.")
+			document.getElementsByName('phoneNum')[1].setAttribute('style', 'border: 3px red solid')
 			return;
-		}
-		if(password == ""){
-			alert("Please enter password.")
-			document.getElementsByName('password')[0].setAttribute('style', 'border: 1px red solid')
-			return;
+		}else{
+			document.getElementsByName('phoneNum')[1].setAttribute('style', 'border: default')
 		}
 
-		fetch(databaseLink+'/api/memberLogIn/'+phoneNum+'/'+password, {
-			method: 'GET', // or 'PUT'
+		if(password == ""){
+			alert("Please enter password.")
+			document.getElementsByName('password')[1].setAttribute('style', 'border: 3px red solid')
+			return;
+		}else{
+			document.getElementsByName('password')[1].setAttribute('style', 'border: default')
+		}
+
+		const data = {
+			phoneNum: phoneNum,
+			password: password
+		}
+
+		searchLoading.style.display = "block"
+		fetch(databaseLink+'/api/memberLogIn', {
+			method: 'POST', // or 'PUT'
 			headers: {
 				'Content-Type': 'application/json',
-			}
+			},
+			body: JSON.stringify(data),
 		})
 		.then(response => response.json())
 		.then(data => {
 			console.log('Success:', data);
 
 			if(data == "wrong phone number"){
+				searchLoading.style.display = "none"
+				document.getElementsByName('password')[1].setAttribute('style', 'border: default')
+				document.getElementsByName('phoneNum')[1].setAttribute('style', 'border: 3px red solid')
 				alert("Phone number entered does not exist in system.")
 			}else if(data == "wrong password"){
+				document.getElementsByName('phoneNum')[1].setAttribute('style', 'border: default')
+				document.getElementsByName('password')[1].setAttribute('style', 'border: 3px red solid')
 				alert("Wrong password entered.")
-			}else{
 				searchLoading.style.display = "none"
+			}else{
 				sessionStorage.setItem('userData', JSON.stringify(data[1][0]));
-				window.location.href = "userHomepage.html";	
+				window.location.href = "userHomepage.html";
+				searchLoading.style.display = "none"
 			}
 			
 		})
 		.catch((error) => {
-			console.error('Error:', error);
+			console.error('Error:', error);			
+			searchLoading.style.display = "none"
+			alert(error)
 		});
 	}
 
 	function addMemberFunc(){
-		searchLoading.style.display = "block"
-
 		var name = document.getElementsByName('name')[0].value
 		var phoneNum = document.getElementsByName('phoneNum')[0].value
 		var password = document.getElementsByName('password')[0].value
+		var address = document.getElementsByName('address')[0].value
+		var postcode = document.getElementsByName('postcode')[0].value
+		var city = document.getElementsByName('city')[0].value
+		var state = document.getElementsByName('state')[0].value
+		var country = document.getElementsByName('country')[0].value
+		var childAge13 = document.getElementsByTagName('tbody')[0].children[0].children[2].textContent
+		var childAge46 = document.getElementsByTagName('tbody')[0].children[1].children[2].textContent
+		var childAge711 = document.getElementsByTagName('tbody')[0].children[2].children[2].textContent
+		var childAge1215 = document.getElementsByTagName('tbody')[0].children[3].children[2].textContent
+		var childAge1618 = document.getElementsByTagName('tbody')[0].children[4].children[2].textContent
+
+		const data = new FormData();
+		var modal2Btn = document.getElementById('modal2Btn')
+		console.log(modal2Btn.textContent)
+
+		if(modal2Btn.textContent == "Next"){
+			var imageData = document.getElementsByName('image')[0].files[0]
+			data.append('photo', imageData)
+		}
+		data.append('name', capitalize(name))
+		data.append('phoneNum', phoneNum)
+		data.append('password', password)
+		data.append('address', address)
+		data.append('postcode', postcode)
+		data.append('city', capitalize(city))
+		data.append('state', capitalize(state))
+		data.append('country', capitalize(country))
+		data.append('childAge13', childAge13)
+		data.append('childAge46', childAge46)
+		data.append('childAge711', childAge711)
+		data.append('childAge1215', childAge1215)
+		data.append('childAge1618', childAge1618)
+		data.append('genre', genreChoices)
+		data.append('status', 'good')
+		console.log(...data)
+
+		searchLoading.style.display = "block"
+		fetch(databaseLink+'/api/new-member', {
+			method: 'POST',
+			body:data
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+			sessionStorage.setItem('userData', JSON.stringify(data[0]));
+			window.location.href = "userHomepage.html";
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
+	}	
+
+
+	function checkPhoneNum(){
+		var name = document.getElementsByName('name')[0].value
+		var phoneNum = document.getElementsByName('phoneNum')[0].value
+		var password = document.getElementsByName('password')[0].value
+		var confirmPassword = document.getElementsByName('confirmPassword')[0].value
 		var address = document.getElementsByName('address')[0].value
 		var postcode = document.getElementsByName('postcode')[0].value
 		var city = document.getElementsByName('city')[0].value
@@ -326,6 +528,9 @@
 		}
 		while(password.charAt(0) == " "){
 			password = password.substring(1)
+		}
+		while(confirmPassword.charAt(0) == " "){
+			confirmPassword = confirmPassword.substring(1)
 		}
 		while(address.charAt(0) == " "){
 			address = address.substring(1)
@@ -355,40 +560,16 @@
 			alert("Please fill up password.")
 			return;
 		}
-		if(address == ""){
-			alert("Please fill up address.")
-			return;
-		}
-		if(postcode == ""){
-			alert("Please fill up postcode.")
-			return;
-		}
-		if(city == ""){
-			alert("Please fill up city.")
-			return;
-		}
-		if(state == ""){
-			alert("Please fill up state.")
-			return;
-		}
-		if(country == ""){
-			alert("Please fill up country.")
+		if(password != confirmPassword){
+			alert("Password does not match confirm password.")
 			return;
 		}
 
 		const data = {
-			name: capitalize(name),
-			phoneNum: phoneNum,
-			password: password,
-			address: address,
-			postcode: postcode,
-			city: capitalize(city),
-			state: capitalize(state),
-			country: capitalize(country),
-			status: "good"
+			phoneNum: phoneNum
 		};
 
-		fetch(databaseLink+'/api/new-member', {
+		fetch(databaseLink+'/api/check-member', {
 			method: 'POST', // or 'PUT'
 			headers: {
 				'Content-Type': 'application/json',
@@ -404,43 +585,94 @@
 				alert("Phone number already used.")
 			}else{
 				searchLoading.style.display = "none"
-				alert("User created. Please login.")
 				modal2Visibility()
 			}
-
-
-			document.getElementsByName('name')[0].value = ""
-			document.getElementsByName('phoneNum')[0].value = ""
-			document.getElementsByName('password')[0].value = ""
-			document.getElementsByName('address')[0].value = ""
-			document.getElementsByName('postcode')[0].value = ""
-			document.getElementsByName('city')[0].value = ""
-			document.getElementsByName('state')[0].value = ""
-			document.getElementsByName('country')[0].value = ""
-
-			
 		})
 		.catch((error) => {
 			console.error('Error:', error);
-		});	
+		});
 	}
+
+
+	function bookGenres(genreBtn){
+		var btnBgColor = genreBtn.style.backgroundColor
+		if (btnBgColor == ""){
+			genreBtn.style.backgroundColor = "blue"
+			genreChoices.push(genreBtn.value)
+		}else{
+			genreBtn.style.backgroundColor = ""
+			var index = genreChoices.indexOf(genreBtn.value)
+			genreChoices.splice(index, 1)
+		}
+	}
+
+
+	function displayImageFunc(data){
+		var modal2Btn = document.getElementById('modal2Btn')
+		var imageData = data.files[0]
+		console.log(typeof imageData)
+		if(typeof imageData == "object"){			
+			var reader = new FileReader()
+			reader.readAsDataURL(imageData)
+			reader.onload = function(evt){
+				// console.log(evt)
+				console.log(evt.target.result.substring(5,10))
+				if(evt.target.result.substring(5,10) == "image"){
+					document.getElementById('profilePicture').src = evt.target.result
+					modal2Btn.textContent = "Next"
+				}else{
+					document.getElementsByName('image')[0].value = ""
+					document.getElementById('profilePicture').src = ""					
+					modal2Btn.textContent = "Skip"
+					alert("Please choose file type image")
+				}
+			}
+		}else{
+			document.getElementsByName('image')[0].value = ""
+			document.getElementById('profilePicture').src = ""
+					modal2Btn.textContent = "Skip"
+		}
+	}
+
 
 	function modal1Visibility(){
 		console.log("modal 1 clicked")
 		modal1.style.display = "block"
 		modal2.style.display = "none"
+		modal3.style.display = "none"
+		modal4.style.display = "none"
 	}
 
 	function modal2Visibility(){
 		console.log("modal 2 clicked")
 		modal1.style.display = "none"
 		modal2.style.display = "block"
+		modal3.style.display = "none"
+		modal4.style.display = "none"
+	}
+
+	function modal3Visibility(){
+		console.log("modal 2 clicked")
+		modal1.style.display = "none"
+		modal2.style.display = "none"
+		modal3.style.display = "block"
+		modal4.style.display = "none"
+	}
+
+	function modal4Visibility(){
+		console.log("modal 2 clicked")
+		modal1.style.display = "none"
+		modal2.style.display = "none"
+		modal3.style.display = "none"
+		modal4.style.display = "block"
 	}
 
 	function closeModals(){
 		console.log("close modals clicked")
 		modal1.style.display = "none"
 		modal2.style.display = "none"
+		modal3.style.display = "none"
+		modal4.style.display = "none"
 	}
 
 </script>

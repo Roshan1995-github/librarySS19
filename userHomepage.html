@@ -28,7 +28,7 @@
 			text-align: center;
 			background: linear-gradient(to bottom, #ccff99 -37%, #333300 100%);
 		}
-		#modal1, #modal2, #searchLoading{			
+		#modal1, #modal2, #searchLoading, #loadingPage{			
 		  display: none; /* Hidden by default */
 		  position: fixed; /* Stay in place */
 		  z-index: 1; /* Sit on top */
@@ -97,9 +97,43 @@
 		}
 		#displayBooksDiv{
 			color: yellow;
+			text-align: center;
+			/*border:  solid red 1px;*/
+		}
+		#bookContentDiv{
+			display: inline-block;
+			width: 250px;
+			height: 100%;
+			padding: 20px 0px;
+			text-align: center;
+			margin: 10px 30px;
+			/*border:  solid red 1px;*/
+		}
+		#bookContentDiv>img{
+			height: 200px;
+			width: 200px;
+		}
+		#bookContentDiv>table{
+			width: 95%;
+			margin:  0px auto;
+			table-layout: fixed
+		}
+		#bookContentDiv>table>tbody>tr>td{
+			text-align: left;
+			height: 35px;
+			/*border:  solid red 1px;*/
+		}
+		#bookContentDiv>table>tbody>tr>td:nth-child(1){
+			width: 55px;
+			/*border:  solid blue 1px;*/
+		}		
+		#bookContentDiv>table>tbody>tr>td:nth-child(2){
+			width: 5px;
+		}		
+		#bookContentDiv>table>tbody>tr>td:nth-child(3){
+			word-wrap: break-word
 		}
 		#body{
-			border: solid red 1px;
 			width: 100%;
 			height: 100%;
 		}
@@ -108,6 +142,27 @@
 			color: white;
 			font: small-caps bold 40px;
 			text-align: center;
+		}	
+
+
+		@media (max-width:  1008px){
+			#bookContentDiv{
+				margin: 10px 25px;
+			}
+		}
+
+
+		@media (max-width:  965px){
+			#bookContentDiv{
+				margin: 10px 15px;
+			}
+		}
+
+
+		@media (max-width:  901px){
+			#bookContentDiv{
+				margin: 10px 60px;
+			}
 		}
 
 
@@ -121,6 +176,14 @@
 				font-size: 12px;
 				margin: 20px auto !important;
 			}
+
+		}
+
+
+		@media (max-width:  830px){
+			#bookContentDiv{
+				margin: 10px 35px;
+			}
 		}
 
 
@@ -128,16 +191,8 @@
 			#mainContentDiv>div{				
 				flex-direction: column;
 			}
-			#displayBooksDiv>div{
-				flex-direction: column;
-				width: 95%;
-				margin: 10px auto;
-				padding: 0px
-			}
 			#bookContentDiv{
-				width: 70% !important;
-				margin: 10px auto;
-				border: solid yellow 5px;
+				margin: 10px 30px;
 			}
 			#prevNextBtnDiv{
 				flex-direction: row !important
@@ -164,10 +219,28 @@
 		}
 
 
+		@media (max-width:  680px){
+			#bookContentDiv{
+				margin: 10px 20px;
+			}
+		}
+
+
+		@media (max-width:  627px){
+			#bookContentDiv{
+				margin: 10px 15px;
+			}
+		}
+
+
 
 	</style>
 </head>
-<body>
+<body onload="bodyLoad()">
+	<div id="loadingPage" style="display: block; z-index: 3">
+		<!-- <img src="https://i.gifer.com/7Fmb.gif" style="opacity: 1; width: 100px; height: 100px; border-radius: 50%;"> -->
+		<img src="Images/loadingPage.gif" style="width: 100%; height: 100%; border-radius: 0px;">
+	</div>
 	<div id="searchLoading">
 		<div>
 			<!-- <img src="https://i.gifer.com/7Fmb.gif" style="opacity: 1; width: 100px; height: 100px; border-radius: 50%;"> -->
@@ -205,7 +278,7 @@
 
 		<div id="modal1">
 			<div id="modal1Content">
-				<img src="" id="modal1Image" style="width: 200px; margin: 20px auto; display: block;">
+				<img src="" id="modal1Image" style="width: 200px; height: 250px; margin: 20px auto; display: block;">
 				<p id="modal1Title"></p>
 				<p id="modal1Author"></p>
 				<p id="modal1Category"></p>
@@ -215,13 +288,13 @@
 				<p id="modal1RemainingOverdue"></p>
 				<div style="display: flex; width: 90%; margin: 10px auto; justify-content: space-around;">
 					<button onclick="closeModals()">Cancel</button>
-					<button>Returned</button>
+					<button onclick="returnBookFunc()">Returned</button>
 				</div>
 			</div>		
 		</div>
 		<div id="modal2">
 			<div id="modal2Content">
-				<img src="" id="modal2Image" style="width: 200px; margin: 20px auto; display: block;">
+				<img src="" id="modal2Image" style="width: 200px; height: 250px; margin: 20px auto; display: block;">
 				<p id="modal2Title"></p>
 				<p id="modal2Author"></p>
 				<p id="modal2Category"></p>
@@ -236,8 +309,8 @@
 
 <script type="text/javascript">	
 
-	var databaseLink = "https://libraryss19.herokuapp.com"
-	// var databaseLink = "http://libraryss19.test"
+	// var databaseLink = "https://libraryss19.herokuapp.com"
+	var databaseLink = "http://libraryss19.test"
 	var userData = JSON.parse(sessionStorage.getItem('userData'))
 	console.log(userData)
 	if(userData == null){
@@ -253,9 +326,11 @@
 	var cameraId = ""
 
 
-	function showLoading(){
-		console.log("clicked")
-		document.getElementById("searchLoading").style.display = "block"
+	function bodyLoad(){
+		console.log("body loaded")
+		setTimeout(function(){
+			document.getElementById("loadingPage").style.display = "none"
+		}, 1000)		
 	}
 
 	
@@ -265,7 +340,7 @@
 	function onScanSuccess(decodedText, decodedResult) {
 	  // handle the scanned code as you like, for example:
 	  console.log(`Code matched = ${decodedText}`, decodedResult);
-	  alert(decodedText)
+	  // alert(decodedText)
 	  	fetch(decodedText, {
 			method: 'GET', // or 'PUT'
 			headers: {
@@ -280,7 +355,7 @@
 			if(bookData.image == null){
 				document.getElementById('modal2Image').setAttribute('src', 'https://thumbs.dreamstime.com/b/no-image-available-icon-vector-illustration-flat-design-140476186.jpg')
 			}else{
-				document.getElementById('modal2Image').setAttribute('src', databaseLink+'/api/get-image/'+bookData.image.split('/')[1])
+				document.getElementById('modal2Image').setAttribute('src', databaseLink+'/api/get-cover-page/'+bookData.image.split('/')[1])
 			}
 			document.getElementById('modal2Title').innerHTML = "Title : "+bookData.name
 			document.getElementById('modal2Author').innerHTML = "Author : "+bookData.author
@@ -337,7 +412,7 @@
 			status: "active"
 		};
 		fetch(databaseLink+'/api/new-book-borrowed', {
-			method: 'POST', // or 'PUT'
+			method: 'PUT', // or 'PUT'
 			headers: {
 				'Content-Type': 'application/json',
 			},
@@ -346,13 +421,32 @@
 		.then(response => response.json())
 		.then(data => {
 			console.log('Success:', data);
+			loadBooksFunc()
 		})
 		.catch((error) => {
 			console.error('Error:', error);
 		});
-		loadBooksFunc()
 	}
 	
+
+	function returnBookFunc(){
+		fetch(databaseLink+'/api/return-book-borrowed/'+bookData.id, {
+			method: 'PUT', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+			loadBooksFunc()
+			closeModals()
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
+	}
+
 
 
 	function loadBooksFunc(){
@@ -390,97 +484,121 @@
 			if(data == ""){
 				console.log("empty")
 				displayBooksDiv.innerHTML = "NO BOOKS BORROWED"
-				displayBooksDiv.setAttribute("style", "text-align: center; padding-top: 20px")
 				return;
 			}else{
-				displayBooksDiv.setAttribute("style", "text-align: left; padding-top: 0px")
 			}
 			var dataLength = data.length
-			var dataNumber = 0
-			for(var i=0; i<dataLength/3; i++){
-				var div = document.createElement('DIV')
-				div.setAttribute("style", "display: flex; justify-content: space-around")
-				displayBooksDiv.appendChild(div)
-				for (var j=0; j<3; j++){
-					var bookContentDiv = document.createElement('DIV')
-					console.log(bookContentDiv)
-					bookContentDiv.setAttribute('id', 'bookContentDiv')
-					console.log(data[dataNumber].book_id.availability)
-					if(data[dataNumber].status == "late"){
-						bookContentDiv.setAttribute('style', 'width: 30%; padding: 10px; text-align: center; background-color: red; margin-top: 10px')
-					}else if(data[dataNumber].status == "active"){
-						bookContentDiv.setAttribute('style', 'width: 30%; padding: 10px; text-align: center; background-color: green; margin-top: 10px')
-					}					
+			for(var i=0; i<dataLength; i++){
+				var bookContentDiv = document.createElement('DIV')
+				console.log(bookContentDiv)
+				bookContentDiv.setAttribute('id', 'bookContentDiv')
+				console.log(data[i].book_id.availability)
+				if(data[i].status == "late"){
+					bookContentDiv.setAttribute('style', 'background-color: red')
+				}else if(data[i].status == "active"){
+					bookContentDiv.setAttribute('style', 'background-color: green')
+				}					
 
-					var image = document.createElement('IMG')
-					if(data[dataNumber].image == null){
-						image.setAttribute('src', 'https://thumbs.dreamstime.com/b/no-image-available-icon-vector-illustration-flat-design-140476186.jpg')
-					}else{
-						image.setAttribute('src', databaseLink+'/api/get-image/'+data[dataNumber].image.split('/')[1])
-					}
-					image.setAttribute('style', 'height: 200px')
-					var paraDiv = document.createElement('DIV')
-					paraDiv.setAttribute('style', 'text-align:left; width: 60%; margin: 0px auto')
-					paraDiv.innerHTML = "Title : "+data[dataNumber].book_id.name+"<br>"+"Author : "+data[dataNumber].book_id.author+"<br>"+"Category : "+data[dataNumber].book_id.category+"<br>"+"Genre : "+data[dataNumber].book_id.genre
-
-					var para = document.createElement('P')
-					para.setAttribute('id', 'bookBorrowedId')
-					para.setAttribute('style', 'display: none')
-					para.innerHTML = data[dataNumber].id
-
-					bookContentDiv.appendChild(image)
-					bookContentDiv.appendChild(paraDiv)
-					bookContentDiv.appendChild(para)
-					
-					div.appendChild(bookContentDiv)
-					
-					bookContentDiv.addEventListener('click', function(e){
-						console.log('clciked')
-						console.log(this.children[2].textContent)
-
-						modal1Visibility()
-						var bookBorrowedId = this.children[2].textContent
-
-						fetch(databaseLink+'/api/book-borrowed/'+bookBorrowedId, {
-							method: 'GET', // or 'PUT'
-							headers: {
-								'Content-Type': 'application/json',
-							}
-						})
-						.then(response => response.json())
-						.then(data => {
-							console.log('Success:', data);
-							data = data[1][0]
-							document.getElementById('modal1Image').setAttribute('src', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTY_6xlv6z30igW5fW7--EW0owZJWX0aedcQ&usqp=CAU')
-							document.getElementById('modal1Title').innerHTML = "Title : "+data.book_id.name
-							document.getElementById('modal1Author').innerHTML = "Author : "+data.book_id.author
-							document.getElementById('modal1Category').innerHTML = "Category : "+data.book_id.category
-							document.getElementById('modal1Genre').innerHTML = "Genre : "+data.book_id.genre
-							var borrowDate = getProperDate(new Date(data.created_at))
-							document.getElementById('modal1DateBorrowed').innerHTML = "Date Borrowed : "+borrowDate
-							var expReturnDate = getProperDate(addDaysToDate(new Date(data.created_at), 7))
-							document.getElementById('modal1DateExpectedReturn').innerHTML = "Expected Return Date : "+expReturnDate
-							var todayDate = new Date()
-							var remainingOverdueDate = Math.ceil(differenceInDates(expReturnDate, todayDate))
-							document.getElementById('modal1RemainingOverdue').innerHTML = "Days Remaining : "+remainingOverdueDate
-
-							if(data.status == "late"){
-								document.getElementById("modal1Content").setAttribute("style", "background: linear-gradient(to bottom, #ff5050 -27%, #ff0000 100%)")
-							}else{
-								document.getElementById("modal1Content").setAttribute("style", "background: linear-gradient(to bottom, #66ff33 -27%, #009933 100%)")
-							}
-
-						})
-						.catch((error) => {
-							console.error('Error:', error);
-						});
-					})
-
-					dataNumber = dataNumber + 1
-					if(dataNumber == dataLength){
-						return;
-					}
+				var image = document.createElement('IMG')
+				console.log(data[i].book_id.image)
+				if(data[i].book_id.image == null){
+					image.setAttribute('src', 'https://thumbs.dreamstime.com/b/no-image-available-icon-vector-illustration-flat-design-140476186.jpg')
+				}else{
+					console.log(databaseLink+'/api/get-cover-page/'+data[i].book_id.image.split('/')[1])
+					image.setAttribute('src', databaseLink+'/api/get-cover-page/'+data[i].book_id.image.split('/')[1])
 				}
+
+				var table = document.createElement('table')
+				var tr1 = table.insertRow()
+				var td1a = tr1.insertCell()
+				var td1b = tr1.insertCell()
+				var td1c = tr1.insertCell()
+				td1a.appendChild(document.createTextNode('Title'))
+				td1b.appendChild(document.createTextNode(':'))
+				td1c.appendChild(document.createTextNode(data[i].book_id.name))
+
+				var tr2 = table.insertRow()
+				var td2a = tr2.insertCell()
+				var td2b = tr2.insertCell()
+				var td2c = tr2.insertCell()
+				td2a.appendChild(document.createTextNode('Genre'))
+				td2b.appendChild(document.createTextNode(':'))
+				td2c.appendChild(document.createTextNode(data[i].book_id.genre))
+
+				var tr3 = table.insertRow()
+				var td3a = tr3.insertCell()
+				var td3b = tr3.insertCell()
+				var td3c = tr3.insertCell()
+				td3a.appendChild(document.createTextNode('Author'))
+				td3b.appendChild(document.createTextNode(':'))
+				td3c.appendChild(document.createTextNode(data[i].book_id.author))
+
+				var tr4 = table.insertRow()
+				var td4a = tr4.insertCell()
+				var td4b = tr4.insertCell()
+				var td4c = tr4.insertCell()
+				td4a.appendChild(document.createTextNode('Category'))
+				td4b.appendChild(document.createTextNode(':'))
+				td4c.appendChild(document.createTextNode(data[i].book_id.category))
+
+				var para = document.createElement('P')
+				para.setAttribute('id', 'bookBorrowedId')
+				para.setAttribute('style', 'display: none')
+				para.innerHTML = data[i].id
+
+				bookContentDiv.appendChild(image)
+				bookContentDiv.appendChild(table)
+				bookContentDiv.appendChild(para)
+				
+				displayBooksDiv.appendChild(bookContentDiv)
+				
+				bookContentDiv.addEventListener('click', function(e){
+					console.log('clciked')
+					console.log(this.children[2].textContent)
+
+					modal1Visibility()
+					var bookBorrowedId = this.children[2].textContent
+
+					fetch(databaseLink+'/api/book-borrowed/'+bookBorrowedId, {
+						method: 'GET', // or 'PUT'
+						headers: {
+							'Content-Type': 'application/json',
+						}
+					})
+					.then(response => response.json())
+					.then(data => {
+						console.log('Success:', data);
+						data = data[1][0]
+						bookData = data.book_id
+						if(data.book_id.image == null){
+							document.getElementById('modal1Image').setAttribute('src', 'https://thumbs.dreamstime.com/b/no-image-available-icon-vector-illustration-flat-design-140476186.jpg')
+						}else{
+							console.log(databaseLink+'/api/get-image/'+data.book_id.image.split('/')[1])
+							document.getElementById('modal1Image').setAttribute('src', databaseLink+'/api/get-cover-page/'+data.book_id.image.split('/')[1])
+						}
+						document.getElementById('modal1Title').innerHTML = "Title : "+data.book_id.name
+						document.getElementById('modal1Author').innerHTML = "Author : "+data.book_id.author
+						document.getElementById('modal1Category').innerHTML = "Category : "+data.book_id.category
+						document.getElementById('modal1Genre').innerHTML = "Genre : "+data.book_id.genre
+						var borrowDate = getProperDate(new Date(data.created_at))
+						document.getElementById('modal1DateBorrowed').innerHTML = "Date Borrowed : "+borrowDate
+						var expReturnDate = getProperDate(addDaysToDate(new Date(data.created_at), 7))
+						document.getElementById('modal1DateExpectedReturn').innerHTML = "Expected Return Date : "+expReturnDate
+						var todayDate = new Date()
+						var remainingOverdueDate = Math.ceil(differenceInDates(expReturnDate, todayDate))
+						document.getElementById('modal1RemainingOverdue').innerHTML = "Days Remaining : "+remainingOverdueDate
+
+						if(data.status == "late"){
+							document.getElementById("modal1Content").setAttribute("style", "background: linear-gradient(to bottom, #ff5050 -27%, #ff0000 100%)")
+						}else{
+							document.getElementById("modal1Content").setAttribute("style", "background: linear-gradient(to bottom, #66ff33 -27%, #009933 100%)")
+						}
+
+					})
+					.catch((error) => {
+						console.error('Error:', error);
+					});
+				})
 			}			
 		})
 		.catch((error) => {
