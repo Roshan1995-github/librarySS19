@@ -83,8 +83,13 @@
 	</style>
 </head>
 <body>
-	<div id="modal">
+	<div id="modal" style="display: block">
 		<div id="modalContent">
+			<div style="display: flex; height: 30px;">
+				<p style="margin: 5px">IBSN No. </p>
+				<input type="text" name="isbnNum" style="width: 300px">
+				<button style="height: 30px; margin: 0px" onclick="searchISBN()">SEARCH</button>
+			</div>
 			<p>Book Name</p>
 			<input type="text" name="name">
 			<p>Author</p>
@@ -406,6 +411,19 @@
 
 
 	function addBookFunc(){
+		// Open library details
+		//https://openlibrary.org/dev/docs/api/books
+
+
+		// Open library ISBN API
+		//https://openlibrary.org/isbn/{isbn number}.json
+
+
+		//Retrieve cover page from "cover" form json above
+		//https://covers.openlibrary.org/b/id/{cover id}.jpg
+
+
+
 		var bookName = document.getElementsByName('name')[0].value
 		var author = document.getElementsByName('author')[0].value
 		var category = document.getElementById('category').value
@@ -445,6 +463,27 @@
 		.catch((error) => {
 			console.error('Error:', error);
 		});		
+	}
+
+	function searchISBN(){
+		console.log('clicked')
+		var isbnNum = document.getElementsByName('isbnNum')[0].value
+		console.log(isbnNum)
+
+		fetch('https://openlibrary.org/isbn/'+isbnNum+'.json', {
+			method: 'GET', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});	
 	}
 
 </script>
