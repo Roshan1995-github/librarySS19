@@ -173,8 +173,8 @@
 
 
 <script type="text/javascript">
-	// var databaseLink = "https://libraryss19.herokuapp.com"
-	var databaseLink = "http://libraryss19.test"
+	var databaseLink = "https://libraryss19.herokuapp.com"
+	// var databaseLink = "http://libraryss19.test"
 	var currentPage = 1
 	var lastPage = 0
 
@@ -324,6 +324,12 @@
 				        var a = document.createElement('a');
 					    a.href = element.lastChild.src
 					    a.setAttribute('download', "qr-code.png");
+
+					    /////////////////////////////////////////////////////////////////
+					    //to convert table to image and then download
+					    //table 3 by 3
+					    //each cell should contain qrcode and book name
+					    //https://stackoverflow.com/questions/53757970/downloading-data-tables-from-html-as-image/53758301
 					 
 					    element.prepend(a);
 					    a.click();
