@@ -469,9 +469,9 @@
 		console.log('clicked')
 		var isbnNum = document.getElementsByName('isbnNum')[0].value
 		console.log(isbnNum)
-
+		console.log('https://openlibrary.org/isbn/'+isbnNum+'.json')
 		fetch('https://openlibrary.org/isbn/'+isbnNum+'.json', {
-			method: 'GET', // or 'PUT'
+			method: 'POST', // or 'PUT'
 			headers: {
 				'Content-Type': 'application/json',
 			},
