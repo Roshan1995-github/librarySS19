@@ -131,12 +131,12 @@
 				<button style="height: 30px; margin: 0px" onclick="searchISBN()">SEARCH</button>
 			</div>
 			<p>Book Title</p>
-			<input type="text" name="title" disabled="true">
+			<input type="text" name="title">
 			<p>Author</p>
-			<input type="text" name="author" disabled="true">
+			<input type="text" name="author">
 			<p>Genre</p>
 			<input type="text" name="genre">			
-			<input type="text" name="coverPage" disabled="true" style="display: none">
+			<input type="text" name="coverPage" style="display: none">
 			<br>
 			<img src="" id="displayCoverPage">
 			<br>
@@ -339,7 +339,7 @@
 						td2c.appendChild(document.createTextNode("-"))
 					}else{
 						td2c.appendChild(document.createTextNode(data[dataNumber].genre))
-					}			
+					}
 
 					var tr3 = table.insertRow()
 					var td3a = tr3.insertCell()
@@ -347,7 +347,11 @@
 					var td3c = tr3.insertCell()
 					td3a.appendChild(document.createTextNode('Author'))
 					td3b.appendChild(document.createTextNode(':'))
-					td3c.appendChild(document.createTextNode(data[dataNumber].author))
+					if(data[dataNumber].author == null){
+						td3c.appendChild(document.createTextNode("-"))
+					}else{
+						td3c.appendChild(document.createTextNode(data[dataNumber].author))
+					}					
 
 					var editBookBtn = document.createElement('BUTTON')
 					editBookBtn.setAttribute('style', 'width: 200px; height: 30px; margin: 10px auto')
@@ -539,23 +543,49 @@
 		.then(response => response.json())
 		.then(data => {
 			console.log('Success:', data);
-
+			console.log(data.covers);
 			if(data.full_title){
 				var bookTitle = data.full_title
 			}else{
 				var bookTitle = data.title
 			}
-			var author = data.authors[0].key
-			var coverPage = data.covers[0]
 
-			fetch('https://openlibrary.org'+author+'.json')
-			.then(response => response.json())
-			.then(data => {
-				console.log('Success:', data);
+			if(data.covers){
+				var coverPage = data.covers[0]
+			}else{
+				var coverPage = ""
+			}
+
+					console.log(bookTitle)
+					console.log(coverPage)
+					console.log(data.authors)
+			if(data.authors){
+				var author = data.authors[0].key
+
+				fetch('https://openlibrary.org'+author+'.json')
+				.then(response => response.json())
+				.then(data => {
+					console.log('Success:', data);
+					document.getElementById("searchLoading").style.display = "none"
+
+					author = data.name
+
+					console.log(bookTitle)
+					console.log(author)
+					console.log(coverPage)
+
+					document.getElementsByName('title')[0].value = bookTitle
+					document.getElementsByName('author')[0].value = author
+					document.getElementsByName('coverPage')[0].value = coverPage
+					document.getElementById("displayCoverPage").src = "https://covers.openlibrary.org/b/id/"+coverPage+".jpg"
+				})
+				.catch((error) => {
+					console.error('Error:', error);
+				});
+			}else{
+				var author = ""
+
 				document.getElementById("searchLoading").style.display = "none"
-
-				author = data.name
-
 				console.log(bookTitle)
 				console.log(author)
 				console.log(coverPage)
@@ -564,25 +594,14 @@
 				document.getElementsByName('author')[0].value = author
 				document.getElementsByName('coverPage')[0].value = coverPage
 				document.getElementById("displayCoverPage").src = "https://covers.openlibrary.org/b/id/"+coverPage+".jpg"
-			})
-			.catch((error) => {
-				console.error('Error:', error);
+			}
 
-				document.getElementsByName('title')[0].value = ""
-				document.getElementsByName('author')[0].value = ""
-				document.getElementsByName('coverPage')[0].value = ""
-				
-				alert("Error finding author. Notify developer.")
-			});
 		})
 		.catch((error) => {
 			console.error('Error:', error);
+			document.getElementById("searchLoading").style.display = "none"
 
-			document.getElementsByName('title')[0].value = ""
-			document.getElementsByName('author')[0].value = ""
-			document.getElementsByName('coverPage')[0].value = ""
-
-			alert("Unable to find book with the following ISBN No. : "+isbnNum)
+			alert("Unable to find book with the following ISBN No. : "+isbnNum+" \nPlease try again.")
 		});	
 	}
 
