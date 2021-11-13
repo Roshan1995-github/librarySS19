@@ -416,7 +416,8 @@
 			}
 		})
 		.catch((error) => {
-			console.error('Error:', error);
+			console.error('Error:', error);			
+			window.location.href = "errorPage.html";
 		});
 	}loadBooks()
 
@@ -517,6 +518,7 @@
 		})
 		.catch((error) => {
 			console.error('Error:', error);
+			window.location.href = "errorPage.html";
 		});		
 	}
 		// Open library details
@@ -581,6 +583,7 @@
 				})
 				.catch((error) => {
 					console.error('Error:', error);
+					window.location.href = "errorPage.html";
 				});
 			}else{
 				var author = ""
@@ -600,7 +603,6 @@
 		.catch((error) => {
 			console.error('Error:', error);
 			document.getElementById("searchLoading").style.display = "none"
-
 			alert("Unable to find book with the following ISBN No. : "+isbnNum+" \nPlease try again.")
 		});	
 	}

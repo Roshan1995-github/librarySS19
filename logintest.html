@@ -132,6 +132,7 @@
 			height: 50px;
 			margin: 15px;
 			color: black;
+			background-color: white;
 			font-size: 20px;
 		}
 		#modal4Content>div{
@@ -228,6 +229,10 @@
 				<input type="number" name="phoneNum">
 			</div>
 			<div>
+				<p>Email<span style="color:red">*</span></p>
+				<input type="text" name="email">
+			</div>
+			<div>
 				<p>Password<span style="color:red">*</span></p>
 				<input type="password" name="password">
 			</div>
@@ -257,6 +262,9 @@
 			</div>
 			<table>
 				<thead>
+					<tr>
+						<td colspan="4">NUMBER OF CHILDREN</td>
+					</tr>
 					<tr>
 						<td>Category</td>
 						<td colspan="3">Quantity</td>
@@ -313,7 +321,7 @@
 			<button onclick="modal1Visibility()" style="background-color: red">Back</button>
 		</div>
 	</div>
-	<div id="modal3">
+	<div id="modal3" style="display: block">
 		<div id="modal3Content">
 			<h1 class="headerFont">SS19 LIBRARY</h1>
 			<p style="text-align:center; margin: 15px;">Select preferred genres and complete registration</p>
@@ -410,7 +418,7 @@
 		}else{
 			document.getElementsByName('password')[1].setAttribute('style', 'border: default')
 		}
-
+		console.log(password)
 		const data = {
 			phoneNum: phoneNum,
 			password: password
@@ -446,15 +454,15 @@
 			
 		})
 		.catch((error) => {
-			console.error('Error:', error);			
-			searchLoading.style.display = "none"
-			alert(error)
+			console.error('Error:', error);
+			window.location.href = "errorPage.html";
 		});
 	}
 
 	function addMemberFunc(){
 		var name = document.getElementsByName('name')[0].value
 		var phoneNum = document.getElementsByName('phoneNum')[0].value
+		var email = document.getElementsByName('email')[0].value
 		var password = document.getElementsByName('password')[0].value
 		var address = document.getElementsByName('address')[0].value
 		var postcode = document.getElementsByName('postcode')[0].value
@@ -477,6 +485,7 @@
 		}
 		data.append('name', capitalize(name))
 		data.append('phoneNum', phoneNum)
+		data.append('email', email)
 		data.append('password', password)
 		data.append('address', address)
 		data.append('postcode', postcode)
@@ -505,6 +514,7 @@
 		})
 		.catch((error) => {
 			console.error('Error:', error);
+			window.location.href = "errorPage.html";
 		});
 	}	
 
@@ -512,6 +522,7 @@
 	function checkPhoneNum(){
 		var name = document.getElementsByName('name')[0].value
 		var phoneNum = document.getElementsByName('phoneNum')[0].value
+		var email = document.getElementsByName('email')[0].value
 		var password = document.getElementsByName('password')[0].value
 		var confirmPassword = document.getElementsByName('confirmPassword')[0].value
 		var address = document.getElementsByName('address')[0].value
@@ -525,6 +536,9 @@
 		}
 		while(phoneNum.charAt(0) == " "){
 			phoneNum = phoneNum.substring(1)
+		}
+		while(email.charAt(0) == " "){
+			email = email.substring(1)
 		}
 		while(password.charAt(0) == " "){
 			password = password.substring(1)
@@ -556,6 +570,10 @@
 			alert("Please fill up phone number.")
 			return;
 		}
+		if(email == ""){
+			alert("Please fill up Email.")
+			return;
+		}
 		if(password == ""){
 			alert("Please fill up password.")
 			return;
@@ -569,6 +587,7 @@
 			phoneNum: phoneNum
 		};
 
+		searchLoading.style.display = "block"
 		fetch(databaseLink+'/api/check-member', {
 			method: 'POST', // or 'PUT'
 			headers: {
@@ -590,6 +609,7 @@
 		})
 		.catch((error) => {
 			console.error('Error:', error);
+			window.location.href = "errorPage.html";
 		});
 	}
 
@@ -600,7 +620,7 @@
 			genreBtn.style.backgroundColor = "blue"
 			genreChoices.push(genreBtn.value)
 		}else{
-			genreBtn.style.backgroundColor = ""
+			genreBtn.style.backgroundColor = "white"
 			var index = genreChoices.indexOf(genreBtn.value)
 			genreChoices.splice(index, 1)
 		}

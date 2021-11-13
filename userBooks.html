@@ -38,6 +38,7 @@
 		#displayBooksDiv{
 			color: yellow;
 			text-align: center;
+			background-color: rgba(0,0,0,0.4);
 			/*border:  solid red 1px;*/
 		}
 		#bookContentDiv{
@@ -190,7 +191,7 @@
 	<div id="mainContentDiv">
 		<div id="searchDiv" style="display: flex; width: 99%; justify-content: space-between; margin: 0px auto;">
 			<div style="display: flex">
-				<p style="margin: 0px 10px">Name:</p>			
+				<p style="margin: 0px 10px">Title:</p>			
 				<input list="searchBooks" type="text" name="search" style="height: 20px">
 				<datalist id="searchBooks">
 					<option value="Book Name 1">
@@ -350,7 +351,7 @@
 				if(data[i].availability == "unavailable"){
 					bookContentDiv.setAttribute('style', 'background-color: red')
 				}else{
-					bookContentDiv.setAttribute('style', 'background-color: green')
+					bookContentDiv.setAttribute('style', 'background-color: rgba(255,255,255,0.05);')
 				}					
 
 				var image = document.createElement('IMG')
@@ -406,6 +407,7 @@
 		})
 		.catch((error) => {
 			console.error('Error:', error);
+			window.location.href = "errorPage.html";
 		});
 	}loadBooksFunc()
 
