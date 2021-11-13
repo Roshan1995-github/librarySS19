@@ -187,6 +187,10 @@
 				<input type="number" name="phoneNum" disabled="true">
 			</div>
 			<div>
+				<p>Email</p>
+				<input type="number" name="email" disabled="true">
+			</div>
+			<div>
 				<p>Address</p>
 				<input type="text" name="address" disabled="true">
 			</div>
@@ -264,6 +268,7 @@
 
 		document.getElementsByName('name')[0].value	= data.name
 		document.getElementsByName('phoneNum')[0].value	= data.phoneNum
+		document.getElementsByName('phoneNum')[0].value	= data.email
 		document.getElementsByName('address')[0].value	= data.address
 		document.getElementsByName('postcode')[0].value	= data.postcode
 		document.getElementsByName('city')[0].value	= data.city
@@ -275,6 +280,7 @@
 	function editBtnFunc(){
 		document.getElementsByName('name')[0].disabled = false
 		document.getElementsByName('phoneNum')[0].disabled = false
+		document.getElementsByName('email')[0].disabled = false
 		document.getElementsByName('address')[0].disabled = false
 		document.getElementsByName('postcode')[0].disabled = false
 		document.getElementsByName('city')[0].disabled = false
@@ -292,6 +298,7 @@
 			id: memberId,
 			name: capitalize(document.getElementsByName('name')[0].value),
 			phoneNum: document.getElementsByName('phoneNum')[0].value,
+			email: document.getElementsByName('email')[0].value,
 			address: document.getElementsByName('address')[0].value,
 			postcode: document.getElementsByName('postcode')[0].value,
 			city: capitalize(document.getElementsByName('city')[0].value),
@@ -313,6 +320,7 @@
 
 			document.getElementsByName('name')[0].disabled = true
 			document.getElementsByName('phoneNum')[0].disabled = true
+			document.getElementsByName('email')[0].disabled = true
 			document.getElementsByName('address')[0].disabled = true
 			document.getElementsByName('postcode')[0].disabled = true
 			document.getElementsByName('city')[0].disabled = true
