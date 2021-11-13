@@ -34,10 +34,7 @@
 		input{
 			margin-right: 30px
 		}
-		th, td{
-			border: solid black 1px;
-		}
-		#modal{			
+		#modal, #loadingPage, #searchLoading{			
 		  display: none; /* Hidden by default */
 		  position: fixed; /* Stay in place */
 		  z-index: 1; /* Sit on top */
@@ -48,11 +45,19 @@
 		  overflow: none; /* Enable scroll if needed */
 		  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 		}
+		#searchLoading{	
+		  z-index: 3; /* Sit on top */
+		}
+		#searchLoading>div{
+			width: 50%;
+			margin: 240px auto;
+			text-align: center;
+		}
 		#modalContent{
 			background-color: white;
-			margin: 5% auto;
+			margin: 2% auto;
 			width: 50%;
-			height: 58%;
+			height: 90%;
 			overflow: auto;
 			overflow-x: hidden;
 			padding: 10px
@@ -77,34 +82,63 @@
 		#booksTableBody>tr:nth-child(5n+1)>td:nth-child(1){
 			height: 200px
 		}
+		#bookContentDiv>img{
+			height: 290px;
+			width: 200px;
+		}
+		#bookContentDiv>table{
+			width: 95%;
+			margin:  0px auto;
+			table-layout: fixed
+		}
+		#bookContentDiv>table>tbody>tr>td{
+			text-align: left;
+			height: 35px;
+			/*border:  solid red 1px;*/
+		}
+		#bookContentDiv>table>tbody>tr>td:nth-child(1){
+			width: 55px;
+			/*border:  solid blue 1px;*/
+		}		
+		#bookContentDiv>table>tbody>tr>td:nth-child(2){
+			width: 5px;
+		}		
+		#bookContentDiv>table>tbody>tr>td:nth-child(3){
+			word-wrap: break-word
+		}
 
 
 
 	</style>
 </head>
 <body>
-	<div id="modal" style="display: block">
+	<div id="loadingPage" style="display: none; z-index: 3">
+		<!-- <img src="https://i.gifer.com/7Fmb.gif" style="opacity: 1; width: 100px; height: 100px; border-radius: 50%;"> -->
+		<img src="Images/loadingPage.gif" style="width: 100%; height: 100%; border-radius: 0px;">
+	</div>
+	<div id="searchLoading" style="display: block">
+		<div>
+			<img src="https://i.gifer.com/7Fmb.gif" style="opacity: 1; width: 100px; height: 100px; border-radius: 50%;">
+			<!-- <img src="https://thumbs.gfycat.com/IndolentDistantBuffalo-max-1mb.gif" style="opacity: 1; width: 100px; height: 100px; border-radius: 50%;"> -->
+		</div>
+	</div>
+
+	<div id="modal" style="display: none">
 		<div id="modalContent">
 			<div style="display: flex; height: 30px;">
 				<p style="margin: 5px">IBSN No. </p>
-				<input type="text" name="isbnNum" style="width: 300px">
+				<input type="text" name="isbnNum" style="width: 30%">
 				<button style="height: 30px; margin: 0px" onclick="searchISBN()">SEARCH</button>
 			</div>
-			<p>Book Name</p>
-			<input type="text" name="name">
+			<p>Book Title</p>
+			<input type="text" name="title" disabled="true">
 			<p>Author</p>
-			<input type="text" name="author">
-			<p>Category</p>
-			<select id="category">
-				<option value="F">Fiction</option>
-				<option value="NF">Non-Fiction</option>
-			</select>
+			<input type="text" name="author" disabled="true">
 			<p>Genre</p>
-			<input type="text" name="genre">
+			<input type="text" name="genre">			
+			<input type="text" name="coverPage" disabled="true" style="display: none">
 			<br>
-			<p>Book Cover</p>
-			<input type="file" name="image" onchange="displayImage()">
-			<img id="imageDisplay" src="">
+			<img src="" id="displayCoverPage">
 			<br>
 			<div style="display: flex">				
 				<button onclick="modalVisibility()" style="background-color: red">CANCEL</button>
@@ -240,6 +274,7 @@
 		.then(response => response.json())
 		.then(data => {
 			console.log('Success:', data);
+			document.getElementById("searchLoading").style.display = "none"
 			lastPage = data[1].last_page
 
 			if(currentPage == lastPage){
@@ -276,15 +311,43 @@
 					}					
 
 					var image = document.createElement('IMG')
-					if(data[dataNumber].image == null){
+					if(data[dataNumber].coverPage == null){
 						image.setAttribute('src', 'https://thumbs.dreamstime.com/b/no-image-available-icon-vector-illustration-flat-design-140476186.jpg')
 					}else{
-						image.setAttribute('src', databaseLink+'/api/get-cover-page/'+data[dataNumber].image.split('/')[1])
+						image.setAttribute('src', 'https://covers.openlibrary.org/b/id/'+data[dataNumber].coverPage+'.jpg')
 					}
-					image.setAttribute('style', 'height: 290px; width: 200px')
-					var paraDiv = document.createElement('DIV')
-					paraDiv.setAttribute('style', 'text-align:left; width: 60%; margin: 0px auto')
-					paraDiv.innerHTML = "Title : "+data[dataNumber].name+"<br>"+"Author : "+data[dataNumber].author+"<br>"+"Category : "+data[dataNumber].category+"<br>"+"Genre : "+data[dataNumber].genre
+					// var paraDiv = document.createElement('DIV')
+					// paraDiv.setAttribute('style', 'text-align:left; width: 60%; margin: 0px auto')
+					// paraDiv.innerHTML = "Title : "+data[dataNumber].title+"<br>"+"Author : "+data[dataNumber].author+"<br>"+"Genre : "+data[dataNumber].genre
+
+					var table = document.createElement('table')
+					var tr1 = table.insertRow()
+					var td1a = tr1.insertCell()
+					var td1b = tr1.insertCell()
+					var td1c = tr1.insertCell()
+					td1a.appendChild(document.createTextNode('Title'))
+					td1b.appendChild(document.createTextNode(':'))
+					td1c.appendChild(document.createTextNode(data[dataNumber].title))
+
+					var tr2 = table.insertRow()
+					var td2a = tr2.insertCell()
+					var td2b = tr2.insertCell()
+					var td2c = tr2.insertCell()
+					td2a.appendChild(document.createTextNode('Genre'))
+					td2b.appendChild(document.createTextNode(':'))
+					if(data[dataNumber].genre == null){
+						td2c.appendChild(document.createTextNode("-"))
+					}else{
+						td2c.appendChild(document.createTextNode(data[dataNumber].genre))
+					}			
+
+					var tr3 = table.insertRow()
+					var td3a = tr3.insertCell()
+					var td3b = tr3.insertCell()
+					var td3c = tr3.insertCell()
+					td3a.appendChild(document.createTextNode('Author'))
+					td3b.appendChild(document.createTextNode(':'))
+					td3c.appendChild(document.createTextNode(data[dataNumber].author))
 
 					var editBookBtn = document.createElement('BUTTON')
 					editBookBtn.setAttribute('style', 'width: 200px; height: 30px; margin: 10px auto')
@@ -297,7 +360,8 @@
 					downloadQRCodeBtn.innerHTML = "Download QR Code"
 
 					bookContentDiv.appendChild(image)
-					bookContentDiv.appendChild(paraDiv)
+					// bookContentDiv.appendChild(paraDiv)
+					bookContentDiv.appendChild(table)
 					bookContentDiv.appendChild(editBookBtn)
 					bookContentDiv.appendChild(downloadQRCodeBtn)
 					
@@ -341,7 +405,7 @@
 					})
 
 					dataNumber = dataNumber + 1
-					if(dataNumber == dataLength){
+					if(dataNumber >= dataLength){
 						return;
 					}
 				}
@@ -377,81 +441,68 @@
 		if(modalDisplay == "block"){
 			document.getElementById('modal').style.display = "none"
 
-			document.getElementsByName('name')[0].value = ""
+			document.getElementsByName('isbnNum')[0].value = ""
+			document.getElementsByName('title')[0].value = ""
 			document.getElementsByName('author')[0].value = ""
-			document.getElementById('category').value = "F"
 			document.getElementsByName('genre')[0].value = ""
-			document.getElementsByName('image')[0].value = ""
-			document.getElementById('imageDisplay').src = ""
+			document.getElementsByName('coverPage')[0].value = ""
+			document.getElementById("displayCoverPage").src = ""
 		}else{
 			document.getElementById('modal').style.display = "block"
 		}
 	}
 
 
-	function displayImage(){
-		var imageData = document.getElementsByName('image')[0].files[0]
-		// console.log(typeof imageData)
-		if(typeof imageData == "object"){			
-			var reader = new FileReader()
-			reader.readAsDataURL(imageData)
-			reader.onload = function(evt){
-				// console.log(evt)
-				// console.log(evt.target.result.substring(5,10))
-				if(evt.target.result.substring(5,10) == "image"){
-					document.getElementById('imageDisplay').src = evt.target.result
-				}else{
-					document.getElementsByName('image')[0].value = ""
-					document.getElementById('imageDisplay').src = ""
-					alert("Please choose file type image")
-				}
-			}
-		}
-	}
+	// function displayImage(){
+	// 	var imageData = document.getElementsByName('image')[0].files[0]
+	// 	// console.log(typeof imageData)
+	// 	if(typeof imageData == "object"){			
+	// 		var reader = new FileReader()
+	// 		reader.readAsDataURL(imageData)
+	// 		reader.onload = function(evt){
+	// 			// console.log(evt)
+	// 			// console.log(evt.target.result.substring(5,10))
+	// 			if(evt.target.result.substring(5,10) == "image"){
+	// 				document.getElementById('imageDisplay').src = evt.target.result
+	// 			}else{
+	// 				document.getElementsByName('image')[0].value = ""
+	// 				document.getElementById('imageDisplay').src = ""
+	// 				alert("Please choose file type image")
+	// 			}
+	// 		}
+	// 	}
+	// }
 
 
 	function addBookFunc(){
-		// Open library details
-		//https://openlibrary.org/dev/docs/api/books
-
-
-		// Open library ISBN API
-		//https://openlibrary.org/isbn/{isbn number}.json
-
-
-		//Retrieve cover page from "cover" form json above
-		//https://covers.openlibrary.org/b/id/{cover id}.jpg
-
-
-
-		var bookName = document.getElementsByName('name')[0].value
+		var isbnNum = document.getElementsByName('isbnNum')[0].value
+		var bookTitle = document.getElementsByName('title')[0].value
 		var author = document.getElementsByName('author')[0].value
-		var category = document.getElementById('category').value
 		var genre = document.getElementsByName('genre')[0].value
-		var imageData = document.getElementsByName('image')[0].files[0]
+		var coverPage = document.getElementsByName('coverPage')[0].value
 
-		console.log(bookName)
+		console.log(isbnNum)
+		console.log(bookTitle)
 		console.log(author)
-		console.log(category)
 		console.log(genre)
-		console.log(imageData)
+		console.log(coverPage)
 
-		if(typeof imageData != "object"){
-			console.log("yeap undefined")
-			imageData = ""
+		const data = {
+			title: bookTitle,
+			author: author,
+			genre: genre,
+			coverPage: coverPage,
+			isbn: isbnNum,
+			availability: "available"
 		}
 
-		const data = new FormData();
-		data.append('photo', imageData)
-		data.append('name', capitalize(bookName))
-		data.append('author', capitalize(author))
-		data.append('category', category)
-		data.append('genre', capitalize(genre))
-		console.log(...data)
-
+		document.getElementById("searchLoading").style.display = "block"
 		fetch(databaseLink+'/api/new-book', {
-			method: 'POST',
-			body:data
+			method: 'POST', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
 		})
 		.then(response => response.json())
 		.then(data => {
@@ -464,25 +515,74 @@
 			console.error('Error:', error);
 		});		
 	}
+		// Open library details
 
 	function searchISBN(){
-		console.log('clicked')
+		//https://openlibrary.org/dev/docs/api/books
+
+
+		// Open library ISBN API
+		//9780735619678
+		//9789672464181
+		//https://openlibrary.org/isbn/{isbn number}.json
+
+
+		//Retrieve cover page from "cover" form json above
+		//https://covers.openlibrary.org/b/id/{cover id}.jpg
+
+
+		console.log('clicked search ISBN')
 		var isbnNum = document.getElementsByName('isbnNum')[0].value
-		console.log(isbnNum)
-		console.log('https://openlibrary.org/isbn/'+isbnNum+'.json')
-		fetch('https://openlibrary.org/isbn/'+isbnNum+'.json', {
-			method: 'POST', // or 'PUT'
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		})
+
+		document.getElementById("searchLoading").style.display = "block"
+		fetch('https://openlibrary.org/isbn/'+isbnNum+'.json')
 		.then(response => response.json())
 		.then(data => {
 			console.log('Success:', data);
 
+			if(data.full_title){
+				var bookTitle = data.full_title
+			}else{
+				var bookTitle = data.title
+			}
+			var author = data.authors[0].key
+			var coverPage = data.covers[0]
+
+			fetch('https://openlibrary.org'+author+'.json')
+			.then(response => response.json())
+			.then(data => {
+				console.log('Success:', data);
+				document.getElementById("searchLoading").style.display = "none"
+
+				author = data.name
+
+				console.log(bookTitle)
+				console.log(author)
+				console.log(coverPage)
+
+				document.getElementsByName('title')[0].value = bookTitle
+				document.getElementsByName('author')[0].value = author
+				document.getElementsByName('coverPage')[0].value = coverPage
+				document.getElementById("displayCoverPage").src = "https://covers.openlibrary.org/b/id/"+coverPage+".jpg"
+			})
+			.catch((error) => {
+				console.error('Error:', error);
+
+				document.getElementsByName('title')[0].value = ""
+				document.getElementsByName('author')[0].value = ""
+				document.getElementsByName('coverPage')[0].value = ""
+				
+				alert("Error finding author. Notify developer.")
+			});
 		})
 		.catch((error) => {
 			console.error('Error:', error);
+
+			document.getElementsByName('title')[0].value = ""
+			document.getElementsByName('author')[0].value = ""
+			document.getElementsByName('coverPage')[0].value = ""
+
+			alert("Unable to find book with the following ISBN No. : "+isbnNum)
 		});	
 	}
 

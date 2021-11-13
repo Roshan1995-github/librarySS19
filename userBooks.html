@@ -354,12 +354,11 @@
 				}					
 
 				var image = document.createElement('IMG')
-				console.log(data[i].image)
-				if(data[i].image == null){
+				console.log(data[i].coverPage)
+				if(data[i].coverPage == null){
 					image.setAttribute('src', 'https://thumbs.dreamstime.com/b/no-image-available-icon-vector-illustration-flat-design-140476186.jpg')
 				}else{
-					console.log(databaseLink+'/api/get-cover-page/'+data[i].image.split('/')[1])
-					image.setAttribute('src', databaseLink+'/api/get-cover-page/'+data[i].image.split('/')[1])
+					image.setAttribute('src', 'https://covers.openlibrary.org/b/id/'+data[i].coverPage+'.jpg')
 				}
 				var table = document.createElement('table')
 				var tr1 = table.insertRow()
@@ -368,7 +367,7 @@
 				var td1c = tr1.insertCell()
 				td1a.appendChild(document.createTextNode('Title'))
 				td1b.appendChild(document.createTextNode(':'))
-				td1c.appendChild(document.createTextNode(data[i].name))
+				td1c.appendChild(document.createTextNode(data[i].title))
 
 				var tr2 = table.insertRow()
 				var td2a = tr2.insertCell()
@@ -376,7 +375,11 @@
 				var td2c = tr2.insertCell()
 				td2a.appendChild(document.createTextNode('Genre'))
 				td2b.appendChild(document.createTextNode(':'))
-				td2c.appendChild(document.createTextNode(data[i].genre))
+				if(data[i].genre == null){
+					td2c.appendChild(document.createTextNode("-"))
+				}else{
+					td2c.appendChild(document.createTextNode(data[i].genre))
+				}			
 
 				var tr3 = table.insertRow()
 				var td3a = tr3.insertCell()
@@ -386,13 +389,13 @@
 				td3b.appendChild(document.createTextNode(':'))
 				td3c.appendChild(document.createTextNode(data[i].author))
 
-				var tr4 = table.insertRow()
-				var td4a = tr4.insertCell()
-				var td4b = tr4.insertCell()
-				var td4c = tr4.insertCell()
-				td4a.appendChild(document.createTextNode('Category'))
-				td4b.appendChild(document.createTextNode(':'))
-				td4c.appendChild(document.createTextNode(data[i].category))
+				// var tr4 = table.insertRow()
+				// var td4a = tr4.insertCell()
+				// var td4b = tr4.insertCell()
+				// var td4c = tr4.insertCell()
+				// td4a.appendChild(document.createTextNode('Category'))
+				// td4b.appendChild(document.createTextNode(':'))
+				// td4c.appendChild(document.createTextNode(data[i].category))
 
 				bookContentDiv.appendChild(image)
 				bookContentDiv.appendChild(table)
