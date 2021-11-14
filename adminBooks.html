@@ -506,6 +506,11 @@
 		var genre = document.getElementById('genreSelect').value
 		var coverPage = document.getElementsByName('coverPage')[0].value
 
+		if (genre == ""){
+			alert("Please fill select genre")
+			return;
+		}
+
 		console.log(isbnNum)
 		console.log(bookTitle)
 		console.log(author)
