@@ -135,7 +135,20 @@
 			<p>Author</p>
 			<input type="text" name="author">
 			<p>Genre</p>
-			<input type="text" name="genre">			
+			<select id="genreSelect">
+				<option value="">-</option>
+				<option value="adultFiction">Adult Fiction</option>
+				<option value="nonFiction">Non-Fiction</option>
+				<option value="scienceFiction">Science Fiction</option>
+				<option value="children">Children</option>
+				<option value="youngAdult">Young Adults</option>
+				<option value="selfHelp">Self Help</option>
+				<option value="healthCare">Health Care</option>
+				<option value="horror">Horror</option>
+				<option value="anime">Anime</option>
+				<option value="mystery">Mystery</option>
+				<option value="magazine">Magazine</option>
+			</select>		
 			<input type="text" name="coverPage" style="display: none">
 			<br>
 			<img src="" id="displayCoverPage">
@@ -218,7 +231,10 @@
 	var lastPage = 0
 
 
-	
+	// function check(){
+	// 	var a = document.getElementById('genreSelect').value
+	// 	console.log(a)
+	// }
 
 
 	function loadBooks(){
@@ -449,7 +465,7 @@
 			document.getElementsByName('isbnNum')[0].value = ""
 			document.getElementsByName('title')[0].value = ""
 			document.getElementsByName('author')[0].value = ""
-			document.getElementsByName('genre')[0].value = ""
+			document.getElementById('genreSelect').value = ""
 			document.getElementsByName('coverPage')[0].value = ""
 			document.getElementById("displayCoverPage").src = ""
 		}else{
@@ -483,7 +499,7 @@
 		var isbnNum = document.getElementsByName('isbnNum')[0].value
 		var bookTitle = document.getElementsByName('title')[0].value
 		var author = document.getElementsByName('author')[0].value
-		var genre = document.getElementsByName('genre')[0].value
+		var genre = document.getElementById('genreSelect').value
 		var coverPage = document.getElementsByName('coverPage')[0].value
 
 		console.log(isbnNum)
@@ -518,6 +534,7 @@
 		})
 		.catch((error) => {
 			console.error('Error:', error);
+			document.getElementById("searchLoading").style.display = "none"
 			window.location.href = "errorPage.html";
 		});		
 	}
