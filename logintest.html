@@ -348,6 +348,10 @@
 				<input type="number" name="phoneNum">
 				<p>Password</p>
 				<input type="password" name="password">
+				<div style="display: flex; margin-top: 10px;">
+					<input type="checkbox" name="keepSignedIn">
+					<p style="font-size: 12px; padding: 0px; margin-top: 3px">Keep me signed in</p>
+				</div>
 			</div>
 			<br><br>
 			<button onclick="loginBtnFunc()" style="background: linear-gradient(to bottom, #ff0066 0%, #000099 100%);">Login</button>
@@ -364,8 +368,8 @@
 		<button style="background: linear-gradient(to bottom, #ffff00 -50%, #ff9900 100%);" onclick="modal1Visibility()">Register</button>
 	</div>
 <script type="text/javascript">	
-	var databaseLink = "https://libraryss19.herokuapp.com"
-	// var databaseLink = "http://libraryss19.test"
+	// var databaseLink = "https://libraryss19.herokuapp.com"
+	var databaseLink = "http://libraryss19.test"
 
 	var modal1 = document.getElementById('modal1')
 	var modal2 = document.getElementById('modal2')
@@ -394,6 +398,7 @@
 	function loginBtnFunc(){
 		var phoneNum = document.getElementsByName('phoneNum')[1].value
 		var password = document.getElementsByName('password')[1].value
+		var keepSignedIn = document.getElementsByName('keepSignedIn')[0].checked
 
 		while(phoneNum.charAt(0) == " "){
 			phoneNum = phoneNum.substring(1)
@@ -447,7 +452,11 @@
 				alert("Wrong password entered.")
 				searchLoading.style.display = "none"
 			}else{
-				sessionStorage.setItem('userData', JSON.stringify(data[1][0]));
+				if (keepSignedIn == true){
+					localStorage.setItem('userData', JSON.stringify(data[1][0]));
+				}else{
+					sessionStorage.setItem('userData', JSON.stringify(data[1][0]));
+				}				
 				window.location.href = "userHomepage.html";
 				searchLoading.style.display = "none"
 			}
@@ -514,7 +523,7 @@
 		})
 		.catch((error) => {
 			console.error('Error:', error);
-			window.location.href = "errorPage.html";
+			// window.location.href = "errorPage.html";
 		});
 	}	
 

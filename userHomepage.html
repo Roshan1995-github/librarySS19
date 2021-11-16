@@ -249,7 +249,7 @@
 	</div>
 
 	<div style="width: 100%; height: 100%; display: none;" id="qrReader">
-		<div id="reader" width="100%"></div>
+		<div id="reader" style="width: 100%; height: 100%;"></div>
 		<button onclick="qrReaderCancelBtnFunc()">Cancel</button>
 	</div>
 
@@ -312,8 +312,12 @@
 
 	var databaseLink = "https://libraryss19.herokuapp.com"
 	// var databaseLink = "http://libraryss19.test"
-	var userData = JSON.parse(sessionStorage.getItem('userData'))
-	console.log(userData)
+	var userData = JSON.parse(localStorage.getItem('userData'))
+	console.log("local storage is "+JSON.parse(localStorage.getItem('userData')))
+	if(userData == null){
+		userData = JSON.parse(sessionStorage.getItem('userData'))
+	}
+	console.log("session storage is "+JSON.parse(sessionStorage.getItem('userData')))
 	if(userData == null){
 		window.location.href = "logintest.html";
 	}
