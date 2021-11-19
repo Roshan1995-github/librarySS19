@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>ADMIN QR PRINTER</title>
+	<script src="functions.js"></script>
+	<script src="./html5-qrcode/dist/html5-qrcode.min.js"></script>
+	<script src="./node_modules/html2canvas/dist/html2canvas.js"></script>
+	<style type="text/css">
+		body{
+			padding: 0px
+		}
+		h1{
+			width: 100%;
+			height: 60px;
+			text-align: center;
+			padding-top: 20px;
+			margin-top: 0px;
+			background-image: url('https://image.freepik.com/free-photo/hand-painted-watercolor-background-with-sky-clouds-shape_24972-1095.jpg');
+			background-size: cover
+		}
+		ul{
+			display: flex;
+			list-style-type: none;
+			padding: 0px;
+		}
+		li{
+			margin: 0px 30px;
+			font-size: 20px
+		}
+		p{
+			font-size: 20px
+		}
+		input{
+			margin: 0px 10px;
+			text-align: center;
+			width: 20px
+		}
+		#searchLoading{			
+		  display: none; /* Hidden by default */
+		  position: fixed; /* Stay in place */
+		  z-index: 1; /* Sit on top */
+		  left: 0;
+		  top: 0;
+		  width: 100%; /* Full width */
+		  height: 100%; /* Full height */
+		  overflow: none; /* Enable scroll if needed */
+		  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+		}
+		#searchLoading{	
+		  z-index: 3; /* Sit on top */
+		}
+		#searchLoading>div{
+			width: 50%;
+			margin: 240px auto;
+			text-align: center;
+		}
+		#navigationBarDiv{
+			display: flex;
+			justify-content: space-between;
+		}
+		#booksTableBody>tr:nth-child(5n+1)>td:nth-child(1){
+			height: 200px
+		}
+		#bookContentDiv>img{
+			height: 290px;
+			width: 200px;
+		}
+		#bookContentDiv>table{
+			width: 95%;
+			margin:  0px auto;
+			table-layout: fixed
+		}
+		#bookContentDiv>table>tbody>tr>td{
+			text-align: left;
+			height: 35px;
+			/*border:  solid red 1px;*/
+		}
+		#bookContentDiv>table>tbody>tr>td:nth-child(1){
+			width: 55px;
+			/*border:  solid blue 1px;*/
+		}		
+		#bookContentDiv>table>tbody>tr>td:nth-child(2){
+			width: 5px;
+		}		
+		#bookContentDiv>table>tbody>tr>td:nth-child(3){
+			word-wrap: break-word
+		}
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+		    -webkit-appearance: none;
+		    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+		}
+		input[type=number] {
+		    -moz-appearance:textfield; /* Firefox */
+		}
+	</style>
+</head>
+<body>
+	<div id="searchLoading" style="display: block">
+		<div>
+			<img src="https://i.gifer.com/7Fmb.gif" style="opacity: 1; width: 100px; height: 100px; border-radius: 50%;">
+			<!-- <img src="https://thumbs.gfycat.com/IndolentDistantBuffalo-max-1mb.gif" style="opacity: 1; width: 100px; height: 100px; border-radius: 50%;"> -->
+		</div>
+	</div>
+
+	<h1 style="width: 100%; text-align: center">SS 19 MINI LIBRARY</h1>
+	<div id="navigationBarDiv">
+		<ul>
+			<li onclick="window.location.href = 'homepage.html'">Homepage</li>
+			<li onclick="window.location.href = 'books.html'">Books</li>
+			<li onclick="window.location.href = 'members.html'">Members</li>
+		</ul>
+		<button style="height: 30px; margin-top: 10px" onclick="downloadQRCodes()">Download Page QR Codes</button>
+	</div>
+	<div id="mainContentDiv">
+		<div id="displayBooksDiv" style="width: 90%; margin: 10px auto">
+			
+		</div>
+		<div style="display: flex; width: 100%; justify-content: center; margin-top: 20px">
+			<button onclick="prevBtnFunc()" id="prevBtn">Prev</button>
+			<input type="number" name="pageNum" onkeydown="search(this)">
+			<button onclick="nextBtnFunc()" id="nextBtn">Next</button>
+		</div>
+		<div id="qrcode" style="display: none"></div>
+	</div>
+	<div id="testImage" style="border: solid red 1px; width: 3100px; height: 4050px;"></div>
+	<div id="downloadableImage" style="display: none">
+    	<!-- Result will appear be here -->
+ 	 </div>
+
+<script type="text/javascript">	
+	var databaseLink = "https://libraryss19.herokuapp.com"
+	// var databaseLink = "http://libraryss19.test"
+	var currentPage = 1
+	var lastPage = 0
+
+	document.getElementsByName('pageNum')[0].value = currentPage
+
+
+	function downloadQRCodes(){
+		console.log("clicked downloadableImage")
+		var testImage =	document.getElementById('testImage')
+		console.log(testImage)
+		var downloadableImage =	document.getElementById('downloadableImage')
+		html2canvas(testImage).then(function(canvas) {
+    			downloadableImage.appendChild(canvas);
+                var img = canvas.toDataURL("image/png");
+                console.log(img)
+                var a = document.createElement('a');
+			    a.href = img
+			    a.setAttribute('download', "qr-codes.png");
+			 
+			    downloadableImage.prepend(a);
+			    a.click();
+		});
+	}
+
+
+	function loadBooks(){
+
+		var displayBooksDiv = document.getElementById('displayBooksDiv')
+		displayBooksDiv.innerHTML = ""
+		console.log(displayBooksDiv)
+
+		fetch(databaseLink+'/api/QR-printing-books?page='+currentPage, {
+			method: 'GET', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+			document.getElementById("searchLoading").style.display = "none"
+			lastPage = data[1].last_page
+
+			if(currentPage == lastPage){
+				document.getElementById('nextBtn').disabled = true
+				document.getElementById('prevBtn').disabled = true
+				if(lastPage > 1){
+					document.getElementById('prevBtn').disabled = false
+				}
+			}else{
+				document.getElementById('nextBtn').disabled = false
+				document.getElementById('prevBtn').disabled = false
+				if(currentPage == 1){
+					document.getElementById('prevBtn').disabled = true
+				}
+			}
+
+			var data = data[1].data
+			var dataLength = data.length
+			var dataNumber = 0
+			for(var i=0; i<dataLength/3; i++){
+				var div = document.createElement('DIV')
+				div.setAttribute("style", "display: flex; justify-content: space-around")
+				displayBooksDiv.appendChild(div)
+				for (var j=0; j<3; j++){
+					var bookId = data[dataNumber].id
+					var bookTitle = data[dataNumber].title
+					console.log(bookId)
+					console.log(bookTitle)
+					var bookContentDiv = document.createElement('DIV')
+					bookContentDiv.setAttribute('id', 'bookContentDiv')
+					console.log(data[dataNumber].availability)
+					if(data[dataNumber].availability == "unavailable"){
+						bookContentDiv.setAttribute('style', 'width: 30%; padding: 10px; text-align: center; background-color: red; margin-top: 10px')
+					}else{
+						bookContentDiv.setAttribute('style', 'width: 30%; padding: 10px; text-align: center; background-color: azure; margin-top: 10px')
+					}					
+
+					var image = document.createElement('IMG')
+					if(data[dataNumber].coverPage == null){
+						image.setAttribute('src', 'https://thumbs.dreamstime.com/b/no-image-available-icon-vector-illustration-flat-design-140476186.jpg')
+					}else{
+						image.setAttribute('src', 'https://covers.openlibrary.org/b/id/'+data[dataNumber].coverPage+'.jpg')
+					}
+
+					var table = document.createElement('table')
+					var tr1 = table.insertRow()
+					var td1a = tr1.insertCell()
+					var td1b = tr1.insertCell()
+					var td1c = tr1.insertCell()
+					td1a.appendChild(document.createTextNode('Title'))
+					td1b.appendChild(document.createTextNode(':'))
+					td1c.appendChild(document.createTextNode(data[dataNumber].title))
+
+					var tr2 = table.insertRow()
+					var td2a = tr2.insertCell()
+					var td2b = tr2.insertCell()
+					var td2c = tr2.insertCell()
+					td2a.appendChild(document.createTextNode('Genre'))
+					td2b.appendChild(document.createTextNode(':'))
+					if(data[dataNumber].genre == null){
+						td2c.appendChild(document.createTextNode("-"))
+					}else{
+						td2c.appendChild(document.createTextNode(data[dataNumber].genre))
+					}
+
+					var tr3 = table.insertRow()
+					var td3a = tr3.insertCell()
+					var td3b = tr3.insertCell()
+					var td3c = tr3.insertCell()
+					td3a.appendChild(document.createTextNode('Author'))
+					td3b.appendChild(document.createTextNode(':'))
+					if(data[dataNumber].author == null){
+						td3c.appendChild(document.createTextNode("-"))
+					}else{
+						td3c.appendChild(document.createTextNode(data[dataNumber].author))
+					}
+
+					bookContentDiv.appendChild(image)
+					bookContentDiv.appendChild(table)
+					
+					div.appendChild(bookContentDiv)
+
+
+
+
+
+
+						var qrURL = databaseLink+'/api/book/'+bookId
+						console.log(qrURL)
+						var qrImage = showQRCode(qrURL, bookId+" "+bookTitle)
+						console.log(qrImage)
+						// 4 in a row
+						// qrImage.setAttribute("style", "display: inline-block; border: solid green 2px; height: 1000px; width: 750px; margin: 75px 5px")
+
+						//3 in a row
+						qrImage.setAttribute("style", "display: inline-block; border: solid green 2px; width:900px; margin: 170px 60px")
+						var testImage =	document.getElementById('testImage')
+						testImage.appendChild(qrImage)
+
+
+
+
+
+						// return;
+
+
+					dataNumber = dataNumber + 1
+					// if(dataNumber == 5){
+					// 	return;
+					// }
+					if(dataNumber >= dataLength){
+						return;
+					}
+				}
+			}
+		})
+		.catch((error) => {
+			console.error('Error:', error);			
+			// window.location.href = "errorPage.html";
+		});
+	}loadBooks()
+
+
+	function search(ele) {
+	    if(event.key === 'Enter') {
+	    	currentPage = parseInt(document.getElementsByName('pageNum')[0].value)
+	        loadBooks()        
+	    }
+	}
+
+
+	function nextBtnFunc(){
+		currentPage = currentPage + 1
+		document.getElementsByName('pageNum')[0].value = currentPage	
+		loadBooks()
+	}
+
+
+	function prevBtnFunc(){
+		currentPage = currentPage - 1
+		document.getElementsByName('pageNum')[0].value = currentPage
+		loadBooks()
+	}
+	
+	// const data = { username: 'example' };
+	// fetch('https://example.com/profile', {
+	// 	method: 'POST', // or 'PUT'
+	// 	headers: {
+	// 		'Content-Type': 'application/json',
+	// 	},
+	// 	body: JSON.stringify(data),
+	// })
+	// .then(response => response.json())
+	// .then(data => {
+	// 	console.log('Success:', data);
+	// })
+	// .catch((error) => {
+	// 	console.error('Error:', error);
+	// });
+
+</script>
+
+</body>
+</html>

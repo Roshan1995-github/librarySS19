@@ -401,6 +401,10 @@
 						console.log('clicked')
 						console.log(this.id)
 						console.log(this)
+						console.log(this.parentElement)
+						console.log(this.parentElement.children[1])
+						console.log(this.parentElement.children[1].children[0].children[0].children[2].textContent)
+						var bookTitle = this.id + " - " + this.parentElement.children[1].children[0].children[0].children[2].textContent
 						var qrURL = databaseLink+'/api/book/'+this.id
 						console.log(qrURL)
 
@@ -408,10 +412,10 @@
 						var element = document.getElementById("qrcode");
 						console.log(element.children.length)
 				        if(element.children.length > 0){				        	
-				          element.replaceChild(showQRCode(qrURL), element.lastChild);
+				          element.replaceChild(showQRCode(qrURL, bookTitle), element.lastChild);
 				        }
 				        else{
-				          element.appendChild(showQRCode(qrURL));
+				          element.appendChild(showQRCode(qrURL, bookTitle));
 				        }
 
 				        var a = document.createElement('a');
