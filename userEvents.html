@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>EVENTS</title>
+	<script src="functions.js"></script>
+	<style type="text/css">
+		html, body{
+			margin: 0;
+			height: 100%;
+			background-image: url("Images/background-1.jpg");
+		}
+		body{
+			background-repeat: no-repeat;
+			background-size: 100% 100%;
+		}
+		ul{
+			display: flex;
+			list-style-type: none;
+			padding: 0px
+		}
+		li{
+			color: white;
+			font-size: 20px;
+			margin: 10px;
+			width: 150px;
+			text-align: center;
+			background: linear-gradient(to bottom, #ccff99 -37%, #333300 100%);
+		}
+		p{
+			color: white;
+			margin: 0px;
+		}
+		img{
+			border: solid black 2px;
+		}
+
+
+		#loadingPage{			
+		  display: none; /* Hidden by default */
+		  position: fixed; /* Stay in place */
+		  z-index: 1; /* Sit on top */
+		  left: 0;
+		  top: 0;
+		  width: 100%; /* Full width */
+		  height: 100%; /* Full height */
+		  overflow: none; /* Enable scroll if needed */
+		  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+		}
+		#mainContentDiv>div{
+			border:  solid yellow 1px;
+			margin: 10px;
+			display: flex;
+		}
+		#mainContentDiv>div>div:nth-child(1){
+			margin: 10px;
+			min-width: 300px;
+			max-width: 300px;
+		}
+		#mainContentDiv>div>div:nth-child(2){
+			margin: 10px;
+			width: 73%;
+			background-color: rgba(0, 0, 0, 0.5);
+		}
+		#mainContentDiv>div>div>p:nth-child(2){
+			margin: 15px 0px;
+		}
+
+		.headerFont{
+			color: white;
+			font: small-caps bold 40px;
+			text-align: center;
+		}
+
+
+
+
+		@media (max-width: 700px){			
+			li{
+				font-size: 14px;
+				margin: 6px;
+			}
+
+			#mainContentDiv>div{
+				display: block;
+			}
+			#mainContentDiv>div>div:nth-child(1){
+				width: 100%;
+				margin: 10px auto;
+			}
+			#mainContentDiv>div>div:nth-child(2){
+				margin: 10px auto;
+				width: 90%;
+			}
+		}
+	</style>
+</head>
+<body onload="bodyLoad()">
+	<div id="loadingPage" style="display: block; z-index: 3">
+		<!-- <img src="https://i.gifer.com/7Fmb.gif" style="opacity: 1; width: 100px; height: 100px; border-radius: 50%;"> -->
+		<img src="Images/loadingPage.gif" style="width: 100%; height: 100%; border-radius: 0px;">
+	</div>
+
+	<p id="greetings" style="color: white; font-size: 20px">Hello</p>
+	<h1 class="headerFont">SS19 LIBRARY</h1>
+	<div id="navigationBarDiv">
+		<ul>
+			<li onclick="window.location.href = 'userHomepage.html'">Homepage</li>
+			<li onclick="window.location.href = 'userBooks.html'">Books</li>
+			<li onclick="window.location.href = 'userProfile.html'">Profile</li>
+			<li onclick="window.location.href = 'userEvents.html'">Events</li>
+			<li onclick="window.location.href = 'userHowToUse.html'">How To Use</li>
+		</ul>
+	</div>
+	<div id="mainContentDiv">
+
+	</div>
+
+<script type="text/javascript">	
+	var databaseLink = "https://libraryss19.herokuapp.com"
+	// var databaseLink = "http://libraryss19.test"
+	var userData = JSON.parse(localStorage.getItem('userData'))
+	console.log("local storage is "+JSON.parse(localStorage.getItem('userData')))
+	if(userData == null){
+		userData = JSON.parse(sessionStorage.getItem('userData'))
+	}
+	console.log("session storage is "+JSON.parse(sessionStorage.getItem('userData')))
+	if(userData == null){
+		window.location.href = "logintest.html";
+	}
+
+
+	var noImage = "data:image/png;base64,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"
+
+
+
+	document.getElementById('greetings').innerHTML = "Hello "+userData.name
+	
+
+	function bodyLoad(){
+		console.log("body loaded")
+		setTimeout(function(){
+			document.getElementById("loadingPage").style.display = "none"
+		}, 1000)		
+	}
+
+
+	function loadEventsFunc(){
+		fetch(databaseLink+'/api/get-events', {
+			method: 'GET', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+
+			var mainContentDiv = document.getElementById('mainContentDiv')
+
+			for(var i=0; i<data.length; i++){
+				var div1 = document.createElement('DIV')
+				var div2 = document.createElement('DIV')
+				var div3 = document.createElement('DIV')
+
+				var img = document.createElement('IMG')
+				img.setAttribute('style', 'display: block; max-width: 290px; margin: 0px auto')
+				if(data[i].image == null){
+					img.src = noImage
+				}else{
+					img.src = data[i].image	
+				}
+				var para1 = document.createElement('P')
+				para1.setAttribute('style', 'font-weight: bold')
+				para1.textContent = data[i].name.toUpperCase()
+				var para2 = document.createElement('P')
+				para2.textContent = getProperDate(data[i].date)				
+				div2.appendChild(img)
+				div3.appendChild(para1)
+				div3.appendChild(para2)
+
+				if(data[i].details != null){					
+					var details = data[i].details.split(/\n/)
+					console.log(details.length)
+					for(var j=0; j<details.length; j++){
+						var para3 = document.createElement('P')
+						para3.textContent = details[j]
+						div3.appendChild(para3)
+					}
+				}
+
+				div1.appendChild(div2)
+				div1.appendChild(div3)
+
+				mainContentDiv.appendChild(div1)
+
+			}
+
+
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
+	}loadEventsFunc();
+
+	
+	// const data = { username: 'example' };
+	// fetch('https://example.com/profile', {
+	// 	method: 'POST', // or 'PUT'
+	// 	headers: {
+	// 		'Content-Type': 'application/json',
+	// 	},
+	// 	body: JSON.stringify(data),
+	// })
+	// .then(response => response.json())
+	// .then(data => {
+	// 	console.log('Success:', data);
+	// })
+	// .catch((error) => {
+	// 	console.error('Error:', error);
+	// });
+
+</script>
+
+</body>
+</html>

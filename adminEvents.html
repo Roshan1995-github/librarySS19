@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Events</title>
+	<script src="functions.js"></script>
+	<style type="text/css">
+		body{
+			padding: 0px
+		}
+		h1{
+			width: 100%;
+			height: 60px;
+			text-align: center;
+			padding-top: 20px;
+			margin-top: 0px;
+			background-image: url('https://image.freepik.com/free-photo/hand-painted-watercolor-background-with-sky-clouds-shape_24972-1095.jpg');
+			background-size: cover
+		}
+		ul{
+			display: flex;
+			list-style-type: none;
+			padding: 0px
+		}
+		li{
+			margin: 0px 30px;
+			font-size: 20px
+		}
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+		    -webkit-appearance: none;
+		    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+		}
+		input[type=number] {
+		    -moz-appearance:textfield; /* Firefox */
+		}
+		#eventInfo>div>p{
+			display: inline-block;
+		}
+		#eventInfo>div>input{
+			margin-right: 30px;
+		}
+		#eventPicture{
+			max-width: 290px;
+			max-height: 380px;
+		}
+	</style>
+</head>
+<body>
+	<h1 style="width: 100%; text-align: center">SS 19 MINI LIBRARY</h1>
+	<div id="navigationBarDiv">
+		<ul>
+			<li onclick="window.location.href = 'adminHomepage.html'">Homepage</li>
+			<li onclick="window.location.href = 'adminBooks.html'">Books</li>
+			<li onclick="window.location.href = 'adminMembers.html'">Members</li>
+			<li onclick="window.location.href = 'adminEvents.html'">Events</li>
+		</ul>
+	</div>
+	<div id="mainContentDiv">
+		<div style="display: flex; justify-content: space-between;">
+			<div>
+				<p style="display: inline-block; margin-right: 10px;">Choose Event</p>
+				<select id="eventsOption" onchange="eventSelectedFunc(this.value)">
+					<option value="" selected disabled hidden>Select Event Here</option>
+				</select>				
+			</div>
+			<div>
+				<button style="margin-top: 12px;" onclick="newEventBtnFunc()">Create New Event</button>
+			</div>
+		</div>
+		<div id="eventInfo" style="border: solid black 1px; display: flex; height: 410px">
+			<div style="width: 400px; height: 408px; border: solid red 1px">
+				<input type="file" name="image" onchange="displayImageFunc(this)">
+				<img src="" id="eventPicture">
+			</div>
+			<div style="width: 100%; padding: 20px; border: solid black 1px">
+				<p>Event Name:</p>
+				<input type="text" name="eventName" style="width: 70%">
+				<button id="editSaveBtn" style="width: 100px; margin-left: 40px;" onclick="saveBtnFunc()">SAVE</button>
+				<p>Event Date:</p>
+				<input type="Date" name="eventDate">
+				<p>Price: RM</p>
+				<input type="number" name="price" style="width: 70px">
+				<p>Paticipation Limit: </p>
+				<input type="number" name="participantLimit" style="width: 70px">
+				<p style="display: block; margin-bottom: 0px;">Details</p>
+				<textarea id="eventDetails" style="width: 98%; margin: 0px auto; height: 60%;"></textarea>
+			</div>
+		</div>
+		
+	</div>
+
+<script type="text/javascript">	
+	// var databaseLink = "https://libraryss19.herokuapp.com"
+	var databaseLink = "http://libraryss19.test"
+
+	var eventName = document.getElementsByName('eventName')[0]
+	var eventDate = document.getElementsByName('eventDate')[0]
+	var price = document.getElementsByName('price')[0]
+	var participantLimit = document.getElementsByName('participantLimit')[0]
+	var eventDetails = document.getElementById('eventDetails')
+	var editSaveBtn = document.getElementById('editSaveBtn')
+	var eventId = ""
+	var edit = false
+
+	var noImage = "data:image/png;base64,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"
+
+
+	function displayImageFunc(data){
+		var imageData = data.files[0]
+		console.log(typeof imageData)
+		if(typeof imageData == "object"){			
+			var reader = new FileReader()
+			reader.readAsDataURL(imageData)
+			reader.onload = function(evt){
+				// console.log(evt)
+				console.log(evt.target.result.substring(5,10))
+				if(evt.target.result.substring(5,10) == "image"){
+					document.getElementById('eventPicture').src = evt.target.result
+				}else{
+					document.getElementsByName('image')[0].value = ""
+					document.getElementById('eventPicture').src = ""
+					alert("Please choose file type image")
+				}
+			}
+		}else{
+			document.getElementsByName('image')[0].value = ""
+			document.getElementById('eventPicture').src = ""
+		}
+	}
+
+
+	function newEventBtnFunc(){
+		eventId = ""
+		edit = false
+		editSaveBtn.textContent = "SAVE"
+		editSaveBtn.setAttribute('onclick', 'saveBtnFunc()')
+		eventName.disabled = false
+		eventDate.disabled = false
+		price.disabled = false
+		participantLimit.disabled = false
+		eventDetails.disabled = false
+		eventName.value = ""
+		eventDate.value = ""
+		price.value = ""
+		participantLimit.value = ""
+		eventDetails.value = ""
+		document.getElementsByName('image')[0].style.visibility = "visible"
+		document.getElementById('eventPicture').src = ""
+		document.getElementsByName('image')[0].value = ""
+		document.getElementById('eventsOption').value = ""
+	}
+
+
+	function saveBtnFunc(){
+		const data = new FormData();
+		var imageData = ""
+		var inputImage = document.getElementsByName('image')[0].files[0]
+
+		while(eventName.value.charAt(0) == " "){
+			eventName.value = eventName.value.substring(1)
+		}
+		if(eventName.value == ""){
+			alert("Please fill up name.")
+			return;
+		}
+
+		if(eventDate.value == ""){
+			alert("Please choose a date for the event");
+			return;
+		}
+		if(new Date(eventDate.value) < new Date()){
+			alert("Date must not be in the past");
+			return;
+		}
+
+		if (typeof inputImage == "object"){
+			if(inputImage.size > 47000){
+				alert("Image file size cannot be more than 47kb");
+				return;
+			}
+			imageData = document.getElementById('eventPicture').src	
+		}
+		if(edit == true){
+			console.log("edit is true")
+			console.log(document.getElementsByName('image')[0].value)
+			if(document.getElementById('eventPicture').src == noImage || document.getElementsByName('image')[0].value == ""){
+				imageData = ""
+			}else{
+				imageData = document.getElementById('eventPicture').src
+			}			
+		}
+		// console.log(imageData)
+		// console.log(eventName.value)
+		console.log(eventDate.value)
+		// console.log(price.value)
+		// console.log(participantLimit.value)
+		// console.log(eventDetails.value)
+		data.append('id', eventId)
+		data.append('name', eventName.value)
+		data.append('date', eventDate.value)
+		data.append('price', price.value)
+		data.append('participant_limit', participantLimit.value)
+		data.append('details', eventDetails.value)
+		data.append('image', imageData)
+		console.log(...data)
+		edit = false
+		eventId = ""
+
+		fetch(databaseLink+'/api/new-event', {
+			method: 'POST',
+			body:data
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+			getEventNamesFunc(data.id)
+			eventSelectedFunc(data.id)
+			// window.location.href = "userHomepage.html";
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+			// window.location.href = "errorPage.html";
+		});
+	}
+
+
+	function editBtnFunc(){
+		edit = true
+		editSaveBtn.textContent = "SAVE"
+		editSaveBtn.setAttribute('onclick', 'saveBtnFunc()')
+		eventName.disabled = false
+		eventDate.disabled = false
+		price.disabled = false
+		participantLimit.disabled = false
+		eventDetails.disabled = false
+		document.getElementsByName('image')[0].style.visibility = "visible"
+	}
+
+
+	function eventSelectedFunc(id){
+		console.log(id)
+		editSaveBtn.textContent = "EDIT"
+		editSaveBtn.setAttribute('onclick', 'editBtnFunc()')
+		eventName.disabled = true
+		eventDate.disabled = true
+		price.disabled = true
+		participantLimit.disabled = true
+		eventDetails.disabled = true
+		document.getElementsByName('image')[0].style.visibility = "hidden"
+
+		fetch(databaseLink+'/api/get-event/'+id, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+			eventId = data[0].id
+			eventName.value = data[0].name
+			eventDate.value = data[0].date
+			if(data[0].price == null || data[0].price == 0){
+				price.value = 0
+			}else{
+				price.value = data[0].price
+			}
+
+			if(data[0].participant_limit == null || data[0].participant_limit == 0){
+				participantLimit.value = 0
+			}else{
+				participantLimit.value = data[0].participant_limit
+			}
+
+			eventDetails.value = data[0].details
+
+			if(data[0].image == null){
+				document.getElementById('eventPicture').src = noImage
+			}else{
+				document.getElementById('eventPicture').src = data[0].image	
+			}
+			
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+			// window.location.href = "errorPage.html";
+		});
+	}
+
+
+	function getEventNamesFunc(selectedEvent){
+		fetch(databaseLink+'/api/all-event-names', {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+			}
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+			var eventsLength = data.length
+			// console.log(eventsLength)
+
+			var eventsSelect = document.getElementById('eventsOption')
+			console.log(eventsSelect.options.length)
+			for (var j=eventsSelect.options.length; j>1; j--){
+				eventsSelect.remove(j-1);
+			}
+
+			for (var i=0; i<eventsLength; i++){
+			  	index = i+1
+			  	var option = document.createElement("option")
+				option.text =  data[i].name.toUpperCase()
+				option.value =  data[i].id
+				eventsSelect.add(option)		
+			}
+
+			if(selectedEvent){
+				eventsSelect.value = selectedEvent
+			}
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+			// window.location.href = "errorPage.html";
+		});
+	}getEventNamesFunc();
+
+	
+	// const data = { username: 'example' };
+	// fetch('https://example.com/profile', {
+	// 	method: 'POST', // or 'PUT'
+	// 	headers: {
+	// 		'Content-Type': 'application/json',
+	// 	},
+	// 	body: JSON.stringify(data),
+	// })
+	// .then(response => response.json())
+	// .then(data => {
+	// 	console.log('Success:', data);
+	// })
+	// .catch((error) => {
+	// 	console.error('Error:', error);
+	// });
+
+</script>
+
+</body>
+</html>

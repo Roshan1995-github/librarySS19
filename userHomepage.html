@@ -261,6 +261,7 @@
 				<li onclick="window.location.href = 'userHomepage.html'">Homepage</li>
 				<li onclick="window.location.href = 'userBooks.html'">Books</li>
 				<li onclick="window.location.href = 'userProfile.html'">Profile</li>
+			<li onclick="window.location.href = 'userEvents.html'">Events</li>
 				<li onclick="window.location.href = 'userHowToUse.html'">How To Use</li>
 			</ul>
 			<button onclick="scanQRBtnFunc()">Scan QR Code</button>
@@ -304,6 +305,11 @@
 					<button onclick="closeModals()">Cancel</button>
 					<button onclick="bookNowBtnFunc()">Book Now!</button>
 				</div>
+			</div>		
+		</div>
+		<div id="modal3">
+			<div id="modal3Content">
+				<img src="">
 			</div>		
 		</div>
 	</div>
@@ -357,15 +363,14 @@
 			console.log('Success:', data);
 			bookData = data[1][0]
 			console.log(bookData)
-			if(bookData.image == null){
+			if(bookData.coverPage == null){
 				document.getElementById('modal2Image').setAttribute('src', 'https://thumbs.dreamstime.com/b/no-image-available-icon-vector-illustration-flat-design-140476186.jpg')
 			}else{
-				document.getElementById('modal2Image').setAttribute('src', databaseLink+'/api/get-cover-page/'+bookData.image.split('/')[1])
+				document.getElementById('modal2Image').setAttribute('src', 'https://covers.openlibrary.org/b/id/'+bookData.coverPage+'.jpg')
 			}
-			document.getElementById('modal2Title').innerHTML = "Title : "+bookData.name
+			document.getElementById('modal2Title').innerHTML = "Title : "+bookData.title
 			document.getElementById('modal2Author').innerHTML = "Author : "+bookData.author
-			document.getElementById('modal2Category').innerHTML = "Category : "+bookData.category
-			document.getElementById('modal2Genre').innerHTML = "Genre : "+bookData.genre
+			document.getElementById('modal2Genre').innerHTML = "Genre : "+setBookGenre(bookData.genre)
 
 			document.getElementById('body').style.display = "block"
 			document.getElementById('qrReader').style.display = "none"
@@ -507,12 +512,10 @@
 				}					
 
 				var image = document.createElement('IMG')
-				console.log(data[i].book_id.image)
-				if(data[i].book_id.image == null){
+				if(data[i].book_id.coverPage == null){
 					image.setAttribute('src', 'https://thumbs.dreamstime.com/b/no-image-available-icon-vector-illustration-flat-design-140476186.jpg')
 				}else{
-					console.log(databaseLink+'/api/get-cover-page/'+data[i].book_id.image.split('/')[1])
-					image.setAttribute('src', databaseLink+'/api/get-cover-page/'+data[i].book_id.image.split('/')[1])
+					image.setAttribute('src', 'https://covers.openlibrary.org/b/id/'+data[i].book_id.coverPage+'.jpg')
 				}
 
 				var table = document.createElement('table')
@@ -522,7 +525,7 @@
 				var td1c = tr1.insertCell()
 				td1a.appendChild(document.createTextNode('Title'))
 				td1b.appendChild(document.createTextNode(':'))
-				td1c.appendChild(document.createTextNode(data[i].book_id.name))
+				td1c.appendChild(document.createTextNode(data[i].book_id.title))
 
 				var tr2 = table.insertRow()
 				var td2a = tr2.insertCell()
@@ -530,7 +533,7 @@
 				var td2c = tr2.insertCell()
 				td2a.appendChild(document.createTextNode('Genre'))
 				td2b.appendChild(document.createTextNode(':'))
-				td2c.appendChild(document.createTextNode(data[i].book_id.genre))
+				td2c.appendChild(document.createTextNode(setBookGenre(data[i].book_id.genre)))
 
 				var tr3 = table.insertRow()
 				var td3a = tr3.insertCell()
@@ -540,13 +543,13 @@
 				td3b.appendChild(document.createTextNode(':'))
 				td3c.appendChild(document.createTextNode(data[i].book_id.author))
 
-				var tr4 = table.insertRow()
-				var td4a = tr4.insertCell()
-				var td4b = tr4.insertCell()
-				var td4c = tr4.insertCell()
-				td4a.appendChild(document.createTextNode('Category'))
-				td4b.appendChild(document.createTextNode(':'))
-				td4c.appendChild(document.createTextNode(data[i].book_id.category))
+				// var tr4 = table.insertRow()
+				// var td4a = tr4.insertCell()
+				// var td4b = tr4.insertCell()
+				// var td4c = tr4.insertCell()
+				// td4a.appendChild(document.createTextNode('Category'))
+				// td4b.appendChild(document.createTextNode(':'))
+				// td4c.appendChild(document.createTextNode(data[i].book_id.category))
 
 				var para = document.createElement('P')
 				para.setAttribute('id', 'bookBorrowedId')
@@ -577,16 +580,14 @@
 						console.log('Success:', data);
 						data = data[1][0]
 						bookData = data.book_id
-						if(data.book_id.image == null){
+						if(bookData.coverPage == null){
 							document.getElementById('modal1Image').setAttribute('src', 'https://thumbs.dreamstime.com/b/no-image-available-icon-vector-illustration-flat-design-140476186.jpg')
 						}else{
-							console.log(databaseLink+'/api/get-image/'+data.book_id.image.split('/')[1])
-							document.getElementById('modal1Image').setAttribute('src', databaseLink+'/api/get-cover-page/'+data.book_id.image.split('/')[1])
+							document.getElementById('modal1Image').setAttribute('src', 'https://covers.openlibrary.org/b/id/'+bookData.coverPage+'.jpg')
 						}
-						document.getElementById('modal1Title').innerHTML = "Title : "+data.book_id.name
-						document.getElementById('modal1Author').innerHTML = "Author : "+data.book_id.author
-						document.getElementById('modal1Category').innerHTML = "Category : "+data.book_id.category
-						document.getElementById('modal1Genre').innerHTML = "Genre : "+data.book_id.genre
+						document.getElementById('modal1Title').innerHTML = "Title : "+bookData.title
+						document.getElementById('modal1Author').innerHTML = "Author : "+bookData.author
+						document.getElementById('modal1Genre').innerHTML = "Genre : "+setBookGenre(bookData.genre)
 						var borrowDate = getProperDate(new Date(data.created_at))
 						document.getElementById('modal1DateBorrowed').innerHTML = "Date Borrowed : "+borrowDate
 						var expReturnDate = getProperDate(addDaysToDate(new Date(data.created_at), 7))
@@ -614,6 +615,8 @@
 			window.location.href = "errorPage.html";
 		});
 	}loadBooksFunc()
+
+
 	
 
 	function nextBtnFunc(){

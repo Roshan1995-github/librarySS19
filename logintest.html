@@ -372,7 +372,7 @@
 	// var databaseLink = "http://libraryss19.test"
 
 	if(JSON.parse(localStorage.getItem('userData')) != null){
-		window.location.href = "userHomepage.html";
+		window.location.href = "userEvents.html";
 	}
 
 	var modal1 = document.getElementById('modal1')
@@ -460,7 +460,7 @@
 				}else{
 					sessionStorage.setItem('userData', JSON.stringify(data[1][0]));
 				}				
-				window.location.href = "userHomepage.html";
+				window.location.href = "userEvents.html";
 				searchLoading.style.display = "none"
 			}
 			

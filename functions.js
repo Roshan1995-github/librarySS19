@@ -107,3 +107,44 @@ function capitalize(string){
 
  	return capitalzeStr;
 }
+
+
+
+
+
+
+
+function setBookGenre(genre){
+    switch(genre) {
+      case "adultFiction":
+        return "Adult Fiction";
+      case "nonFiction":
+        return "Non-Fiction";
+      case "scienceFiction":
+        return "Science Fiction";
+      case "children":
+        return "Children";
+      case "youngAdult":
+        return "Young Adult";
+      case "selfHelp":
+        return "Self Help";
+      case "healthCare":
+        return "Health Care";
+      case "horror":
+        return "Horror";
+      case "anime":
+        return "Anime";
+      case "mystery":
+        return "Mystery";       
+      case "magazine":
+        return "Magazine";
+      case "mandarin":
+        return "Mandarin";
+      case "english":
+        return "English";
+      case "bahasaMelayu":
+        return "Bahasa Melayu";
+      case "fantasy":
+        return "Fantasy";
+    }
+  }

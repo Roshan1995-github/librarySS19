@@ -170,6 +170,7 @@
 			<li onclick="window.location.href = 'adminHomepage.html'">Homepage</li>
 			<li onclick="window.location.href = 'adminBooks.html'">Books</li>
 			<li onclick="window.location.href = 'adminMembers.html'">Members</li>
+			<li onclick="window.location.href = 'adminEvents.html'">Events</li>
 		</ul>
 	</div>
 	<div id="mainContentDiv" style="background-color: grey; padding-top: 40px">
@@ -358,7 +359,7 @@
 					if(data[dataNumber].genre == null){
 						td2c.appendChild(document.createTextNode("-"))
 					}else{
-						td2c.appendChild(document.createTextNode(data[dataNumber].genre))
+						td2c.appendChild(document.createTextNode(setBookGenre(data[dataNumber].genre)))
 					}
 
 					var tr3 = table.insertRow()

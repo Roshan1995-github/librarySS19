@@ -235,7 +235,7 @@
 					if(data[dataNumber].genre == null){
 						td2c.appendChild(document.createTextNode("-"))
 					}else{
-						td2c.appendChild(document.createTextNode(data[dataNumber].genre))
+						td2c.appendChild(document.createTextNode(setBookGenre(data[dataNumber].genre)))
 					}
 
 					var tr3 = table.insertRow()
