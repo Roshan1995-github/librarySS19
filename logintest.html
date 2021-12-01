@@ -522,7 +522,7 @@
 		.then(data => {
 			console.log('Success:', data);
 			sessionStorage.setItem('userData', JSON.stringify(data[0]));
-			window.location.href = "userHomepage.html";
+			window.location.href = "userEvents.html";
 		})
 		.catch((error) => {
 			console.error('Error:', error);

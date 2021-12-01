@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Login</title>
+	<script src="functions.js"></script>
+	<style type="text/css">
+		body{
+			padding: 0px
+		}
+		h1{
+			width: 100%;
+			height: 60px;
+			text-align: center;
+			padding-top: 20px;
+			margin-top: 0px;
+			background-image: url('https://image.freepik.com/free-photo/hand-painted-watercolor-background-with-sky-clouds-shape_24972-1095.jpg');
+			background-size: cover
+		}
+		ul{
+			display: flex;
+			list-style-type: none;
+			padding: 0px
+		}
+		li{
+			margin: 0px 30px;
+			font-size: 20px
+		}
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+		    -webkit-appearance: none;
+		    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+		}
+		input[type=number] {
+		    -moz-appearance:textfield; /* Firefox */
+		}
+		#eventInfo>div>p{
+			display: inline-block;
+		}
+		#eventInfo>div>input{
+			margin-right: 30px;
+		}
+		#eventPicture{
+			max-width: 290px;
+			max-height: 380px;
+		}
+	</style>
+</head>
+<body>
+	<h1 style="width: 100%; text-align: center">SS 19 MINI LIBRARY</h1>
+	<div id="mainContentDiv" style="border: solid black 1px">
+		<div>
+			<p>Phone Number</p>
+			<input type="number" name="phoneNum">
+			<p>Password</p>
+			<input type="password" name="password">
+			<div style="display: flex; margin-top: 10px;">
+				<input type="checkbox" name="keepSignedIn">
+				<p style="font-size: 12px; padding: 0px; margin-top: 3px">Keep me signed in</p>
+			</div>
+		</div>
+		<br><br>
+		<button onclick="loginBtnFunc()">Login</button>		
+	</div>
+
+<script type="text/javascript">	
+	// var databaseLink = "https://libraryss19.herokuapp.com"
+	var databaseLink = "http://libraryss19.test"
+
+	// const data = { username: 'example' };
+	// fetch('https://example.com/profile', {
+	// 	method: 'POST', // or 'PUT'
+	// 	headers: {
+	// 		'Content-Type': 'application/json',
+	// 	},
+	// 	body: JSON.stringify(data),
+	// })
+	// .then(response => response.json())
+	// .then(data => {
+	// 	console.log('Success:', data);
+	// })
+	// .catch((error) => {
+	// 	console.error('Error:', error);
+	// });
+
+</script>
+
+</body>
+</html>
