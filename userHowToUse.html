@@ -27,6 +27,21 @@
 			text-align: center;
 			background: linear-gradient(to bottom, #ccff99 -37%, #333300 100%);
 		}
+		h4{
+			color: white;
+			margin: 10px;
+			font-size: 30px;
+		}
+		#mainContentDiv>div{
+			padding: 5px 0px 10px 0px;
+			margin: 10px 0px;
+			background-color: rgba(0, 0, 0, 0.5);
+		}
+		#mainContentDiv>div>div{
+			color: white;
+			padding: 0px 20px;
+			font-size: 20px;
+		}
 		#loadingPage{			
 		  display: none; /* Hidden by default */
 		  position: fixed; /* Stay in place */
@@ -71,8 +86,26 @@
 			<li onclick="window.location.href = 'userHowToUse.html'">How To Use</li>
 		</ul>
 	</div>
-	<div id="mainContentDiv">
-		<img src="http://libraryss19.test/qrcode.png">
+	<div id="mainContentDiv">		
+		<div>
+			<h4>How to borrow book</h4>
+			<div>
+				1. Go to Homepage<br>
+				2. Click on "Scan QR Code" button<br>
+				3. Choose camera preference<br>
+				4. Scan QR code of the book you wish to borrow<br>
+				5. Click "Book Now!"
+			</div>
+		</div>
+		<div>
+			<h4>How to return book</h4>
+			<div>
+				1. Place book back in community library<br>
+				2. Go to Homepage<br>
+				3. Click on book you wish to return<br>
+				4. Click "Returned"<br>
+			</div>
+		</div>
 	</div>
 
 <script type="text/javascript">	

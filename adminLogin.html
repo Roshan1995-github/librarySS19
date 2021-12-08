@@ -6,7 +6,9 @@
 	<script src="functions.js"></script>
 	<style type="text/css">
 		body{
-			padding: 0px
+			padding: 0px;
+			background-image: url('https://image.freepik.com/free-photo/hand-painted-watercolor-background-with-sky-clouds-shape_24972-1095.jpg');
+			background-size: cover;
 		}
 		h1{
 			width: 100%;
@@ -14,7 +16,6 @@
 			text-align: center;
 			padding-top: 20px;
 			margin-top: 0px;
-			background-image: url('https://image.freepik.com/free-photo/hand-painted-watercolor-background-with-sky-clouds-shape_24972-1095.jpg');
 			background-size: cover
 		}
 		ul{
@@ -34,24 +35,40 @@
 		input[type=number] {
 		    -moz-appearance:textfield; /* Firefox */
 		}
-		#eventInfo>div>p{
-			display: inline-block;
+		input[type=text], input[type=password]{
+			font-size: 20px;
+			width: 280px;
 		}
-		#eventInfo>div>input{
-			margin-right: 30px;
+		p{
+			font-size: 20px;
+			margin: 15px 0px 0px 0px;
 		}
-		#eventPicture{
-			max-width: 290px;
-			max-height: 380px;
+		button{
+			display: block;
+			margin: 0px auto;
+			width: 200px;
+			height: 40px;
 		}
+
+
+
+		#mainContentDiv{
+			width: 300px;
+			margin: 100px auto;
+		}
+		#mainContentDiv>div{
+			padding: 5px;
+		}
+
+
 	</style>
 </head>
 <body>
 	<h1 style="width: 100%; text-align: center">SS 19 MINI LIBRARY</h1>
-	<div id="mainContentDiv" style="border: solid black 1px">
+	<div id="mainContentDiv">
 		<div>
-			<p>Phone Number</p>
-			<input type="number" name="phoneNum">
+			<p>Username</p>
+			<input type="text" name="username">
 			<p>Password</p>
 			<input type="password" name="password">
 			<div style="display: flex; margin-top: 10px;">
@@ -64,8 +81,49 @@
 	</div>
 
 <script type="text/javascript">	
-	// var databaseLink = "https://libraryss19.herokuapp.com"
-	var databaseLink = "http://libraryss19.test"
+	var databaseLink = "https://libraryss19.herokuapp.com"
+	// var databaseLink = "http://libraryss19.test"
+
+
+
+
+	function loginBtnFunc(){
+		var keepSignedIn = document.getElementsByName('keepSignedIn')[0].checked
+
+		const data = {
+			username: document.getElementsByName('username')[0].value,
+			password: document.getElementsByName('password')[0].value
+		};
+		fetch(databaseLink+'/api/admin-login', {
+			method: 'POST', // or 'PUT'
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		})
+		.then(response => response.json())
+		.then(data => {
+			console.log('Success:', data);
+
+			if(data == "Wrong username entered!" || data == "Wrong password entered!"){
+				alert(data)
+			}else{
+				if(keepSignedIn == true){
+					localStorage.setItem('adminToken', data);
+				}else{					
+					sessionStorage.setItem('adminToken', data);
+				}
+				window.location.href = 'adminHomepage.html'
+			}
+		})
+		.catch((error) => {
+			console.error('Error:', error);
+		});
+
+
+
+		
+	}
 
 	// const data = { username: 'example' };
 	// fetch('https://example.com/profile', {
