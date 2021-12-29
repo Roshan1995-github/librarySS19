@@ -241,6 +241,7 @@
 		edit = false
 		eventId = ""
 
+		document.getElementById('searchLoading').style.display = "block"
 		fetch(databaseLink+'/api/new-event', {
 			method: 'POST',
 			body:data
@@ -250,7 +251,7 @@
 			console.log('Success:', data);
 			getEventNamesFunc(data.id)
 			eventSelectedFunc(data.id)
-			// window.location.href = "userHomepage.html";
+			document.getElementById('searchLoading').style.display = "none"
 		})
 		.catch((error) => {
 			console.error('Error:', error);

@@ -29,12 +29,15 @@
 			border: solid black 1px;
 		}
 		td:nth-child(1){
-			width: 25%
+			width: 20%
 		}
 		td:nth-child(2){
-			width: 15%
+			width: 10%
 		}
 		td:nth-child(3){
+			width: 10%
+		}
+		td:nth-child(4){
 			width: 60%
 		}
 		#modal, #searchLoading{			
@@ -132,6 +135,7 @@
 				<tr>
 					<th>NAME</th>
 					<th>HANDPHONE #</th>
+					<th>EMAIL</th>
 					<th>ADDRESS</th>
 				</tr>
 			</thead>
@@ -193,14 +197,35 @@
 				var td1 = document.createElement('TD')
 				var td2 = document.createElement('TD')
 				var td3 = document.createElement('TD')
+				var td4 = document.createElement('TD')
 				td1.textContent = data[1].data[i].name
 				td2.textContent = data[1].data[i].phoneNum
-				td3.textContent = data[1].data[i].address + " " + data[1].data[i].postcode + " " + data[1].data[i].city + " " + data[1].data[i].state
+				td3.textContent = data[1].data[i].email
+
+				var address = ""
+				var postcode = ""
+				var city = ""
+				var state = ""
+
+				if(data[1].data[i].address != null){
+					address = data[1].data[i].address
+				}
+				if(data[1].data[i].postcode != null){
+					postcode = data[1].data[i].postcode
+				}
+				if(data[1].data[i].city != null){
+					city = data[1].data[i].city
+				}
+				if(data[1].data[i].state != null){
+					state = data[1].data[i].state
+				}
+				td4.textContent = address + " " + postcode + " " + city + " " + state
 
 				memTableBod.appendChild(tr)
 				tr.appendChild(td1)
 				tr.appendChild(td2)
 				tr.appendChild(td3)
+				tr.appendChild(td4)
 
 			}
 
