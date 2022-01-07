@@ -467,7 +467,7 @@
 		})
 		.catch((error) => {
 			console.error('Error:', error);
-			window.location.href = "errorPage.html";
+			// window.location.href = "errorPage.html";
 		});
 	}
 
@@ -632,7 +632,7 @@
 			genreBtn.style.backgroundColor = "blue"
 			genreChoices.push(genreBtn.value)
 		}else{
-			genreBtn.style.backgroundColor = "white"
+			genreBtn.style.backgroundColor = ""
 			var index = genreChoices.indexOf(genreBtn.value)
 			genreChoices.splice(index, 1)
 		}
