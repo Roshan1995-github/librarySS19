@@ -371,7 +371,14 @@
 	var databaseLink = "https://library-ss19.herokuapp.com"
 	// var databaseLink = "http://libraryss19.test"
 
-	if(JSON.parse(localStorage.getItem('userData')) != null){
+	var userData = JSON.parse(localStorage.getItem('userData'))
+	console.log("local storage is "+JSON.parse(localStorage.getItem('userData')))
+	if(userData != null){
+		window.location.href = "userEvents.html";		
+	}
+	userData = JSON.parse(sessionStorage.getItem('userData'))
+	console.log("session storage is "+JSON.parse(sessionStorage.getItem('userData')))
+	if(userData != null){
 		window.location.href = "userEvents.html";
 	}
 
