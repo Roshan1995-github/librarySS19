@@ -222,7 +222,7 @@
 			<span style="width: 20px"></span>
 			<button onclick="nextBtnFunc()" id="nextBtn">Next</button>
 		</div>
-		<div id="qrcode" style="display: none"></div>
+		<div id="qrcode" style="display: block"></div>
 	</div>
 
 
@@ -428,12 +428,6 @@
 				        var a = document.createElement('a');
 					    a.href = element.lastChild.src
 					    a.setAttribute('download', "qr-code.png");
-
-					    /////////////////////////////////////////////////////////////////
-					    //to convert table to image and then download
-					    //table 3 by 3
-					    //each cell should contain qrcode and book name
-					    //https://stackoverflow.com/questions/53757970/downloading-data-tables-from-html-as-image/53758301
 					 
 					    element.prepend(a);
 					    a.click();

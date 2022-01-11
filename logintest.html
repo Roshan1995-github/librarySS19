@@ -355,7 +355,7 @@
 			</div>
 			<br><br>
 			<button onclick="loginBtnFunc()" style="background: linear-gradient(to bottom, #ff0066 0%, #000099 100%);">Login</button>
-			<p style="text-align: center; font-size: 16px; margin-top: 50px;">Forgot password? <u>CLICK HERE</u></p>
+			<p style="text-align: center; font-size: 16px; margin-top: 50px;" onclick="window.open('userForgotPass.html')">Forgot password? <u>CLICK HERE</u></p>
 			<p style="text-align: center; font-size: 16px;" onclick="modal1Visibility()">Dont have account?  <u>REGISTER HERE</u></p>
 		</div>
 	</div>
@@ -369,7 +369,7 @@
 	</div>
 <script type="text/javascript">	
 	var databaseLink = "https://library-ss19.herokuapp.com"
-	// var databaseLink = "http://libraryss19.test"
+	// var databaseLink = "http://library-ss19.test"
 
 	var userData = JSON.parse(localStorage.getItem('userData'))
 	console.log("local storage is "+JSON.parse(localStorage.getItem('userData')))
@@ -403,6 +403,11 @@
 		}else{
 			cell.parentElement.children[2].textContent = counter + 1
 		}
+	}
+
+
+	function forgotPasswordBtnFunc(){
+
 	}
 
 
